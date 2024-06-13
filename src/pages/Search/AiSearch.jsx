@@ -221,17 +221,21 @@ const AiSearch = () => {
             console.error(e);
         }
 
-        let response = searchResponse.data.choices[0].message.content;
+        // let response = searchResponse.data.choices[0].message.content;
+        let response = searchResponse.data;
+
+        let jsonString = JSON.stringify(response);
 
         console.log("최종 응답");
-
-        console.log(response);
+        // console.log(response);
+        console.log(jsonString);
 
         // ```json과 ```를 제거하는 코드
-        const cleanString = response.replace(/```json|```/g, '').trim();
+        // const cleanString = response.replace(/```json|```/g, '').trim();
 
         // JSON 문자열을 JavaScript 객체로 변환
-        const recipes = JSON.parse(cleanString);
+        // const recipes = JSON.parse(cleanString);
+        const recipes = JSON.parse(jsonString);
 
         console.log("JavaScript 객체를 콘솔에 출력");
         console.log(recipes);
