@@ -52,6 +52,7 @@ const AiSimpleSearch = () => {
         }
         const storedRecipe = sessionStorage.getItem("recipeSimpleSearchList");
         if (storedRecipe) {
+            console.log("있다고 인식됨")
             setRecipe(JSON.parse(storedRecipe));
         }
 
@@ -153,19 +154,15 @@ const AiSimpleSearch = () => {
             console.error(e);
         }
 
-        let response = searchResponse.data.choices[0].message.content;
+        let response = searchResponse.data;
 
-        console.log(recipeCount);
+        // console.log(recipeCount);
+
+        let jsonString = JSON.stringify(response);
 
         console.log("최종 응답");
 
-        console.log(response);
-
-        // ```json과 ```를 제거하는 코드
-        const cleanString = response.replace(/```json|```/g, '').trim();
-
-        // JSON 문자열을 JavaScript 객체로 변환
-        const recipes = JSON.parse(cleanString);
+        const recipes = JSON.parse(jsonString);
 
         console.log("JavaScript 객체를 콘솔에 출력");
         console.log(recipes);
