@@ -97,17 +97,18 @@
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
+    z-index: 1;
   }
   
   .dot {
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     margin: 15px 0;
-    background-color: gray;
+    background-color: $white-color;
     border-radius: 50%;
     cursor: pointer;
   }
 
   .active {
-    background-color: black;
+    background-color: $p-color;
   }

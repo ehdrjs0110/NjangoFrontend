@@ -1,5 +1,18 @@
+@import '../index.scss';
+
+/* ( 크롬, 사파리, 오페라, 엣지 ) 동작 */
+html::-webkit-scrollbar {
+    display: none;
+  }
+
+html {
+    -ms-overflow-style: none; /* 인터넷 익스플로러 */
+    scrollbar-width: none; /* 파이어폭스 */
+}
 
 .container{
+    background-color: $bg-color;
+    height: 100vh;
 
     .main{
 
@@ -9,11 +22,12 @@
                 background-color: #CBECFF;
                 margin-top: 30px;
                 height: 400px;
-
                 display: flex;
                 justify-content: center;
                 align-items: center; 
                 flex-direction:column;
+                position: relative;
+                border: 3px solid $accent-color;
                 
                 h1{
                     font-weight: bold;
@@ -39,6 +53,28 @@
                         color: black;
                     }
                 }
+
+                .img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                .panel {
+                    position: absolute;
+                    background-color: $accent-color;
+                    color: $white-color;
+                    bottom: 0%;
+                    padding: 2px;
+                    width: 100%;
+                    text-align: center;
+
+                    .text {
+                        font-weight: bold;
+                    }
+                }
+
+                
             }
         }
         

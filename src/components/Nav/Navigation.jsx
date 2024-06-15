@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import styles from '../../styles/Components/Nav/Navigation.module.scss';
 import logo from '../../assets/Logo/logo.png';
 
+import cart from '../../assets/Nav/cart.png'
+
 const id = "ehdrjs0110";
 
 function Navigation() {
@@ -43,7 +45,9 @@ function Navigation() {
             <Nav.Link>커뮤니티</Nav.Link>
           </Nav>
           <Nav>
-            <Button variant="primary">장보기</Button>
+            <a className={styles.shop} >
+              <img src={cart} className={styles.cart} alt='' />
+            </a>
             <NavDropdown title={id} id="navbarScrollingDropdown">
               <NavDropdown.Item onClick={goToMy}>내 정보</NavDropdown.Item>
               <NavDropdown.Item href="#action4">구매내역</NavDropdown.Item>

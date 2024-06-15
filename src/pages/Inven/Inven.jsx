@@ -230,7 +230,7 @@ function Inven() {
               <Form.Control type="text" className={styles.ingredientname} onChange={setIngredName} placeholder="재료명"/>
               </Col>
               <Col>
-                <Button className={styles.btn} variant="secondary" onClick={setSize} value={"없음"} disabled={isClickSize==="없음"} >없음</Button>
+                <Button className={styles.btn} variant="none" onClick={setSize} value={"없음"} disabled={isClickSize==="없음"} >없음</Button>
               </Col>
               <Col>
                 <Button className={styles.btn} variant="none" onClick={setSize} value={"적음"} disabled={isClickSize==="적음"} >적음</Button>
@@ -267,7 +267,7 @@ function Inven() {
                       <h3 className={styles.title}>{item.ingredientname}</h3>
                     </Col>
                     <Col>
-                      <Button className={styles.btn} variant="secondary" value={"없음"} disabled={item.size==="없음"} onClick={(e) => updateSize(index,e)}>없음</Button>
+                      <Button className={styles.btn} variant="none" value={"없음"} disabled={item.size==="없음"} onClick={(e) => updateSize(index,e)}>없음</Button>
                     </Col>
                     <Col>
                       <Button className={styles.btn}  variant="none" value={"적음"} disabled={item.size==="적음"} onClick={(e) => updateSize(index,e)}>적음</Button>

@@ -1,35 +1,36 @@
+@import "../index.scss";
 
 .container{
-    height: calc(100vh - 56px);
+    height: calc(100vh - 91px);
+    background-color: $bg-color;
 
     .main{
         height: 100%;
 
         .controllerRow{
-            height: 20%;
+            height: 13%;
+            margin-bottom: 10px;
         }
 
         .contentRow{
-            height: 80%;
+            height: 85%;
         }
     }
 }
 
 .controller {
+    background-color: $white-color;
     height: 100%;
-    background-color: lightblue;
-    padding: 20px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    .controllerRow1{
-        height: 30%;
-    }
-
-    .controllerRow2{
-        height: 70%;
-    }
-
-    .title {
-        font-weight: bold;
+    .controllerRow{
+        width: 100%;
+        height: 100%;
+        margin: 0;
     }
 
     .controlform {
@@ -46,51 +47,42 @@
     
         .serchbtn{
             margin-left: 10px;
+            background-color: $p-color;
+            color: $white-color;
         }
 
         .btn {
             margin-left: 50px;
+            background-color: $p-color;
+            color : $white-color;
+            font-weight: bold;
         }
     }
     
 }
 
 .content {
-    border: 1px solid black;
-    background-color: #fff;
+    background-color: $white-color;
     padding: 20px;
     height: 100%;
     overflow-y: auto;
+    border: 1px solid lightgrey;
     
-    .line {
-        margin: 0 auto;
-        width: 95%;
-        display: flex;
-        padding: 5px;
-        margin-bottom: 5px;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-
-        .title {
-            font-weight: bold;
-        }
-
-        .text {
-            display: inline-block;
-            margin: 0;
-        }
-    
-        .btn {
-            margin-left: 5px;
-        }
-    
-        .count {
-            margin-left: 10px;
-            display: inline-block;
-            width: 30%;
-            text-align: right;
-        }
+    .row {
+        margin: 0;
     }
 
+    .excel {
+        height: 100%;
+        width: 100%;
+        padding: 30px 20px;
+    }
+    
+    
+
 }
+
+/* ( 크롬, 사파리, 오페라, 엣지 ) 동작 */
+.content::-webkit-scrollbar {
+    display: none;
+  }

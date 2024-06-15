@@ -80,44 +80,41 @@ function Excel() {
           <div className={styles.main}>
           <Row className={styles.controllerRow}>
             <Col md={{span: 10, offset: 1}} className={styles.controller}>
-              <Row className={styles.controllerRow1}>
-                <Col>
-                  <h2 className={styles.title}>냉장고 관리</h2>
-                </Col>
-              </Row>
-              <Row className={styles.controllerRow2}>
+              <Row className={styles.controllerRow}>
                 <Col className={styles.controlform}>
                   <div className={styles.serch}>
                     <Form.Control type="text" placeholder="재료검색" />
                   </div>
-                  <Button className={styles.serchbtn} variant="primary">검색</Button>
-                  <Button className={styles.btn} onClick={normalmode} variant="dark">일반 모드</Button>
-                  <Button className={styles.btn} variant="light">나의 재료로 요리하기</Button>
-                  <Button className={styles.btn} variant="info">일괄 저장</Button>
+                  <Button className={styles.serchbtn} variant="none">검색</Button>
+                  <Button className={styles.btn} onClick={normalmode} variant="none">일반 모드</Button>
+                  <Button className={styles.btn} variant="none">나의 재료로 요리하기</Button>
+                  <Button className={styles.btn} variant="none">일괄 저장</Button>
                 </Col>
               </Row>
             </Col>
           </Row>
           <Row className={styles.contentRow}>
             <Col md={{span: 10, offset: 1}} className={styles.content}>
-              <Row>
+              <Row className={styles.row}>
                 <Col>
-                <DataGrid
-                    rows={isData}
-                    columns={columns}
-                    getRowId={(row) => row.ingredientname}
-                    processRowUpdate={handleProcessRowUpdate}
-                    checkboxSelection
-                    disableColumnFilter
-                    disableColumnSelector
-                    disableDensitySelector
-                    slots={{ toolbar: GridToolbar }}
-                    slotProps={{
-                    toolbar: {
-                        showQuickFilter: true,
-                    },
-                    }}
-                />
+                  <div className={styles.excel}>
+                    <DataGrid
+                        rows={isData}
+                        columns={columns}
+                        getRowId={(row) => row.ingredientname}
+                        processRowUpdate={handleProcessRowUpdate}
+                        checkboxSelection
+                        disableColumnFilter
+                        disableColumnSelector
+                        disableDensitySelector
+                        slots={{ toolbar: GridToolbar }}
+                        slotProps={{
+                        toolbar: {
+                            showQuickFilter: true,
+                        },
+                        }}
+                    />
+                  </div>
                 </Col>
               </Row>
             </Col>
