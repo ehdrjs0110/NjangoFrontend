@@ -8,11 +8,12 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 
 import logoImg from '../../assets/Logo/logo.png';
+import {response} from "express";
 
 const SignUp = () => {
   const navigate = useNavigate();
 
-  //입력받은 이메일 
+  //입력받은 이메일
   const [isEmail, setEmail] = useState();
 
   //입력받은 인증 코드
@@ -25,22 +26,24 @@ const SignUp = () => {
   const [isRead, setRead] = useState(false);
 
   //이메일 인증 여부
-  const [isAuth, setAuth] = useState(false);
+  const [isAuth, setAuth] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if(isAuth){  
+
+    if(isAuth){
 
       const form = e.target;
       const email = form.elements.email.value;
       const password = form.elements.password.value;
       const nickname = form.elements.nickname.value;
-    
+      const phoneNumber = form.elements.phone.value;
+
       const formData = new FormData();
       formData.append("email", email);
       formData.append("password", password);
-      formData.append("name", nickname);
+      formData.append("nickname", nickname);
+      formData.append("phoneNumber", phoneNumber);
 
       // formData.forEach((value, key) => {
       //   console.log("key : " + key + " value : " + value);
@@ -48,7 +51,7 @@ const SignUp = () => {
 
       //axios 파일 전송
       axios
-        .post("http://localhost:8080/api/v1/auth/register", formData, {
+         .post("http://localhost:8080/api/v1/auth/register", formData, {
           headers: {
             "Content-type": "multipart/form-data",
           },
@@ -71,7 +74,8 @@ const SignUp = () => {
     }else {
       alert("이메일 인증을 진행해주세요.");
     }
-    
+
+
   };
 
   const checkEmail = async () => {
@@ -87,7 +91,7 @@ const SignUp = () => {
         }else{
           alert("계정이 없음");
           return true;
-        }      
+        }
     }catch(err){
       alert("확인 실패");
       return false;
@@ -106,7 +110,7 @@ const SignUp = () => {
       const data = {
         email : isEmail
       };
-    
+
       try{
         const res = await axios
         .post("http://localhost:8080/mail/send", data)
@@ -122,11 +126,11 @@ const SignUp = () => {
 
       }
       //axios 파일 전송
-      
+
     }else {
       console.log(isEmail);
     }
-    
+
   };
 
   const handleEmail = (e) => {
@@ -143,7 +147,7 @@ const SignUp = () => {
       email : isEmail,
       code : isCode
     };
-  
+
     //axios 파일 전송
     axios
       .post("http://localhost:8080/verify/code", data)
@@ -155,13 +159,13 @@ const SignUp = () => {
           }else{
             alert("코드를 다시 입력해주세요.");
           }
-          
+
       })
       .catch((err) => {
         alert("인증 실패");
         setRead(false);
         console.error('코드 검증 실패:', err); // 실패 시 에러 출력
-      });  
+      });
 
   }
 
@@ -170,13 +174,13 @@ const SignUp = () => {
       <div className={styles.signup}>
         <img src={logoImg} alt='' className={styles.logoimg} />
         <form onSubmit={handleSubmit} >
-          <div className='inputbox'>  
+          <div className='inputbox'>
             <input type="email" id='email' className={styles.inputbox} onChange={handleEmail} readOnly={isRead} placeholder='이메일'/>
           </div>
           <div className='email'>
           <Button variant="primary" className={styles.emailbtn} onClick={sendEmail}>인증번호 전송</Button>
           </div>
-          <div className={styles.hiddenbox} style={{ display: isHidden ? "block" : "none"}}>  
+          <div className={styles.hiddenbox} style={{ display: isHidden ? "block" : "none"}}>
             <div>
               <input type="text" id='emailchk' className={styles.inputbox} onChange={handleCode} placeholder='코드확인'/>
             </div>
@@ -184,23 +188,23 @@ const SignUp = () => {
             <Button variant="primary" className={styles.emailbtn} onClick={checkCode}>인증코드 확인</Button>
           </div>
           </div>
-          <div className='inputbox'>  
+          <div className='inputbox'>
             <input type="password" id='password' className={styles.inputbox} placeholder='비밀번호'/>
           </div>
-          <div className='inputbox'>  
+          <div className='inputbox'>
             <input type="text" id='nickname' className={styles.inputbox} placeholder='닉네임'/>
           </div>
-          <div className='inputbox'>  
-            <input type="text" id='name' className={styles.inputbox} placeholder='이름'/>
-          </div>
-          <div className='inputbox'>  
+          {/*<div className='inputbox'>  */}
+          {/*  <input type="text" id='name' className={styles.inputbox} placeholder='이름'/>*/}
+          {/*</div>*/}
+          <div className='inputbox'>
             <input type="text" id='phone' className={styles.inputbox} placeholder='전화번호'/>
           </div>
           <div className='btnbox'>
             <input type="submit" className={styles.submitbtn} value="회원가입" />
           </div>
         </form>
-      </div>    
+      </div>
     </Container>
   );
 }
