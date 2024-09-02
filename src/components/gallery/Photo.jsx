@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as heartIcon, faArrowUp as arrowUpIcon } from '@fortawesome/free-solid-svg-icons';
 import { useQueryClient } from '@tanstack/react-query';
 
-import styles from './Grid.module.scss';
+import styles from '../../styles/Gallery/Photo.module.scss';
 
 import img1 from './1.jpg';
 import img2 from './2.jpg';
