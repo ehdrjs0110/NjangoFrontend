@@ -34,6 +34,7 @@ import ManagementReport from "./pages/Management/ManagementReport";
 import ManagementLayout from "./pages/Management/ManagementLayout";
 import PrivateRouteAdmin from "./services/Management/PrivateRouteAdmin"
 import PrivateRoute  from "./services/PrivateRoute";
+import Photo from "./components/gallery/Photo";
 
 // import index from '../src/styles/index.css'
 
