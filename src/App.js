@@ -29,11 +29,13 @@ import ManagementDashboard from "./pages/Management/ManagementDashboard";
 import ManagementLayout from "./pages/Management/ManagementLayout";
 import PrivateRouteAdmin from "./services/Management/PrivateRouteAdmin"
 import PrivateRoute  from "./services/PrivateRoute";
+import Photo from "./components/gallery/Photo";
 // import index from '../src/styles/index.css'
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useDispatch, useSelector} from "react-redux";
+
 
 function App() {
   console.log("this is app");
@@ -76,6 +78,7 @@ function App() {
          />
 
           <Route path="/Demo" element={<Demo/>}/>
+          <Route path="/Photo" element={<Photo/>} />
 
         </Routes>
       </Router>
