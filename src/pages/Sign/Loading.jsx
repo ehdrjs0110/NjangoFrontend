@@ -48,12 +48,8 @@ const Loading = () => {
           if(res.data!=null){
             //alert("카카오 계정으로 회원가입 성공!");
             console.log(res.data);
-    
             accessToken = res.data.accessToken;
             refreshToken = res.data.refreshToken;
-    
-            console.log("accesstoken "+ accessToken);
-    
             // redux 변수에 access token 넣는 부분
             dispatch(containToken(accessToken));
             // refresh token cookie에 넣는 부분

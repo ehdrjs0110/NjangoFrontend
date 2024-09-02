@@ -1,5 +1,7 @@
 import axios from "axios";
 import {getToken} from "../Store/accessStore";
+import {expired, getNewToken} from "../services/auth2";
+import {containToken} from "../Store/tokenSlice";
 
 
 const axiosInstance = axios.create({
@@ -16,10 +18,10 @@ const axiosInstance2 = axios.create({
     },
 });
 
+
 axiosInstance.interceptors.request.use(
      (config) => {
          const accessToken = getToken();
-
         if (accessToken) {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
         }

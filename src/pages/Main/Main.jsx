@@ -36,7 +36,11 @@ function Main() {
   };
 
   const recipeshare = () => {
-    navigate('/RecipeShareList')
+    navigate('/RecipeShareList');
+  }
+
+  const gallery = () => {
+    navigate('/gallery');
   }
   
   return (
@@ -72,7 +76,7 @@ function Main() {
             <img src={galleryImg} className={styles.img} alt='' />
               <div className={styles.panel}>
                 <h2 className={styles.text}>갤러리</h2>
-                <a onClick={signin}>바로가기</a>
+                <a onClick={gallery}>바로가기</a>
               </div>
             </Col>
           </Row>

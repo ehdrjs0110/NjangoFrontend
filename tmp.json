@@ -1,0 +1,124 @@
+{
+    "content": [
+        {
+            "id": "ehdrjs0110@gmail.com",
+            "password": "$2a$10$qB7jVS5AheyJ2uh.99kxDeSoLjbMjnp1kfXJSL9Qyezi610W2SFbC",
+            "phoneNumber": "01011112222",
+            "createAt": 1720702481794,
+            "role": "ADMIN",
+            "kakao": false,
+            "enabled": true,
+            "accountNonExpired": true,
+            "credentialsNonExpired": true,
+            "username": "ehdrjs0110@gmail.com",
+            "authorities": [
+                {
+                    "authority": "ROLE_ADMIN"
+                }
+            ],
+            "nickName": "관리자",
+            "accountNonLocked": true
+        },
+        {
+            "id": "ehdrjs0110@naver.com",
+            "password": "$2a$10$BZcxJCrgMap5WNeAfo0zJuFUwYV37Mb3Umt3y5sN/C.YXO08Cnklu",
+            "phoneNumber": "010-8946-9512",
+            "createAt": 1720616940907,
+            "role": "ADMIN",
+            "kakao": true,
+            "enabled": true,
+            "accountNonExpired": true,
+            "credentialsNonExpired": true,
+            "username": "ehdrjs0110@naver.com",
+            "authorities": [
+                {
+                    "authority": "ROLE_ADMIN"
+                }
+            ],
+            "nickName": "관리자",
+            "accountNonLocked": true
+        },
+        {
+            "id": "zxcvbnm2681@naver.com",
+            "password": "$2a$10$9P.IK7uII4CxzmW4q0UjYuu3nwx3Noy6fZTYmaV/TGc/ebddW517K",
+            "phoneNumber": null,
+            "createAt": 1724313600811,
+            "role": "USER",
+            "kakao": true,
+            "enabled": true,
+            "accountNonExpired": true,
+            "credentialsNonExpired": true,
+            "username": "zxcvbnm2681@naver.com",
+            "authorities": [
+                {
+                    "authority": "ROLE_USER"
+                }
+            ],
+            "nickName": "최은희",
+            "accountNonLocked": true
+        },
+        {
+            "id": "heo1356@gmail.com",
+            "password": "$2a$10$AFysczimKPZQA/Y6HmekxethD3Gr5/iGuWlrsEHAhtnYm/HqyIPVe",
+            "phoneNumber": null,
+            "createAt": 1724662882727,
+            "role": "USER",
+            "kakao": true,
+            "enabled": true,
+            "accountNonExpired": true,
+            "credentialsNonExpired": true,
+            "username": "heo1356@gmail.com",
+            "authorities": [
+                {
+                    "authority": "ROLE_USER"
+                }
+            ],
+            "nickName": "은진",
+            "accountNonLocked": true
+        },
+        {
+            "id": "alkjfgh@naver.com",
+            "password": "$2a$10$mYwZgXWS6z89I.JSuRcNGeMT91.jlxtF262QyRLr8v6FYJIdfZvXu",
+            "phoneNumber": null,
+            "createAt": 1724752360349,
+            "role": "USER",
+            "kakao": true,
+            "enabled": true,
+            "accountNonExpired": true,
+            "credentialsNonExpired": true,
+            "username": "alkjfgh@naver.com",
+            "authorities": [
+                {
+                    "authority": "ROLE_USER"
+                }
+            ],
+            "nickName": "유명재",
+            "accountNonLocked": true
+        }
+    ],
+    "pageable": {
+        "pageNumber": 0,
+        "pageSize": 5,
+        "sort": {
+            "empty": true,
+            "sorted": false,
+            "unsorted": true
+        },
+        "offset": 0,
+        "unpaged": false,
+        "paged": true
+    },
+    "last": false,
+    "totalPages": 2,
+    "totalElements": 6,
+    "size": 5,
+    "number": 0,
+    "sort": {
+        "empty": true,
+        "sorted": false,
+        "unsorted": true
+    },
+    "first": true,
+    "numberOfElements": 5,
+    "empty": false
+}

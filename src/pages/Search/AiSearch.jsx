@@ -93,38 +93,26 @@ const AiSearch = () => {
 
 // accesstoken2 대체
     async function tokenHandler() {
-
-
         const isExpired = expired();
         if(isExpired){
-
             let refreshToken = cookies.refreshToken;
             try {
-
-                // getNewToken 함수 호출 (비동기 함수이므로 await 사용)
                 const result = await getNewToken(refreshToken);
                 refreshToken = result.newRefreshToken;
-
-                // refresh token cookie에 재설정
                 setCookie(
                     'refreshToken',
                     refreshToken,
                     {
                         path:'/',
                         maxAge: 7 * 24 * 60 * 60, // 7일
-                        // expires:new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000)
                     }
                 )
-
-                // Redux access token 재설정
                 dispatch(containToken(result.newToken));
-
             } catch (error) {
                 console.log(error);
                 navigate('/Sign');
             }
         }
-
     }
 
 
@@ -282,20 +270,15 @@ const AiSearch = () => {
             console.log('Request Bundle:', requestBundle);
             await tokenHandler();
             searchResponse = await axiosInstance.post("api/v1/chat-gpt/word",requestBundle);
-            
-
         } catch (e) {
             console.error(e);
-
         }
         let response = searchResponse.data;
         console.log(response);
 
         // 원래코드
         let jsonString = JSON.stringify(response);
-
         console.log("not clean: " + jsonString);
-
 
         // 추가
         // const cleanedJsonString = jsonString.replace(/\\n/g, '').replace(/^\s+|\s+$/g, '');

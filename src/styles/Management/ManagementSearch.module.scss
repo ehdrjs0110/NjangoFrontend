@@ -1,0 +1,44 @@
+@import '../index.scss';
+
+.listGroupHorizontal {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin: 0 auto; /* 가운데 정렬을 위해 좌우 여백을 자동으로 설정 */
+
+  //width: 90%; /* 전체 너비를 90%로 설정 */
+}
+//
+//.listGroupItem {
+//  flex: 1; /* 각 항목이 동일한 넓이를 가짐 */
+//  text-align: center; /* 내용 가운데 정렬 */
+//}
+
+//.tableHeader {
+//  font-weight: bold; /* 제목을 강조 */
+//  background-color: #f8f9fa; /* 배경색 추가 */
+//}
+//
+//.item {
+//  flex: 1; /* 모든 항목이 동일한 비율로 넓이를 차지하게 함 */
+//  text-align: center; /* 가운데 정렬 */
+//  overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
+//  white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+//  text-overflow: ellipsis; /* 넘친 텍스트에 생략 기호(...) 추가 */
+//}
+
+
+.item, .tableHeader {
+  flex: 1; /* 모든 항목이 동일한 비율로 넓이를 차지하게 함 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+  overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
+  white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+  text-overflow: ellipsis; /* 넘친 텍스트에 생략 기호(...) 추가 */
+  padding: 10px; /* 적절한 내부 여백 추가 */
+  box-sizing: border-box; /* padding과 border를 포함하여 크기를 계산 */
+}
+
+
+.userIdItem {
+  flex: 2; /* User Id 항목을 다른 항목보다 더 넓게 설정 */
+}

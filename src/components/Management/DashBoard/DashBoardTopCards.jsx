@@ -4,73 +4,99 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faUserPlus, faChartLine, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import styles from '../../../styles/Management/ManagementDashboard.module.scss';
 import axios from "axios";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {useCookies} from "react-cookie";
+import {useNavigate} from "react-router-dom";
+import {expired, getNewToken} from "../../../services/auth2";
+import {containToken} from "../../../Store/tokenSlice";
+import {containIsAdmin} from "../../../Store/isAdminSlice";
+import {axiosInstance} from "../../../middleware/customAxios";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 
+const DashboardTopCards = () => {
+    const [newUserCount, setNewUserCount] = useState(0);
+    const [totalUserCount, setTotalUserCount] = useState(0);
+    const [totalSearchCount, setTotalSearchCount] = useState(0);
 
-const NewMembersCard = () => {
-    const [newUserCount,setNewUserConut] = useState(0);
-    let accessToken = useSelector(state => state.token.value);
+    const [cookies, setCookie] = useCookies(['refreshToken']);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    async function tokenHandler() {
+        const isExpired = expired();
+        if (isExpired) {
+            let refreshToken = cookies.refreshToken;
+            try {
+                const result = await getNewToken(refreshToken);
+                refreshToken = result.newRefreshToken;
+                setCookie('refreshToken', refreshToken, { path: '/', maxAge: 7 * 24 * 60 * 60 });
+                dispatch(containToken(result.newToken));
+                dispatch(containIsAdmin(true));
+            } catch (error) {
+                console.log(error);
+                navigate('/Management');
+            }
+        }
+    }
+
     useEffect(() => {
-        axios.get(
-                "http://localhost:8080/management/user/todayNewUser", {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${accessToken}` // auth 설정
-                    },
-                }
-            ).then(res => setNewUserConut(res.data))
-            .catch(console.error)
+        const fetchData = async () => {
+            try {
+                await tokenHandler();
 
+                const newUserRes = await axiosInstance.get(`management/user/todayNewUser`);
+                setNewUserCount(newUserRes.data);
 
+                const totalUserRes = await axiosInstance.get(`management/user/totalUser`);
+                setTotalUserCount(totalUserRes.data);
 
+                const searchCountRes = await axiosInstance.get(`management/search/allCount`);
+                setTotalSearchCount(searchCountRes.data);
+
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchData();
     }, []);
 
-    return(
+    return (
+        <Row className={styles.topPartRow} xs={2} md={4}>
+            <Col> <NewMembersCard count={newUserCount} /></Col>
+            <Col><TotalMembersCard count={totalUserCount} /></Col>
+            <Col><TodayAllSearchCard count={totalSearchCount} /></Col>
+            <Col><MonthlyRevenueCard /></Col>
+        </Row>
+    );
+};
+
+const NewMembersCard = ({ count }) => (
     <Card border="primary" className={styles.managementCard}>
         <Card.Header>신규회원</Card.Header>
         <Card.Body className={styles.cardBodyContainer}>
-            <Card.Title className={styles.managementCardTitle}>{newUserCount}</Card.Title>
+            <Card.Title className={styles.managementCardTitle}>{count}</Card.Title>
             <FontAwesomeIcon icon={faUser} className={styles.managementCardIcon} />
         </Card.Body>
     </Card>
-    )
-};
+);
 
-const TotalMembersCard = () => {
-    const [totalUserCount,setTotalUserCount] = useState(0);
-    let accessToken = useSelector(state => state.token.value);
-    useEffect(() => {
-        axios.get(
-            "http://localhost:8080/management/user/totalUser", {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${accessToken}` // auth 설정
-                },
-            }
-        ).then(res => setTotalUserCount(res.data))
-            .catch(console.error)
-
-
-
-    }, []);
-
-    return(
+const TotalMembersCard = ({ count }) => (
     <Card border="primary" className={styles.managementCard}>
         <Card.Header>전체 회원</Card.Header>
         <Card.Body className={styles.cardBodyContainer}>
-            <Card.Title className={styles.managementCardTitle}>{totalUserCount}</Card.Title>
-            <FontAwesomeIcon icon={faUserPlus} className={styles.managementCardIcon}/>
+            <Card.Title className={styles.managementCardTitle}>{count}</Card.Title>
+            <FontAwesomeIcon icon={faUserPlus} className={styles.managementCardIcon} />
         </Card.Body>
     </Card>
-    )
-};
+);
 
-const RecipeSearchCard = () => (
+const TodayAllSearchCard = ({ count }) => (
     <Card border="primary" className={styles.managementCard}>
         <Card.Header>레시피 검색량</Card.Header>
         <Card.Body className={styles.cardBodyContainer}>
-            <Card.Title className={styles.managementCardTitle}>Primary Card Title</Card.Title>
+            <Card.Title className={styles.managementCardTitle}>{count}</Card.Title>
             <FontAwesomeIcon icon={faChartLine} className={styles.managementCardIcon} />
         </Card.Body>
     </Card>
@@ -86,4 +112,5 @@ const MonthlyRevenueCard = () => (
     </Card>
 );
 
-export { NewMembersCard, TotalMembersCard, RecipeSearchCard, MonthlyRevenueCard };
+
+export default DashboardTopCards

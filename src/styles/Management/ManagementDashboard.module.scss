@@ -12,10 +12,14 @@
   justify-content: space-between; /* 아이콘과 텍스트 사이의 간격을 최대화하기 위해 공간을 만듭니다 */
   align-items: center; /* 수직으로 가운데 정렬 */
 
-  //.downPartContainer {
-  //  background-color: pink;
-  //  height: 100vh;
-  //}
+  //width: 100%; // .cardBodyContainer가 부모의 가로 길이를 모두 차지하도록 설정
+
+  table {
+
+    //width: 100%;
+    //align-self: flex-start; // 테이블을 컨테이너의 위쪽에 정렬
+  }
+
 }
 
 .managementCard {
@@ -72,6 +76,77 @@
     .downPartCard{
       //height: 80%;
       height: 50%;
+    }
+  }
+}
+
+
+
+
+.cardBodyContainerForTable {
+  display: flex;
+  justify-content: space-between; // 좌우로 화살표와 콘텐츠 사이의 간격을 조절
+  align-items: flex-start; // 콘텐츠를 상단에 위치시킴
+  width: 100%; // 가로로 카드의 전체 너비를 차지하도록 설정
+  height: auto; // 필요에 따라 높이를 자동으로 설정 (또는 원하는 값으로 설정)
+  padding-top: 0; // 여백 제거
+
+  .cardContent {
+    flex-grow: 1; // 가로 공간을 최대한 차지하게 설정
+  }
+
+  .arrow {
+    font-size: 36px; // 화살표 크기 설정
+    color: #555; // 화살표 색상 설정
+    padding: 10px; // 화살표 주변 여백
+    border-radius: 50%; // 둥근 화살표 배경
+    background-color: #f2f5fa; // 화살표 배경색
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); // 화살표에 그림자 추가
+    transition: transform 0.3s ease, box-shadow 0.3s ease; // 화살표에 부드러운 애니메이션 추가
+    cursor: pointer; // 클릭 가능하게 설정
+
+    &:hover {
+      transform: scale(1.1); // 호버 시 화살표 크기 증가
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); // 호버 시 그림자 강화
+    }
+
+    &:active {
+      transform: scale(0.95); // 클릭 시 약간 줄어듦
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); // 클릭 시 그림자 약간 줄어듦
+    }
+  }
+}
+
+
+
+.fadeIn {
+  animation: fade-in 0.5s ease-in-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(20px); /* 카드가 약간 오른쪽에서 들어오는 효과 */
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.cardBodyContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 양쪽 끝에 화살표를 배치 */
+
+  .arrow {
+    cursor: pointer;
+    font-size: 2rem;
+    color: #007bff; /* 화살표 색상 */
+    transition: color 0.3s ease;
+    
+    &:hover {
+      color: #0056b3; /* 호버 시 색상 */
     }
   }
 }
