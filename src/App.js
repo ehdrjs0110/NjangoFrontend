@@ -26,10 +26,15 @@ import LikeDetail from './pages/Like/LikeDetail';
 import ManagementLogin from './pages/Management/ManagementLogin';
 import ManagementNav from "./pages/Management/ManagementNav";
 import ManagementDashboard from "./pages/Management/ManagementDashboard";
+import ManagementUser from "./pages/Management/ManagementUser";
+import ManagementInquiry from "./pages/Management/ManagementInquiry";
+import ManagementComunity from "./pages/Management/ManagementComunity";
+import ManagementSearch from "./pages/Management/ManagementSearch";
+import ManagementReport from "./pages/Management/ManagementReport";
 import ManagementLayout from "./pages/Management/ManagementLayout";
 import PrivateRouteAdmin from "./services/Management/PrivateRouteAdmin"
 import PrivateRoute  from "./services/PrivateRoute";
-import Photo from "./components/gallery/Photo";
+
 // import index from '../src/styles/index.css'
 
 
@@ -71,11 +76,27 @@ function App() {
 
 
           {/* Management Pages*/}
-          <Route path="/Management" element={<ManagementLogin/>}/>
-         {/*<Route path="/Management/Dashboard" element={<ManagementLayout><ManagementDashboard /></ManagementLayout>} />*/}
-         <Route path="/Management/Dashboard" element={<PrivateRouteAdmin
-             component={<ManagementLayout><ManagementDashboard /></ManagementLayout>} />}
-         />
+          <Route path="/Management/*" element={<ManagementLogin/>}/>
+          {/*<Route path="/Management/Dashboard" element={<ManagementLayout><ManagementDashboard /></ManagementLayout>} />*/}
+          <Route path="/Management/Dashboard" element={<PrivateRouteAdmin
+            component={<ManagementLayout><ManagementDashboard /></ManagementLayout>} />}
+          />
+          <Route path="/Management/User" element={<PrivateRouteAdmin
+            component={<ManagementLayout><ManagementUser /></ManagementLayout>} />}
+          />
+          <Route path="/Management/Inquiry" element={<PrivateRouteAdmin
+            component={<ManagementLayout><ManagementInquiry /></ManagementLayout>} />}
+          />
+          <Route path="/Management/Comunity" element={<PrivateRouteAdmin
+            component={<ManagementLayout><ManagementComunity /></ManagementLayout>} />}
+          />
+          <Route path="/Management/Report" element={<PrivateRouteAdmin
+            component={<ManagementLayout><ManagementReport /></ManagementLayout>} />}
+          />
+
+          <Route path="/Management/Search" element={<PrivateRouteAdmin
+              component={<ManagementLayout><ManagementSearch /></ManagementLayout>} />}
+          />
 
           <Route path="/Demo" element={<Demo/>}/>
           <Route path="/Photo" element={<Photo/>} />
