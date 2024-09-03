@@ -70,11 +70,11 @@ const WordSearchListTable = () => {
     };
 
     const columns = [
-        { header: 'Search Id' },
-        { header: 'User Id ' },
-        { header: 'Nickname ' },
-        { header: 'Search Word' },
-        { header: 'Create At' },
+        { header: 'SearchId' },
+        { header: 'UserId' },
+        { header: 'Nickname' },
+        { header: 'SearchWord' },
+        { header: 'CreateAt' },
         { header: 'actions' },
     ];
 
@@ -100,6 +100,7 @@ const WordSearchListTable = () => {
     return (
         <TableWithPagination
             apiEndpoint="management/search/getWordSearchListbyIndex"
+            searchApiEndpoint="management/search/getTodaySearchListbyIndex"
             columns={columns}
             renderRow={renderWordSearchRow}
             pageSize={5}
