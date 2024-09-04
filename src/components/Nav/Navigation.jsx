@@ -60,13 +60,9 @@ function Navigation() {
       reduxNickname = decoded.nickname;
       // kakao
       isKakao = decoded.kakao;
-
-
       dispatch(containEmail(reduxEmail));
       dispatch(containNickName(reduxNickname));
       dispatch(containIsKaKao(isKakao));
-
-
       console.log(decoded);
       console.log(decoded.sub); // useremail
       console.log(decoded.nickname); //
@@ -76,7 +72,6 @@ function Navigation() {
   }
 
   const logout =  async () => {
-
     removeCookie('refreshToken');
     dispatch(containToken(null));
     dispatch(containEmail(null));
@@ -85,23 +80,16 @@ function Navigation() {
     console.log("토큰 제거 테스트");
     console.log(refreshToken);
     console.log("logout " + isKakao);
-
-
     // navigate('/SignIn');
     // redux에서 카카오로 로그인 여부 확인하기
     if(isKakao)
     {
-
         try {
           console.log("카카오 로그아웃 처리");
           const CLIENT_ID = "7a2afab08fdef9ddd3b09ac451ca30b9";
           const REDIRECT_URI = "http://localhost:3000/Main";
           const KOKAO_LOGOUT_URL = `https://kauth.kakao.com/oauth/logout?client_id=${CLIENT_ID}&logout_redirect_uri=${REDIRECT_URI}`;
           // const KOKAO_LOGOUT_URL = `https://kauth.kakao.com/oauth/logout`;
-
-
-
-
           try {
             const response = await axios.get(KOKAO_LOGOUT_URL);
             console.log(response.data);

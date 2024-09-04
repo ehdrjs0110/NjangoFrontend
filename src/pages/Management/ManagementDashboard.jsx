@@ -1,27 +1,13 @@
 import style from "../../styles/Management/ManagementDashboard.module.scss"
 import Card from "react-bootstrap/Card";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-    faChartBar,
-    faChartLine,
-    faCoins, faCreditCard, faDollarSign,
-    faMoneyBill,
-    faSearch,
-    faUser,
-    faUserPlus, faWallet
-} from "@fortawesome/free-solid-svg-icons";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import Chart from 'chart.js/auto';
-import {useEffect, useRef} from "react";
 import {Stack} from "react-bootstrap";
-// import { NewMembersCard, TotalMembersCard, TodayAllSearchCard, MonthlyRevenueCard } from "../../components/Management/DashBoard/DashBoardTopCards";
 import DashboardTopCards from "../../components/Management/DashBoard/DashBoardTopCards";
 import Visit from "../../components/Management/DashBoard/DashBoardVisit";
 import DaySearch from "../../components/Management/DashBoard/DashBoardDaySearch";
-import {useCookies} from "react-cookie";
-import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import DashBoardInquire from "../../components/Management/DashBoard/DashBoardInquire";
+
 const ManagementDashboard = () => {
 
     return(
@@ -45,21 +31,22 @@ const ManagementDashboard = () => {
                     </Col>
                     <Col className={style.downPartCol}>
                         <Card border="light">
-                            <Card.Title>
-                                미정
-                            </Card.Title>
-                            <Card.Body>
+                            <DashBoardInquire/>
+                            {/*<Card.Title>*/}
+                            {/*    미정*/}
+                            {/*</Card.Title>*/}
+                            {/*<Card.Body>*/}
 
-                            </Card.Body>
+                            {/*</Card.Body>*/}
                         </Card>
                     </Col>
                     <Col className={style.downPartCol}>
                         <Card border="light">
                             <Card.Title>
-                               <DaySearch/>
+
                             </Card.Title>
                             <Card.Body>
-
+                                <DaySearch/>
                             </Card.Body>
                         </Card>
                     </Col>
