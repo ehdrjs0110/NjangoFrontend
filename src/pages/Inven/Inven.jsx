@@ -31,6 +31,8 @@ import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
 function Inven() {
     const navigate = useNavigate();
 
+  const [showAddContainer, setShowAddContainer] = useState(false);
+
   //페이지 변화
   const [isChange, setChange] = useState(false);
   //재료 데이터
@@ -64,8 +66,6 @@ function Inven() {
     const dispatch = useDispatch();
 
   useEffect(() => {
-    // setChange(true);
-
     const fetchData = async () => {
 
       const params = { userId:userId};
@@ -79,6 +79,7 @@ function Inven() {
         if(res!=null){
           console.log(res.data);
           setData(res.data);
+          setChange(true);
         }
       }catch(err){
         console.log("err message : " + err);
@@ -298,6 +299,10 @@ function Inven() {
   const cookmode = () => {
     navigate('/AiSimpleSearch', {state:isIngred});
   };
+
+  const toggleAddContainer = () => {
+    setShowAddContainer(!showAddContainer); // 버튼 클릭 시 addContainer를 토글합니다.
+  };
   
   return (
     <>
@@ -311,43 +316,96 @@ function Inven() {
                 <div className={styles.serch}>
                   <Form.Control type="text" placeholder="재료검색" />
                 </div>
-                <Button className={styles.serchbtn} variant="primary">검색</Button>
-                <Button className={styles.btn} onClick={excelmode} variant="none">전문가 모드</Button>
-                <Button className={styles.btn} onClick={cookmode} variant="none">나의 재료로 요리하기</Button>
-                <Button className={styles.btn} onClick={updateData} variant="none">일괄 저장</Button>
+                <button className={styles.button}>찾기</button>
+                <button className={styles.button} onClick={toggleAddContainer}>추가</button>
+                <button className={styles.button} onClick={updateData}>저장</button>
+                <button className={styles.button} onClick={cookmode}>요리 시작</button>
+                <button className={styles.button} onClick={excelmode}>전문가 모드</button>
+                {/*<Button className={styles.serchbtn} variant="primary">찾기</Button>*/}
+                {/*<Button className={styles.btn} onClick={updateData} variant="none">저장</Button>*/}
+                {/*<Button className={styles.btn} onClick={cookmode} variant="none">요리 시작</Button>*/}
+                {/*<Button className={styles.btn} onClick={excelmode} variant="none">전문가 모드</Button>*/}
               </Col>
             </Row>
           </Col>
         </Row>
-        <Row className={styles.addContentRow}>
-          <Col md={{span: 10, offset: 1}} className={styles.addContent}>
-            <Row className={styles.addline}>
-              <Col>
-              <Form.Control type="text" className={styles.ingredientname} onChange={setIngredName} value={isNewData.ingredientname} placeholder="재료명"/>
-              </Col>
-              <Col>
-                <Button className={styles.btn} variant="none" onClick={setSize} value={"없음"} disabled={isClickSize==="없음"} >없음</Button>
-              </Col>
-              <Col>
-                <Button className={styles.btn} variant="none" onClick={setSize} value={"적음"} disabled={isClickSize==="적음"} >적음</Button>
-                <Button className={styles.btn} variant="none" onClick={setSize} value={"적당함"} disabled={isClickSize==="적당함"} >적당함</Button>
-                <Button className={styles.btn} variant="none" onClick={setSize} value={"많음"} disabled={isClickSize==="많음"} >많음</Button>
-              </Col>
-              <Col>
-                <p className={styles.text}>수량</p>
-                <Form.Control type="number" className={styles.count} onChange={setCount} value={(isNewData.status.count===null)?0:isNewData.status.count} placeholder="0"/>
-              </Col>
-              <Col>
-              <Button className={styles.addBtn} variant="none" onClick={addData}>추가</Button>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+          {/* 재료 추가 컨테이너를 조건부 렌더링 */}
+          {showAddContainer && (
+              <Row className={styles.addContentRow}>
+                <Col md={{ span: 10, offset: 1 }} className={styles.addContent}>
+                  <Row className={styles.addline}>
+                    <Col>
+                      <Form.Control
+                          type="text"
+                          className={styles.ingredientname}
+                          onChange={(e) => setNewData({ ...isNewData, ingredientname: e.target.value })}
+                          value={isNewData.ingredientname}
+                          placeholder="재료명"
+                      />
+                    </Col>
+                    <Col>
+                      <Button
+                          className={styles.btn}
+                          variant="none"
+                          onClick={(e) => setClickSize(e.target.value)}
+                          value={"없음"}
+                          disabled={isClickSize === "없음"}
+                      >
+                        없음
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button
+                          className={styles.btn}
+                          variant="none"
+                          onClick={(e) => setClickSize(e.target.value)}
+                          value={"적음"}
+                          disabled={isClickSize === "적음"}
+                      >
+                        적음
+                      </Button>
+                      <Button
+                          className={styles.btn}
+                          variant="none"
+                          onClick={(e) => setClickSize(e.target.value)}
+                          value={"적당함"}
+                          disabled={isClickSize === "적당함"}
+                      >
+                        적당함
+                      </Button>
+                      <Button
+                          className={styles.btn}
+                          variant="none"
+                          onClick={(e) => setClickSize(e.target.value)}
+                          value={"많음"}
+                          disabled={isClickSize === "많음"}
+                      >
+                        많음
+                      </Button>
+                    </Col>
+                    <Col>
+                      <p className={styles.text}>수량</p>
+                      <Form.Control
+                          type="number"
+                          className={styles.count}
+                          onChange={(e) => setNewData({ ...isNewData, status: { ...isNewData.status, count: e.target.value } })}
+                          value={isNewData.status.count || 0}
+                          placeholder="0"
+                      />
+                    </Col>
+                    <Col>
+                      <Button className={styles.addBtn} variant="none" onClick={addData}>
+                        추가
+                      </Button>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+          )}
         <Row className={styles.contentRow}>
           <Col md={{span: 10, offset: 1}} className={styles.content}>
           <Scrollbars className={styles.scroll}>
             <div className={styles.item}>
-              
             {isData && isData.map((item, index) => {
               // 클래스 네임 결합
               const combinedClassName = classNames(

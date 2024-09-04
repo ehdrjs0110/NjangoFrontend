@@ -1,13 +1,20 @@
 $p-color : #fca85b;
-$bg-color : #FFF8E7;
-
+//$bg-color : #FFF8E7; 원래 컬러
+$bg-color : #f3f6fd;
+//
 $p-font-color : #516A6F;
 $accent-color : #666E63;
 
-$white-color : white;
+$white-color : #ffffff;
 $danger-color : #dc3545;
 $primary-color : #0d6efd;
 $secondary-color : #6c757d;
 
-$wave-background: #0af;
-$text-color: white;
+// Font import
+@import url('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap');
+
+.englishFont {
+  font-family: "Bagel Fat One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
