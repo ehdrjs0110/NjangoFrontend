@@ -135,36 +135,33 @@ function Navigation() {
     navigate("/SignIn");
   }
 
-  return (
-    <>
 
-      <Navbar bg="light" data-bs-theme="light" >
-        <Container>
-          <Navbar.Brand onClick={goToMain}>
-            <img src={logo} className={styles.logo} alt='' />
-          </Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link onClick={goToInven}>냉장고 관리</Nav.Link>
-            <Nav.Link onClick={goToSearch}>레시피 검색</Nav.Link>
-            <Nav.Link>커뮤니티</Nav.Link>
-          </Nav>
-          <Nav>
-            <a className={styles.shop} >
-              <img src={cart} className={styles.cart} alt='' />
-            </a>
-            <NavDropdown title={id} id="navbarScrollingDropdown">
-              <NavDropdown.Item onClick={goToMy}>내 정보</NavDropdown.Item>
-              <NavDropdown.Item  href="#action4">구매내역</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={logout}>
-                로그아웃
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-          
-        </Container>
-      </Navbar>
-    </>
+  return (
+      <div className={styles.navContainer}>
+        <Navbar>
+          <Container>
+            <Navbar.Brand onClick={goToMain}>
+              <img src={logo} className={styles.logo} alt='' />
+            </Navbar.Brand>
+            <Nav className={`${styles.navCenter} me-auto`}>
+              <Nav.Link onClick={goToInven}>냉장고 관리</Nav.Link>
+              <Nav.Link onClick={goToSearch}>레시피 검색</Nav.Link>
+              <Nav.Link>커뮤니티</Nav.Link>
+            </Nav>
+            <Nav>
+              <a className={styles.shop}>
+                <img src={cart} className={styles.cart} alt='' />
+              </a>
+              <NavDropdown title={reduxNickname || "Profile"} id="navbarScrollingDropdown">
+                <NavDropdown.Item onClick={goToMy}>내 정보</NavDropdown.Item>
+                <NavDropdown.Item href="#action4">구매내역</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={logout}>로그아웃</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Container>
+        </Navbar>
+      </div>
   );
 }
 

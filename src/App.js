@@ -34,6 +34,9 @@ import ManagementReport from "./pages/Management/ManagementReport";
 import ManagementLayout from "./pages/Management/ManagementLayout";
 import PrivateRouteAdmin from "./services/Management/PrivateRouteAdmin"
 import PrivateRoute  from "./services/PrivateRoute";
+import MainCopy from "./pages/Main/MainCopy";
+
+
 
 // import index from '../src/styles/index.css'
 
@@ -56,6 +59,7 @@ function App() {
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/Loading" element={<Loading />} />
           <Route path="/Main" element={<PrivateRoute component={<Main />} />} />
+          <Route path="/Main/new" element={<PrivateRoute component={<MainCopy />} />} />
           <Route path="/Promotion" element={<Promotion />} />
           <Route path="/Logout" element={<Logout/>}/>
           <Route path="/AiSearch" element={<PrivateRoute component={<AiSearch />}/>} />

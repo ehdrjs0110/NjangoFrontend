@@ -31,19 +31,19 @@ const ManagementDashboard = () => {
                     </Col>
                     <Col className={style.downPartCol}>
                         <Card border="light">
-                            <DashBoardInquire/>
-                            {/*<Card.Title>*/}
-                            {/*    미정*/}
-                            {/*</Card.Title>*/}
-                            {/*<Card.Body>*/}
 
-                            {/*</Card.Body>*/}
+                            <Card.Title>
+                                최근 문의
+                            </Card.Title>
+                            <Card.Body>
+                                <DashBoardInquire/>
+                            </Card.Body>
                         </Card>
                     </Col>
                     <Col className={style.downPartCol}>
                         <Card border="light">
                             <Card.Title>
-
+                                TODAY 검색 상위 TOP 5
                             </Card.Title>
                             <Card.Body>
                                 <DaySearch/>
