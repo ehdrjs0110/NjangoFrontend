@@ -1,0 +1,151 @@
+@import '../index.scss';
+@import url('https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css');
+
+$panel-width: 300px;
+$panel-height: 300px;
+$panel-radius: 5px;
+$panel-shadow: 0 2px 30px rgba(black, .2);
+$wave-size: 500px;
+$wave-opacity: .4;
+$text-shadow: 0 1px 0 rgba(black, .1);
+$text-font: 'Playfair Display', serif;
+$text-letter-spacing: .4em;
+$text-font-size: 24px;
+
+/* ( 크롬, 사파리, 오페라, 엣지 ) 동작 */
+html::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+
+.container {
+  height: 100vh;
+
+  .main {
+    .panel {
+      width: $panel-width;
+      height: $panel-height;
+      border-radius: $panel-radius;
+      box-shadow: $panel-shadow;
+      background: lighten(#f0f4c3, 10%);
+      position: relative;
+      overflow: hidden;
+      transform: translate3d(0, 0, 0);
+
+      &:after {
+        content: '';
+        display: block;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(#e8a, 1), rgba(#def, 0) 80%, rgba(white, .5));
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    .wave {
+      opacity: $wave-opacity;
+      position: absolute;
+      top: 3%;
+      left: 50%;
+      background: $wave-background;
+      width: $wave-size;
+      height: $wave-size;
+      margin-left: -$wave-size / 2;
+      margin-top: -$wave-size / 2;
+      transform-origin: 50% 48%;
+      border-radius: 43%;
+      animation: drift 3000ms infinite linear;
+
+      &.two {
+        animation: drift 7000ms infinite linear;
+        opacity: .1;
+        background: yellow;
+      }
+
+      &.three {
+        animation: drift 5000ms infinite linear;
+      }
+    }
+
+    .text {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      line-height: $panel-height;
+      text-align: center;
+      transform: translate3d(0, 0, 0);
+      color: $text-color;
+      text-transform: uppercase;
+      font-family: $text-font;
+      letter-spacing: $text-letter-spacing;
+      font-size: $text-font-size;
+      text-shadow: $text-shadow;
+      text-indent: .3em;
+    }
+
+    .icon {
+      margin: 0px;
+      font-size: 20px;
+      text-decoration: none;
+      padding: 5px 160px 10px 5px; // 패딩 조정으로 아이콘 위치를 왼쪽 정렬
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 35px;
+      height: 35px;
+      z-index: 999;
+
+      &.amethyst {
+        background-color: #9b59b6;
+        color: rgb(255, 0, 0);
+      }
+
+      // 아이콘에 대한 스타일 추가
+      span {
+        display: inline-block;
+        transition: transform 0.3s ease-in-out;
+        // 다른 스타일을 추가할 수 있습니다.
+      }
+
+      &:hover span {
+        cursor: pointer;
+        animation: arrow-animation 5s ease-in-out infinite;
+      }
+    }
+
+    @keyframes drift {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes arrow-animation {
+      10% {
+        text-indent: 0px;
+      }
+      45% {
+        text-indent: 1000px;
+      }
+      46% {
+        opacity: 0;
+      }
+      47% {
+        text-indent: -1000px;
+      }
+      60% {
+        text-indent: 0px;
+        opacity: 1;
+      }
+    }
+  }
+}
