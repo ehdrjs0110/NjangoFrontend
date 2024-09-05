@@ -27,10 +27,6 @@ function Main() {
     navigate('/AiSearch');
   };
 
-  const signin = () => {
-    navigate('/SignIn');
-  };
-
   const inven = () => {
     navigate('/Inven');
   };

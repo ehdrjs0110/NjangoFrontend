@@ -10,17 +10,12 @@ import Navigation from '../../components/Nav/Navigation'
 import Card from "react-bootstrap/Card";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import {
-    faEllipsis,
-    faHandHoldingHeart,
     faHourglassHalf,
-    faMobile,
     faStar,
     faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import {useLocation} from "react-router-dom";
-import axios from "axios";
 import {useNavigate} from "react-router-dom";
 // auth 관련 --
 import {useCookies} from "react-cookie";
@@ -29,32 +24,45 @@ import {containToken} from "../../Store/tokenSlice";
 import {useDispatch, useSelector} from "react-redux";
 //--
 
-import {axiosInstance} from "../../middleware/customAxios";
-import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
+import {axiosInstance, axiosInstanceFormData} from "../../middleware/customAxios";
 
 import styles from '../../styles/History/HistoryDetail.module.scss';
 
-const RecipeShareDetail = () => {
+const EditRecipe = () => {
     const navigate = useNavigate();
     const location = useLocation(); // 현재 위치 객체를 가져옴
     const { recipeId } = location.state || {}; // 전달된 상태에서 recipe 추출, 없을 경우 빈 객체로 대체
-    const [detailRecipe, setDetailRecipe] = useState(null);
+    const [detailRecipe, setDetailRecipe] = useState([]);
     const [title, setTitle] = useState(null);
-    const [ingredient, setIngredient] = useState(null);
+    const [ingredient, setIngredient] = useState([]);
     const [level,setLevel] = useState(0);
     const [time,setTime] = useState(0);
     const [serve,setServe] = useState(0);
-    const [content,setContent] = useState(null);
+    const [content, setContent] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    //레시피ID 만들기를 위한 시간 가져오기
+    var today = new Date(); //현재시간 가져오기
+    let year = today.getFullYear(); // 년도
+    let month = today.getMonth() + 1;  // 월
+    let date = today.getDate();  // 날짜
+    let hours = today.getHours(); // 시
+    let minutes = today.getMinutes();  // 분
+    let seconds = today.getSeconds();  // 초
+    const nowTime = year + "" + month + "" + date + "" + hours + "" + minutes + "" + seconds;
 
     // auth 관련 --
     const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
     // redux에서 가져오기
-    let accessToken = useSelector(state => state.token.value);
     let  userId = useSelector(state=> state.userEmail.value);
     const dispatch = useDispatch();
     // --
 
     console.log(recipeId);  
+
+        //Recipe ID 생성
+    const newRecipeId = userId + nowTime;
+    console.log(newRecipeId);
 
     useEffect(() => {
 
@@ -75,7 +83,7 @@ const RecipeShareDetail = () => {
 
                 setDetailRecipe(detailRecipeArray);
                 setTitle(storedRecipe[0].title);
-                setIngredient(detailIngredientsArray);
+                setIngredient(formatIngredients(detailIngredientsArray).replace(/\"/gi, ""));
                 setLevel(storedRecipe[0].level);
                 setServe(storedRecipe[0].servings);
                 setTime(storedRecipe[0].time);
@@ -151,12 +159,6 @@ const RecipeShareDetail = () => {
         }
     }
 
-    const userAll = async() => {
-        await tokenHandler();
-        const res = await axiosInstance.get("/user/userAll");
-        console.log(res.data);
-    }
-
     // ingredients 객체를 문자열로 변환하여 사람이 읽기 쉽게 포맷팅하는 함수
     const formatIngredients = (ingredients) => {
         if(ingredients){
@@ -166,6 +168,93 @@ const RecipeShareDetail = () => {
         }else {
             return "";
         }
+    };
+
+    // 포멧한 ingredients 문자열을 객체로 파싱하는 함수
+    function parseIngredients(ingredientString) {
+        const ingredientObject = {};
+        const ingredients = ingredientString.split(", ");
+        ingredients.forEach(item => {
+            const [key, value] = item.split(": ");
+            ingredientObject[key.trim()] = value.trim();
+        });
+        return ingredientObject;
+    }
+
+    //레시피 공유 게시
+    const postRecipe = async() => {
+
+        let progress = JSON.stringify(detailRecipe);
+        let ingredients = JSON.stringify(parseIngredients(ingredient));
+
+        const formData = new FormData();
+        formData.append("recipeId",newRecipeId);
+        formData.append("title",title);
+        formData.append("ingredients",ingredients);
+        formData.append("progress", progress);
+        formData.append("level",level);
+        formData.append("time",time);
+        formData.append("serve",serve);
+        formData.append("content",content);
+        formData.append('file', selectedFile);
+
+        // formData.forEach((value, key) => {
+        //     console.log("key : " + key + " value : " + value);
+        // });
+
+        try{
+            await tokenHandler();
+            const res = await axiosInstanceFormData.post(`recipeShare/${userId}`, formData);
+            //const storedRecipe = res.data;
+            alert("저장 성공!");
+
+        } catch(err){
+            console.log("err message : " + err);
+        }
+        
+
+    };
+
+    //Title 변경
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+    }
+
+    //Ingredient 변경
+    const handleIngredientChange = (e) => {
+        setIngredient(e.target.value);
+    }
+
+    //level 변경
+    const handleLevelChange = (e) => {
+        setLevel(e.target.value);
+    }
+
+    //Time 변경
+    const handleTimeChange = (e) => {
+        setTime(e.target.value);
+    }
+
+    //Serve 변경
+    const handleServeChange = (e) => {
+        setServe(e.target.value);
+    }
+
+    //Content 변경
+    const handleContentChange = (e) => {
+        setContent(e.target.value);
+    }
+
+    // 파일 선택 핸들러
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+    };
+
+    // 레시피 변경 핸들러
+    const handleDetailRecipeChange = (index, field, value) => {
+        const updatedDetailRecipe = [...detailRecipe];
+        updatedDetailRecipe[index][0][field] = value;
+        setDetailRecipe(updatedDetailRecipe);
     };
 
     // 레시피 자세히 보기 ui
@@ -188,9 +277,9 @@ const RecipeShareDetail = () => {
                         <Col className={styles.recipeCol} xs={11}>
                             <Card className={styles.card}>
                                 <Card.Body className={styles.body}>
-                                    <Card.Title>{recipe[0].과정제목}</Card.Title>
+                                    <Card.Title><Form.Control type="text" value={recipe[0].과정제목} onChange={(e) => handleDetailRecipeChange(index, '과정제목', e.target.value)}/></Card.Title>
                                     <Card.Text>
-                                        {recipe[0].process || recipe[1].process}
+                                        <Form.Control type="text" value={recipe[0].process || recipe[1].process} onChange={(e) => handleDetailRecipeChange(index, 'process', e.target.value)}/>
                                     </Card.Text>
                                 </Card.Body>
                             </Card>
@@ -215,19 +304,7 @@ const RecipeShareDetail = () => {
                                         <Card.Title className={styles.upperHalfContain}>
                                             <Row xs={2} md={2} lg={2}>
                                                 <Col className={styles.titleCol}>
-                                                    {title}
-                                                    <div  className={styles.bottomLine}></div>
-                                                </Col>
-                                                <Col className={styles.iconCol}>
-                                                    <Button  className={styles.iconButton} variant="outline-secondary" onClick={userAll}>
-                                                        <FontAwesomeIcon className={styles.icon} icon={faHeart} />
-                                                    </Button>{' '}
-                                                    <Button  className={styles.iconButton}  variant="outline-secondary" >
-                                                        <FontAwesomeIcon className={styles.icon} icon={faMobile} />
-                                                    </Button>{' '}
-                                                    <Button  className={styles.iconButton}  variant="outline-secondary">
-                                                        <FontAwesomeIcon className={styles.icon} icon={faEllipsis} />
-                                                    </Button>{' '}
+                                                    <Form.Control size="lg" type="text" value={title} onChange={handleTitleChange}/>
                                                 </Col>
                                             </Row>
                                         </Card.Title>
@@ -253,20 +330,27 @@ const RecipeShareDetail = () => {
                                                             <Col>
                                                                 {/*    여기는 비율 맞추기 위한 공백  */}
                                                             </Col>
-                                                            
+                                                            <Col>
+                                                                <Button variant="outline-secondary" className={styles.cookingClearButton} onClick={postRecipe} >게시하기</Button>
+                                                            </Col>
                                                         </Row>
                                                     </Row>
                                                     <Row  style={{margin:0}} xs={2} md={2} lg={2}>
                                                         <Row style={{margin:0}} xs={3} md={3} lg={3}>
                                                             <Col>
+                                                            <Form.Select aria-label="Default select example" onChange={handleLevelChange}>
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                            </Form.Select>
                                                                 <p>난이도</p>
                                                             </Col>
                                                             <Col>
-                                                                <p>{serve}인분</p>
+                                                                <p><Form.Control type="text" value={serve} onChange={handleServeChange}/>인분</p>
                                                             </Col>
                                                             {/*{aiSearchEtcRequest()}*/}
                                                             <Col>
-                                                                <p>{time}분</p>
+                                                                <p><Form.Control type="text" value={time} onChange={handleTimeChange}/>분</p>
                                                             </Col>
                                                         </Row>
                                                         <Row xs={2} md={2} lg={2}>
@@ -285,7 +369,7 @@ const RecipeShareDetail = () => {
                                                 <Card.Body>
                                                     <Card.Title className={styles.ingredientTitle}>재료</Card.Title>
                                                     <div className={styles.ingredientList}>
-                                                        {formatIngredients(ingredient).replace(/\"/gi, "")}
+                                                        <Form.Control type="text" value={ingredient} onChange={handleIngredientChange}/>
                                                     </div>
                                                 </Card.Body>
                                             </Card>
@@ -315,14 +399,12 @@ const RecipeShareDetail = () => {
                                         <div className={styles.detailContainer}>
                                             <Card className={styles.recipeContainCard}>
                                                 <Card.Body>
-                                                    이 레시피는 제가 전남자친구에게 배운 레시피로 너무 맛있어서 잊지 못하고 연락까지 하게 된 레시피입니다.
+                                                    <Form.Control type="file" onChange={handleFileChange} />
                                                 </Card.Body>
                                             </Card>
-                                        </div>
-                                        <div className={styles.detailContainer}>
                                             <Card className={styles.recipeContainCard}>
                                                 <Card.Body>
-                                                    오 흑역사 대박...
+                                                    <Form.Control as="textarea" rows={3} placeholder='내용' onChange={handleContentChange}/>
                                                 </Card.Body>
                                             </Card>
                                         </div>
@@ -337,4 +419,4 @@ const RecipeShareDetail = () => {
     );
 }
 
-export default RecipeShareDetail;
+export default EditRecipe;

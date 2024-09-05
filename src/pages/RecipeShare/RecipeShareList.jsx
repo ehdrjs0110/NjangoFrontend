@@ -6,6 +6,7 @@ import Table from "react-bootstrap/Table";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import UpdateModel from '../../components/RecipeShare/SelectRecipe';
 
 import Card from 'react-bootstrap/Card';
 
@@ -28,6 +29,8 @@ const RecipeShareList = () => {
     
     const [isList, setList] = useState(null);
     const [isChange, setChange] = useState(false);
+    //modal
+    const [modalShow, setModalShow] = useState(false);
     const navigate = useNavigate();
 
     // auth 관련 --
@@ -144,8 +147,16 @@ const RecipeShareList = () => {
                         </div>
                         {/* Title 종료점*/}
 
-
-                        {/*레시피 History 시작점*/}
+                        <Button onClick={() => setModalShow(true)}>레시피 공유하기</Button>
+                        <UpdateModel
+                            show={modalShow}
+                            onHide={() => {
+                                setModalShow(false);
+                                
+                                }
+                            }
+                        />
+                        {/*레시피 공유 시작점*/}
                         <div className={styles.recipeContainer}>
                         <Table striped bordered hover>
                             <thead>

@@ -18,6 +18,12 @@ const axiosInstance2 = axios.create({
     },
 });
 
+const axiosInstanceFormData = axios.create({
+    baseURL:`http://localhost:8080/`,
+    headers: {
+        'Content-Type': "multipart/form-data",
+    },
+});
 
 axiosInstance.interceptors.request.use(
      (config) => {
@@ -52,4 +58,21 @@ axiosInstance2.interceptors.request.use(
     }
 )
 
-export {axiosInstance, axiosInstance2}
+axiosInstanceFormData.interceptors.request.use(
+    (config) => {
+        const accessToken = getToken();
+
+        if (accessToken) {
+            config.headers['Authorization'] = `Bearer ${accessToken}`;
+        }
+
+        return config;
+    },
+    (error) => {
+        console.log("위치: interceptors")
+        console.log(error);
+        return Promise.reject(error);
+    }
+)
+
+export {axiosInstance, axiosInstance2, axiosInstanceFormData}
