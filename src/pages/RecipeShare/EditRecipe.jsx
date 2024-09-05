@@ -194,9 +194,13 @@ const EditRecipe = () => {
         formData.append("progress", progress);
         formData.append("level",level);
         formData.append("time",time);
-        formData.append("serve",serve);
+        formData.append("servings",serve);
         formData.append("content",content);
-        formData.append('file', selectedFile);
+
+        if(selectedFile!=null){
+            formData.append('file', selectedFile);
+        }
+        
 
         // formData.forEach((value, key) => {
         //     console.log("key : " + key + " value : " + value);

@@ -58,7 +58,35 @@ const RecipeShareDetail = () => {
 
     useEffect(() => {
 
-    const fetchData = async () => {
+    const fetchData1 = async () => {
+
+        console.log(recipeId);
+        
+        try{
+            await tokenHandler();
+            const res = await axiosInstance.get(`recipe/${recipeId}`);
+            const storedRecipe = res.data;
+
+            if(storedRecipe && storedRecipe.length > 0) {
+                console.log(storedRecipe);
+
+                const detailRecipeArray = JSON.parse(storedRecipe[0].progress);
+                const detailIngredientsArray = JSON.parse(storedRecipe[0].ingredients);
+
+                setDetailRecipe(detailRecipeArray);
+                setTitle(storedRecipe[0].title);
+                setIngredient(detailIngredientsArray);
+                setLevel(storedRecipe[0].level);
+                setServe(storedRecipe[0].servings);
+                setTime(storedRecipe[0].time);
+            }
+    
+        }catch(err){
+            console.log("err message : " + err);
+        }
+    }
+
+    const fetchData2 = async () => {
 
         console.log(recipeId);
         
@@ -86,7 +114,9 @@ const RecipeShareDetail = () => {
         }
     }
     
-        fetchData();
+        fetchData1();
+        fetchData2();
+
     }, [recipeId]);
 
     async function tokenHandler() {
