@@ -53,6 +53,7 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
+
           <Route path="/nav" element={<Navigation/>}/>
           <Route path="/Sign" element={<Sign />} />
           <Route path="/SignIn" element={<SignIn />} />
