@@ -105,8 +105,8 @@ const RecipeShareList = () => {
         }
     }    
 
-    const goDetail = (recipeId) => {
-        navigate('/RecipeShareDetail', { state: { recipeId } });
+    const goDetail = (recipeShareId) => {
+        navigate('/RecipeShareDetail', { state: { recipeShareId } });
     }
 
     // recipe UI
@@ -119,7 +119,7 @@ const RecipeShareList = () => {
                     <tbody>
                         <tr>
                             <td>{list.recipeShareId}</td>
-                            <td onClick={() =>goDetail(list.recipeId)}>{list.title}</td>
+                            <td onClick={() =>goDetail(list.recipeShareId)}>{list.title}</td>
                             <td>{list.nickname}</td>
                             <td>{list.createAt}</td>
                             <td>{list.likeCount}</td>

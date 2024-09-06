@@ -37,7 +37,7 @@ import styles from '../../styles/History/HistoryDetail.module.scss';
 const RecipeShareDetail = () => {
     const navigate = useNavigate();
     const location = useLocation(); // 현재 위치 객체를 가져옴
-    const { recipeId } = location.state || {}; // 전달된 상태에서 recipe 추출, 없을 경우 빈 객체로 대체
+    const { recipeShareId } = location.state || {}; // 전달된 상태에서 recipe 추출, 없을 경우 빈 객체로 대체
     const [detailRecipe, setDetailRecipe] = useState(null);
     const [title, setTitle] = useState(null);
     const [ingredient, setIngredient] = useState(null);
@@ -45,6 +45,7 @@ const RecipeShareDetail = () => {
     const [time,setTime] = useState(0);
     const [serve,setServe] = useState(0);
     const [content,setContent] = useState(null);
+    const [image,setImage] = useState(null);
 
     // auth 관련 --
     const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
@@ -54,70 +55,42 @@ const RecipeShareDetail = () => {
     const dispatch = useDispatch();
     // --
 
-    console.log(recipeId);  
+    console.log(recipeShareId);  
 
     useEffect(() => {
 
-    const fetchData1 = async () => {
+        const fetchData = async () => {
 
-        console.log(recipeId);
+            console.log(recipeShareId);
+            
+            try{
+                await tokenHandler();
+                const res = await axiosInstance.get(`recipeShare/post/${recipeShareId}`);
+                const storedRecipe = res.data;
+
+                if(storedRecipe && storedRecipe.length > 0) {
+                    console.log(storedRecipe);
+
+                    const detailRecipeArray = JSON.parse(storedRecipe[0].progress);
+                    const detailIngredientsArray = JSON.parse(storedRecipe[0].ingredients);
+
+                    setDetailRecipe(detailRecipeArray);
+                    setTitle(storedRecipe[0].title);
+                    setIngredient(detailIngredientsArray);
+                    setLevel(storedRecipe[0].level);
+                    setServe(storedRecipe[0].servings);
+                    setTime(storedRecipe[0].time);
+                    setContent(storedRecipe[0].content);
+                    setImage(storedRecipe[0].imagePath);
+                }
         
-        try{
-            await tokenHandler();
-            const res = await axiosInstance.get(`recipe/${recipeId}`);
-            const storedRecipe = res.data;
-
-            if(storedRecipe && storedRecipe.length > 0) {
-                console.log(storedRecipe);
-
-                const detailRecipeArray = JSON.parse(storedRecipe[0].progress);
-                const detailIngredientsArray = JSON.parse(storedRecipe[0].ingredients);
-
-                setDetailRecipe(detailRecipeArray);
-                setTitle(storedRecipe[0].title);
-                setIngredient(detailIngredientsArray);
-                setLevel(storedRecipe[0].level);
-                setServe(storedRecipe[0].servings);
-                setTime(storedRecipe[0].time);
+            }catch(err){
+                console.log("err message : " + err);
             }
-    
-        }catch(err){
-            console.log("err message : " + err);
         }
-    }
+        fetchData();
 
-    const fetchData2 = async () => {
-
-        console.log(recipeId);
-        
-        try{
-            await tokenHandler();
-            const res = await axiosInstance.get(`recipe/${recipeId}`);
-            const storedRecipe = res.data;
-
-            if(storedRecipe && storedRecipe.length > 0) {
-                console.log(storedRecipe);
-
-                const detailRecipeArray = JSON.parse(storedRecipe[0].progress);
-                const detailIngredientsArray = JSON.parse(storedRecipe[0].ingredients);
-
-                setDetailRecipe(detailRecipeArray);
-                setTitle(storedRecipe[0].title);
-                setIngredient(detailIngredientsArray);
-                setLevel(storedRecipe[0].level);
-                setServe(storedRecipe[0].servings);
-                setTime(storedRecipe[0].time);
-            }
-    
-        }catch(err){
-            console.log("err message : " + err);
-        }
-    }
-    
-        fetchData1();
-        fetchData2();
-
-    }, [recipeId]);
+    }, [recipeShareId]);
 
     async function tokenHandler() {
 
@@ -342,10 +315,17 @@ const RecipeShareDetail = () => {
                                 </Card>
                                 <Card className={styles.contentContainer} >
                                     <Card.Body>
+                                    <div className={styles.detailContainer}>
+                                            <Card className={styles.recipeContainCard}>
+                                                <Card.Body>
+                                                    <img src={`${process.env.PUBLIC_URL}/${image}`} alt='' />
+                                                </Card.Body>
+                                            </Card>
+                                        </div>
                                         <div className={styles.detailContainer}>
                                             <Card className={styles.recipeContainCard}>
                                                 <Card.Body>
-                                                    이 레시피는 제가 전남자친구에게 배운 레시피로 너무 맛있어서 잊지 못하고 연락까지 하게 된 레시피입니다.
+                                                    {content}
                                                 </Card.Body>
                                             </Card>
                                         </div>
