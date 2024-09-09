@@ -34,6 +34,7 @@ import ManagementReport from "./pages/Management/ManagementReport";
 import ManagementLayout from "./pages/Management/ManagementLayout";
 import PrivateRouteAdmin from "./services/Management/PrivateRouteAdmin"
 import PrivateRoute  from "./services/PrivateRoute";
+import Gallery from "./pages/Gallery/Gallery.jsx";
 
 
 
@@ -52,7 +53,6 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-
           <Route path="/nav" element={<Navigation/>}/>
           <Route path="/Sign" element={<Sign />} />
           <Route path="/SignIn" element={<SignIn />} />
@@ -101,6 +101,7 @@ function App() {
           />
 
           <Route path="/Demo" element={<Demo/>}/>
+          <Route path="/Gallery" element={<Gallery/>} />
 
         </Routes>
       </Router>
