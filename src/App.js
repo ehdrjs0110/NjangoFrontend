@@ -35,7 +35,6 @@ import ManagementLayout from "./pages/Management/ManagementLayout";
 import PrivateRouteAdmin from "./services/Management/PrivateRouteAdmin"
 import PrivateRoute  from "./services/PrivateRoute";
 import Gallery from "./pages/Gallery/Gallery.jsx";
-import Mainc from "./pages/Main/Main copy.jsx";
 
 // import index from '../src/styles/index.css'
 
@@ -58,7 +57,7 @@ function App() {
           <Route path="/SignIn" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/Loading" element={<Loading />} />
-          <Route path="/Main" element={<PrivateRoute component={<Mainc />} />} />
+          <Route path="/Main" element={<PrivateRoute component={<Main />} />} />
           <Route path="/Promotion" element={<Promotion />} />
           <Route path="/Logout" element={<Logout/>}/>
           <Route path="/AiSearch" element={<PrivateRoute component={<AiSearch />}/>} />
