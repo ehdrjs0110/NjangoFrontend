@@ -14,6 +14,7 @@ import FindId from './pages/Sign/FindId';
 import FindPw from './pages/Sign/FindPw';
 import Inven from './pages/Inven/Inven';
 import Excel from './pages/Inven/Excel';
+import ManagementInven from './pages/ManagementInven/ManagementInven';
 import Profile from "./pages/Profile/Profile";
 import Demo from "./pages/Demo";
 import Navigation from "./components/Nav/Navigation";
@@ -67,6 +68,7 @@ function App() {
           <Route path="/FindId" element={<FindId />} />
           <Route path="/FindPw" element={<FindPw />} />
           <Route path="/Inven" element={<PrivateRoute component={<Inven />}/>} />
+          <Route path="/ManagementInven" element={<PrivateRoute component={<ManagementInven />}/>} />
           <Route path="/Excel" element={<PrivateRoute component={<Excel />}/>} />
           <Route path="/ProFile" element={<PrivateRoute component={<Profile/>} />} />
           <Route path="/MyPage" element={<PrivateRoute component={<MyPage/>}/>}/>

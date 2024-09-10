@@ -7,20 +7,20 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import React, {useEffect, useState, useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation } from 'react-router-dom';
 
 import aiSimpleCss from '../../styles/Search/AiSimpleSearch.module.scss';
 import axios from "axios";
-import {useNavigate} from "react-router-dom"
-import {css} from "@emotion/react";
+import { useNavigate } from "react-router-dom"
+import { css } from "@emotion/react";
 
 
-import {useCookies} from "react-cookie";
-import {expired, getNewToken} from "../../services/auth2";
-import {containToken} from "../../Store/tokenSlice";
-import {useDispatch, useSelector} from "react-redux";
-import {axiosInstance, axiosInstance2} from "../../middleware/customAxios";
+import { useCookies } from "react-cookie";
+import { expired, getNewToken } from "../../services/auth2";
+import { containToken } from "../../Store/tokenSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { axiosInstance, axiosInstance2 } from "../../middleware/customAxios";
 
 
 
@@ -52,7 +52,7 @@ const AiSimpleSearch = () => {
 
     // redux에서 가져오기
     let accessToken = useSelector(state => state.token.value);
-    let  userId = useSelector(state=> state.userEmail.value);
+    let userId = useSelector(state => state.userEmail.value);
     const dispatch = useDispatch();
 
 
@@ -62,8 +62,7 @@ const AiSimpleSearch = () => {
 
     useEffect(() => {
 
-        if(state)
-        {
+        if (state) {
             var list = Object.values(state.state);
             // console.log("test:"+ test)
             // setMyIngredientList(list);
@@ -81,22 +80,22 @@ const AiSimpleSearch = () => {
         //재료 가져오기
         const fetchData = async () => {
 
-            const params = {userId:userId};
+            const params = { userId: userId };
 
-            try{
+            try {
 
                 await tokenHandler();
-                const res = await axiosInstance.get("inven/manage/name",{params});
+                const res = await axiosInstance.get("inven/manage/name", { params });
 
 
-            if(res!=null){
-                console.log(res.data);
-            }
+                if (res != null) {
+                    console.log(res.data);
+                }
 
-            setIngredients(res.data);
+                setIngredients(res.data);
 
-            }catch(err){
-            console.log("err message : " + err);
+            } catch (err) {
+                console.log("err message : " + err);
 
             }
         }
@@ -108,7 +107,7 @@ const AiSimpleSearch = () => {
 
 
         const isExpired = expired();
-        if(isExpired){
+        if (isExpired) {
 
             let refreshToken = cookies.refreshToken;
             try {
@@ -122,7 +121,7 @@ const AiSimpleSearch = () => {
                     'refreshToken',
                     refreshToken,
                     {
-                        path:'/',
+                        path: '/',
                         maxAge: 7 * 24 * 60 * 60, // 7일
                         // expires:new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000)
                     }
@@ -143,10 +142,10 @@ const AiSimpleSearch = () => {
 
     // 레시피 갯수 입력받기
     const recipeHendler = (event) => {
-        const {value} = event.target;
+        const { value } = event.target;
         console.log(typeof value);
         console.log(value);
-        if(Number(value) <= 5){
+        if (Number(value) <= 5) {
             console.log("검색가능");
             setRecipeCount(value);
         }
@@ -186,9 +185,9 @@ const AiSimpleSearch = () => {
     const selectIngredient = (ingredient) => {
         setSelectedIngredientList(preState => {
             if (preState.includes(ingredient)) {
-                return preState.filter(preItem => preItem !== ingredient )
+                return preState.filter(preItem => preItem !== ingredient)
             } else {
-                return [...preState,ingredient];
+                return [...preState, ingredient];
             }
         });
     }
@@ -204,14 +203,13 @@ const AiSimpleSearch = () => {
 
 
     // prompt 요청
-    async function aiSearchRequest () {
+    async function aiSearchRequest() {
         setModalOpen(true);
         console.log("selectedMyIngredientList" + selectedIngredientList);
         // console.log();
         console.log(recipeCount);
 
-        if(recipeCount == null || Number(recipeCount) <= 0 )
-        {
+        if (recipeCount == null || Number(recipeCount) <= 0) {
             setRecipeCount("1");
         }
 
@@ -221,13 +219,15 @@ const AiSimpleSearch = () => {
         const ingredientNames = isIngredients.map(ingredient => ingredient.ingredientname);
         console.log(ingredientNames);
 
-        const requestBody = {"userContent" : ` ${selectedIngredientList}를 이용한 레시피를 ${recipeCount}개를 알려주는데 재료는 자세하게 알려주고 만드는 과정에 ` +
+        const requestBody = {
+            "userContent": ` ${selectedIngredientList}를 이용한 레시피를 ${recipeCount}개를 알려주는데 재료는 자세하게 알려주고 만드는 과정에 ` +
                 `대해서는 130글자 내로 간략하게 알려줘 ${ingredientNames}가 있어 형태는 title,ingredients,process 으로 알려줘` +
-                `그리고 json 객체로 {0:[요리 1], ...} 형태로 ${recipeCount}갯수로 참고로 키는 무조건 숫자여야해 보내줘`};
+                `그리고 json 객체로 {0:[요리 1], ...} 형태로 ${recipeCount}갯수로 참고로 키는 무조건 숫자여야해 보내줘`
+        };
         let searchResponse;
         try {
             await tokenHandler();
-            searchResponse = await axiosInstance2.post(`api/v1/chat-gpt/simple/${userId}`,requestBody);
+            searchResponse = await axiosInstance2.post(`api/v1/chat-gpt/simple/${userId}`, requestBody);
 
 
 
@@ -248,38 +248,35 @@ const AiSimpleSearch = () => {
 
         console.log("JavaScript 객체를 콘솔에 출력");
         console.log(recipes);
-        const recipesList =  Object.values(recipes);
+        const recipesList = Object.values(recipes);
 
         console.log(recipesList);
         setRecipe(recipesList);
-        sessionStorage.setItem("recipeSimpleSearchList",JSON.stringify(recipesList));
+        sessionStorage.setItem("recipeSimpleSearchList", JSON.stringify(recipesList));
         setModalOpen(false);
     }
 
 
     // 레시피 상세 보기로 값 넘겨주가
 
-    const startDetailAiSearch = (recipe) =>
-    {
-        navigate('/AiDetailSearch', { state: { recipe } }); // 레시피 전달
+    const startDetailAiSearch = (recipe) => {
+        navigate('/AiDetailSearch', { state: { recipe, selectedMyIngredientList: selectedIngredientList } }); // 레시피 전달
 
     }
 
 
     // recipe UI
-    function recipeResponce()
-    {
-        if (recipe != null)
-        {
+    function recipeResponce() {
+        if (recipe != null) {
             return recipe.map((recipe, index) => (
                 <Card className={aiSimpleCss.recipeCard} key={index}>
                     <Card.Header className={aiSimpleCss.hearder}>
                         <Row xs={1} md={2}>
                             <Col className={aiSimpleCss.recipeTitleCol}>
-                                {JSON.stringify(recipe.title)  }
+                                {JSON.stringify(recipe.title)}
                             </Col>
                             <Col className={aiSimpleCss.recipeDetailSearchCol}>
-                                <Button className={aiSimpleCss.recipeDetailSearchButton}  variant="outline-secondary" onClick={() =>startDetailAiSearch(recipe)}>
+                                <Button className={aiSimpleCss.recipeDetailSearchButton} variant="outline-secondary" onClick={() => startDetailAiSearch(recipe)}>
                                     상세보기
                                 </Button>
                             </Col>
@@ -304,20 +301,20 @@ const AiSimpleSearch = () => {
 
 
 
-    return(
+    return (
         <div>
-            <Navigation/>
+            <Navigation />
 
 
-            <Container fluid style={{padding:0}} className={aiSimpleCss.aiSimpleSearchContiner} >
-                <Row className={aiSimpleCss.aiSimpleSearchContinerRow} style={{paddingLeft:0, paddingRight:0}}>
-                    <Col style={{ paddingLeft: 0, paddingRight: 0 }} md={{ span: 10, offset: 1 }}  className={aiSimpleCss.aiSearchMainCol}>
+            <Container fluid style={{ padding: 0 }} className={aiSimpleCss.aiSimpleSearchContiner} >
+                <Row className={aiSimpleCss.aiSimpleSearchContinerRow} style={{ paddingLeft: 0, paddingRight: 0 }}>
+                    <Col style={{ paddingLeft: 0, paddingRight: 0 }} md={{ span: 10, offset: 1 }} className={aiSimpleCss.aiSearchMainCol}>
 
                         {/* 내 재료 시작점 */}
                         <div className={aiSimpleCss.myIngredientContainer} >
                             <Card border="secondary" className={aiSimpleCss.myIngredientCard}>
                                 <Card.Body>
-                                    <Card.Title  className={aiSimpleCss.title}>내 재료</Card.Title>
+                                    <Card.Title className={aiSimpleCss.title}>내 재료</Card.Title>
                                     <Card.Text as="div">
                                         {/*재료 선택*/}
                                         {makeMyIngredientList()}
@@ -357,7 +354,7 @@ const AiSimpleSearch = () => {
                                     value={recipeCount}
 
                                 />
-                                <Button variant="primary" id="button-addon2"  onClick={aiSearchRequest}>
+                                <Button variant="primary" id="button-addon2" onClick={aiSearchRequest}>
                                     검색
                                 </Button>
                             </InputGroup>
@@ -373,20 +370,20 @@ const AiSimpleSearch = () => {
 
                     </Col>
                 </Row>
-                    {
-                        modalOpen &&
-                        <div className={styles.modal_container} ref={modalBackground} onClick={e => {
-                        }}>
-                            <div className={styles.loader}>
-                                <div className={styles.character}></div>
-                                {/* <img src={char} className={styles.character}></img> */}
-                                
-                            </div>
-                            <div className={styles.loading}>
-                                <h2 className={styles.text}>Loading...</h2>
-                            </div>
+                {
+                    modalOpen &&
+                    <div className={styles.modal_container} ref={modalBackground} onClick={e => {
+                    }}>
+                        <div className={styles.loader}>
+                            <div className={styles.character}></div>
+                            {/* <img src={char} className={styles.character}></img> */}
+
                         </div>
-                    }
+                        <div className={styles.loading}>
+                            <h2 className={styles.text}>Loading...</h2>
+                        </div>
+                    </div>
+                }
             </Container>
         </div>
     )
