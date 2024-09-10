@@ -1,7 +1,13 @@
+@import '../../Global/color.scss';
+
 .logo {
     border-radius: 20px;
     height: 65px;
     width: 80px;
+}
+
+.navbar{
+    background-color: $nav-bg-color !important;
 }
 
 .shop {
