@@ -1,82 +1,305 @@
 @import '../index.scss';
 
+$linkbox-width: 300px;
+$linkbox-height: 300px;
+$linkbox-radius: 32px;
+$linkbox-shadow: 0 2px 30px rgba(black, .2);
+$wave-size: 500px;
+$wave-opacity: .4;
+$text-shadow: 0 1px 0 rgba(black, .1);
+$text-letter-spacing: .2em;
+$text-font-size: 34px;
+
 /* ( 크롬, 사파리, 오페라, 엣지 ) 동작 */
 html::-webkit-scrollbar {
-    display: none;
-  }
+  display: none;
+}
 
 html {
-    -ms-overflow-style: none; /* 인터넷 익스플로러 */
-    scrollbar-width: none; /* 파이어폭스 */
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
 }
 
-.container{
-    background-color: $bg-color;
-    height: 100vh;
+.container {
+  background-color: $bg-color;
+  height: 100vh;
 
-    .main{
+  .main {
+    display: grid; /* 그리드를 사용 */
+    grid-template-columns: repeat(4, minmax(150px, auto)); /* 컬럼 수 조정 */
+    padding: 20px;
+    border-radius: 32px;
 
-        .linkrow{
+    .linkbox {
+      margin-top: 15%;
+      width: $linkbox-width;
+      height: $linkbox-height;
+      border-radius: $linkbox-radius;
+      box-shadow: $linkbox-shadow;
+      background: $white-color;
+      position: relative;
+      overflow: hidden;
+      transform: translate3d(0, 0, 0);
+      /* 그리드 셀 내에서 가운데 정렬 */
+      display: flex;
+      justify-self: center; /* 수평 가운데 정렬 */
+      align-self: center;   /* 수직 가운데 정렬 */
+      text-align: center;
+      cursor: pointer;
 
-            .linkbox{
-                background-color: #CBECFF;
-                margin-top: 30px;
-                height: 400px;
-                display: flex;
-                justify-content: center;
-                align-items: center; 
-                flex-direction:column;
-                position: relative;
-                border: 3px solid $accent-color;
-                
-                h1{
-                    font-weight: bold;
-                }
+      &:after {
+        content: '';
+        display: block;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(white, 1), rgba(green, 0) 80%, rgba(white, .5));
+        transform: translate3d(0, 0, 0);
+      }
 
-                a{
-                    margin-top: 20px;
-                    font-size: 1.5em;
-                    font-weight: bold;
-                    cursor: pointer;
-                    text-decoration-line: underline;
-        
-                    &:link{
-                        color: black;
-                    }
-                    &:visited{
-                        color: black;
-                    }
-                    &:hover{
-                        color: black;
-                    }
-                    &:active{
-                        color: black;
-                    }
-                }
+      /* Hover 상태에서 iconbox 표시 */
+      &:hover .iconbox {
+        opacity: 1;
+      }
 
-                .img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
+      &:hover .icon::before {
+        transform: translate(500px, -50%);  /* 화살표 선을 오른쪽으로 이동 */
+      }
 
-                .panel {
-                    position: absolute;
-                    background-color: $accent-color;
-                    color: $white-color;
-                    bottom: 0%;
-                    padding: 2px;
-                    width: 100%;
-                    text-align: center;
-
-                    .text {
-                        font-weight: bold;
-                    }
-                }
-
-                
-            }
-        }
-        
+      &:hover .icon::after {
+        transform: translate(500px, -50%) rotate(45deg);  /* 화살표 머리를 오른쪽으로 이동 */
+      }
     }
+
+    .wave {
+      opacity: $wave-opacity;
+      position: absolute;
+      top: 3%;
+      left: 50%;
+      background: $wave-background;
+      width: $wave-size;
+      height: $wave-size;
+      margin-left: -$wave-size / 2;
+      margin-top: -$wave-size / 2;
+      transform-origin: 50% 48%;
+      border-radius: 43%;
+      animation: drift 4000ms infinite linear;
+
+      &.two {
+        animation: drift 8000ms infinite linear;
+        opacity: .1;
+        background: #003366;
+      }
+
+      &.three {
+        animation: drift 6000ms infinite linear;
+      }
+    }
+
+    .text {
+      position: absolute;
+      width: 100%;
+      line-height: 40px;
+      text-align: center;
+      color: rgb(255, 255, 255);
+      letter-spacing: $text-letter-spacing;
+      font-size: $text-font-size;
+      text-shadow: $text-shadow;
+      text-indent: .3em;
+      z-index: 100;
+      @extend .englishFont;
+      top: 50%; /* 부모 요소의 높이의 50% 위치로 이동 */
+      left: 50%; /* 부모 요소의 너비의 50% 위치로 이동 */
+      transform: translate(-50%, -50%); /* 자신의 크기만큼 반대로 이동하여 가운데 정렬 */
+    }
+
+    .golink {
+      position: absolute;
+      top: 100%; /* 'Go to' 위치 조정 */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin-top: 40px; /* 원하는 간격으로 조정 */
+      text-align: center;
+      color: #003366;
+      text-shadow: $text-shadow;
+      letter-spacing: $text-letter-spacing;
+      font-family: 'malgun gothic';
+      font-size: 30px;
+      font-weight: bold;
+      z-index: 100;
+      transition: opacity 0.3s ease;
+    }
+
+    .linkbox:hover .golink {
+      opacity: 0; /* linkbox를 hover하면 'Go to' 텍스트 숨김 */
+    }
+    
+    .linkbox:hover .iconbox {
+      opacity: 1; /* linkbox를 hover하면 아이콘 박스 표시 */
+    }
+
+    .iconbox{
+      position: absolute;
+      top: 78%; /* 'Go to'와 같은 위치 */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 6vh;
+      background-color: #0033661e;
+      opacity: 0; /* 기본적으로 숨김 상태 */
+      transition: opacity 0.3s ease, transform 0s; /* 부드러운 전환 효과 */
+    }
+
+    .icon {
+      margin: 0px;
+      font-size: 27px;
+      text-decoration: none;
+      padding-top: 5px;
+      padding-left: 5px;
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      z-index: 999;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 27px;  /* 화살표 길이 */
+        height: 8px;  /* 화살표 두께 */
+        background-color: #003366;
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        border-radius: 15%;
+        transition: transform 1.0s ease-in-out;
+      }
+
+      &::after {
+        content: '';
+        display: block;
+        width: 15px;  /* 화살표 머리 부분 */
+        height: 15px;
+        border-top: 5px solid #003366;
+        border-right: 5px solid #003366;
+        position: absolute;
+        top: 50%;
+        left: 24px;
+        transform: translateY(-50%) rotate(45deg);
+        border-radius: 15%;
+        transition: transform 1.0s ease-in-out;
+      }
+
+      &:hover::before {
+        transform: translate(500px, -50%);  /* 화살표 선을 오른쪽으로 이동 */
+      }
+
+      &:hover::after {
+        transform: translate(500px, -50%) rotate(45deg);  /* 화살표 머리를 오른쪽으로 이동 */
+      }
+
+      .linkbox:not(:hover) &::before,
+      .linkbox:not(:hover) &::after {
+        transform: translateY(-50%);
+        transition: none; /* hover에서 벗어날 때 애니메이션 없이 리셋 */
+      }
+    }
+
+    @keyframes drift {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
 }
+
+@media (max-width: 1300px) {
+  .linkbox {
+    width: 250px !important;
+    height: 250px !important;
+    border-radius: 20px !important;
+  }
+
+  .text {
+    font-size: 24px !important;
+    line-height: 30px !important;
+  }
+
+  .golink {
+    font-size: 20px !important;
+    margin-top: 20px !important;
+  }
+
+  .icon {
+    font-size: 20px !important;
+
+    &::before {
+      width: 20px !important;
+      height: 5px !important;
+    }
+
+    &::after {
+      width: 10px !important;
+      height: 10px !important;
+      border-top-width: 3px !important;
+      border-right-width: 3px !important;
+    }
+  }
+
+  .wave {
+    width: 350px !important;
+    height: 350px !important;
+    margin-left: -180px !important;
+    margin-top: -150px !important;
+  }
+}
+
+/* 화면 크기가 480px 이하일 때 linkbox와 내부 요소들의 크기를 더 줄임 */
+@media (max-width: 1050px) {
+  .linkbox {
+    width: 200px !important;
+    height: 200px !important;
+    border-radius: 15px !important;
+  }
+
+  .text {
+    font-size: 21px !important;
+    line-height: 25px !important;
+  }
+
+  .golink {
+    font-size: 19px !important;
+    margin-top: 15px !important;
+  }
+
+  .icon {
+    font-size: 16px !important;
+
+    &::before {
+      width: 15px !important;
+      height: 3px !important;
+    }
+
+    &::after {
+      width: 8px !important;
+      height: 8px !important;
+      border-top-width: 2px !important;
+      border-right-width: 2px !important;
+    }
+  }
+
+  .wave {
+    width: 250px !important;
+    height: 250px !important;
+    margin-left: -130px !important;
+    margin-top: -100px !important;
+  }
+}
+
+

@@ -1,41 +1,44 @@
 @import '../index.scss';
 
-.container{
+.container {
     background-color: $bg-color;
     height: calc(100vh - 91px);
 
-    .main{
+    .main {
         height: 100%;
 
-        .controllerRow{
+        .controllerRow {
             height: 15%;
             margin-bottom: 10px;
+            position: relative; /* 상대 위치 설정 */
         }
 
-        .addContentRow{
+        .addContentRow {
             height: 10%;
             margin-bottom: 10px;
         }
 
-        .contentRow{
-            height: 70%;
+        .contentRow {
+            //height: 70%;
         }
     }
 }
 
 .controller {
-    background-color: $white-color;
     height: 100%;
-    border: 1px solid lightgrey;
-    border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    gap: 10px;
+    border-bottom: 2px solid #ccc;
 
-    .controllerRow{
+
+    .controllerRow {
         width: 100%;
         height: 100%;
         margin: 0;
+        position: relative; /* 상대 위치 설정 */
     }
 
     .controlform {
@@ -44,13 +47,37 @@
         justify-content: center;
         align-items: center;
         text-align: center;
+        gap: 10px;
+        position: relative;
 
         .serch {
-            width: 20%;
+            width: 40%;
             display: inline-block;
         }
-    
-        .serchbtn{
+        .searchContainer {
+            position: relative;
+            //width: 100%; // 또는 원하는 너비
+        }
+
+        .searchInput {
+            //width: calc(100% - 40px) !important; // 아이콘을 제외한 전체 너비 설정
+            width: 100%;
+            padding: 10px 30px 10px 10px; // 오른쪽 패딩을 아이콘 크기만큼 추가
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .searchIcon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ccc;
+            font-size: 20px;
+        }
+
+        .serchbtn {
             margin-left: 10px;
         }
 
@@ -59,61 +86,89 @@
             background-color: $p-color;
             font-weight: bold;
         }
+
+        .buttonGroup {
+            display: flex;
+            gap: 10px;
+
+            &.topGroup {
+                position: absolute;
+                top: 0;
+                right: 0;
+                transform: translateY(-90%); /* 부모 요소의 위쪽으로 50% 이동 */
+                justify-content: flex-end;
+            }
+
+            &.middleGroup {
+                width: 80%; /* 중간 그룹이 너무 많은 공간을 차지하지 않도록 설정 */
+                justify-content: center;
+                margin-top: 20px; /* 중간 그룹의 위쪽 간격 조정 */
+            }
+        }
     }
-    
 }
 
+//.serch {
+//    flex-grow: 1; // input 박스가 버튼 그룹 내에서 가능한 많은 공간을 차지하게 함
+//}
+
 .content {
-    background-color: $white-color;
+    //background-color: $white-color;
     height: 100%;
     overflow-y: auto;
-    border: 1px solid lightgrey;
-    border-radius: 5px;
-    
+    //border: 1px solid lightgrey;
+    //border-radius: 5px;
+
     .scroll {
         position: absolute;
     }
 
-    .item{
+    .item {
         margin-top: 20px;
         margin-bottom: 20px;
     }
 
     .line {
+        background-color: $white-color;
+        //padding: 10px;
+        //background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 15px;
         margin: 0 auto;
         width: 95%;
         display: flex;
         padding: 5px;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         justify-content: center;
         align-items: center;
         text-align: center;
-        border-radius: 5px;
+        //border-radius: 5px;
+        //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 
         .title {
-            font-weight: bold;
-            color: $p-font-color;
+            //font-weight: bold;
+            color: black;
         }
 
         .text {
             display: inline-block;
             margin: 0;
         }
-    
+
         .btn {
             margin: 5px;
             background-color: $p-color;
-            color : $white-color;
+            color: $white-color;
             font-weight: bold;
         }
 
         .delBtn {
             margin: 5px;
             background-color: $danger-color;
-            color : $white-color;
+            color: $white-color;
             font-weight: bold;
         }
-    
+
         .count {
             margin-left: 10px;
             display: inline-block;
@@ -131,12 +186,11 @@
         /* 떠오르는 효과 */
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         /* 그림자 효과 */
-    }    
-
+    }
 }
 
 .addContent {
-    background-color: $accent-color;
+    background-color: $white-color;
     height: 100%;
     border: 1px solid lightgrey;
     border-radius: 5px;
@@ -151,27 +205,27 @@
         justify-content: center;
         align-items: center;
         text-align: center;
-        
+
         .text {
             color: $white-color;
             display: inline-block;
             margin: 0;
         }
-    
+
         .btn {
             margin: 5px;
             background-color: $p-color;
-            color : $white-color;
+            color: $white-color;
             font-weight: bold;
         }
 
         .addBtn {
             margin: 5px;
             background-color: $primary-color;
-            color : $white-color;
+            color: $white-color;
             font-weight: bold;
         }
-    
+
         .count {
             margin-left: 10px;
             display: inline-block;
@@ -179,6 +233,30 @@
             text-align: right;
         }
     }
-    
+}
 
+.button {
+    background-color: #fff;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-size: 16px;
+    transition: box-shadow 0.3s ease;
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.5);
+    }
+
+    &:active {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.buttonContainer {
+    display: flex;
+    gap: 10px;
 }
