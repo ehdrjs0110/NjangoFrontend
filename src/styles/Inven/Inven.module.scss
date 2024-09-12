@@ -124,6 +124,7 @@
     }
 
     .item {
+        border-radius: 15px;
         margin-top: 20px;
         margin-bottom: 20px;
     }
@@ -137,25 +138,48 @@
         height: 250px;
         position: relative;
         display: flex;
-        padding: 5px;
-        margin: 0 auto 10px;
+        //padding: 5px;
+        margin: 0 auto 30px;
         justify-content: center;
         align-items: center;
         text-align: center;
         //border-radius: 5px;
         //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-
+        transition: transform 0.3s ease;
 
         &:hover {
-            .btn, .delBtn {
-                //opacity: 1; // 마우스 호버 시에 버튼 보이기
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            .btn, .delBtn, .infoBtn {
+                opacity: 1;
+            }
+            .ingredient {
+                filter: brightness(0.5);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
             }
         }
 
+        .ingredient {
+            position: relative;
+            border-radius: 15px;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            background-size: contain;  // 이미지를 가로 크기에 맞추고, 세로는 비율에 맞게 조정
+            background-repeat: no-repeat;  // 이미지가 반복되지 않도록 설정
+            overflow: hidden;
+            transition: box-shadow 0.3s ease, filter 0.3s ease;
+            filter: brightness(1);
+        }
+
         .title {
-            //font-weight: bold;
+            font-weight: bold;
             color: black;
+            position: absolute;
+            bottom: 5%;
+            width: 100%;
         }
 
         .text {
@@ -166,6 +190,7 @@
         .btn {
             background-color: $p-color;
             left: 0;
+            border-top-left-radius: 0;  // 오른쪽 위 모서리 둥글기 제거
             border-top-right-radius: 0;  // 오른쪽 위 모서리 둥글기 제거
             border-bottom-right-radius: 0;  // 오른쪽 아래 모서리 둥글기 제거
             //border-radius: ;
@@ -174,18 +199,35 @@
         .delBtn {
             background-color: $danger-color;
             right: 0;
+            border-top-right-radius: 0;  // 오른쪽 위 모서리 둥글기 제거
             border-top-left-radius: 0;  // 오른쪽 위 모서리 둥글기 제거
             border-bottom-left-radius: 0;  // 오른쪽 아래 모서리 둥글기 제거
         }
         .btn, .delBtn{
             color: $white-color;
             font-weight: bold;
-            height: 25%;
+            height: 70px;
             position: absolute;
             width: 50%;
             bottom: 0;
-            //opacity: 0; // 기본적으로 숨김
-            //transition: opacity 0.3s ease; // 호버 시 애니메이션
+            opacity: 0; // 기본적으로 숨김
+            transition: opacity 0.3s ease; // 호버 시 애니메이션
+        }
+
+        .infoBtn {
+            opacity: 0;
+            position: absolute;
+            top: 10px;  // 버튼 위치를 조정
+            right: 10px;  // 버튼 위치를 조정
+            background-color: transparent;  // 배경 투명하게
+            border: none;
+            color: $p-color;  // 아이콘 색상 설정
+            transition: opacity 0.3s ease; // 호버 시 애니메이션
+            cursor: pointer;
+
+            &:hover {
+                color: $primary-color;  // 호버 시 색상 변경
+            }
         }
 
         .count {
@@ -197,14 +239,8 @@
     }
 
     .select {
+        border-radius: 15px;
         border: 3px solid $p-color;
-    }
-
-    .line:hover {
-        transform: translateY(-2px);
-        /* 떠오르는 효과 */
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        /* 그림자 효과 */
     }
 }
 

@@ -10,9 +10,8 @@ import '../../styles/Bootstrap/Bootstrap.scss';
 import styles from '../../styles/Inven/Inven.module.scss'
 
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
+import { Modal, Button, Form } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 
@@ -29,10 +28,10 @@ import {axiosInstance} from "../../middleware/customAxios";
 import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 function Inven() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [showAddContainer, setShowAddContainer] = useState(false);
 
@@ -48,7 +47,11 @@ function Inven() {
       count: "",
     }
   });
-  
+  const [showAddModal, setShowAddModal] = useState(false); // 추가 모달 상태
+  const handleShowAddModal = () => setShowAddModal(true);
+  const handleCloseAddModal = () => setShowAddModal(false);
+
+
   //수정 재료 데이터
   const [isUpdateData, setUpdateData] = useState([]);
   //추가 사이즈 선택 버튼
@@ -64,9 +67,9 @@ function Inven() {
   let reduxNickname = useSelector( state => state.userNickName.value);
 
   // redux에서 가져오기
-    let accessToken = useSelector(state => state.token.value);
-    let userId = useSelector(state => state.userEmail.value);
-    const dispatch = useDispatch();
+  let accessToken = useSelector(state => state.token.value);
+  let userId = useSelector(state => state.userEmail.value);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,7 +130,7 @@ function Inven() {
   }
 
   //재료 추가
-  const addData = async () => {
+  const handleAddData = async () => {
 
     const data = isNewData;
 
@@ -147,20 +150,18 @@ function Inven() {
       await tokenHandler();
       await axiosInstance.patch(`inven/manage/add/${userId}`, data);
       setChange(!isChange);
+      setClickSize("");
+      setNewData((isNewData) => ({
+        "ingredientname" : "",
+        "status" : {
+          "size" : "",
+          "count" : "",
+        }
+      }));
 
     }catch(err){
       console.log("err message : " + err);
     }
-
-    setClickSize("");
-    setNewData((isNewData) => ({
-      "ingredientname" : "",
-      "status" : {
-        "size" : "",
-        "count" : "",
-      }
-    }));
-
   };
 
   //재료 삭제
@@ -226,21 +227,36 @@ function Inven() {
     }));
   };
 
-  const updateSize = (index,e) => {
-    isData[index].size = e.target.value;
-    setData(isData);
-    
+  const updateSize = async (index, e) => {
+    const newCount = e.target.value;
+    const updatedData = [...isData];
+    updatedData[index].status.count = newCount;
+    setData(updatedData);
+
     setUpdateData((isUpdateData) => ({
       ...isUpdateData,
-      [index] : {
+      [index]: {
         ...isUpdateData[index],
-        "ingredientname" : isData[index].ingredientname,
-        "status" : {
+        ingredientname: isData[index].ingredientname,
+        status: {
           ...isUpdateData[index]?.status,
-          "size" : e.target.value,
-        }
-      }
+          count: newCount,
+        },
+      },
     }));
+
+    // 서버에 업데이트 요청
+    try {
+      await axiosInstance.patch(`inven/manage/update/${userId}`, [{
+        ingredientname: isData[index].ingredientname,
+        status: {
+          count: newCount,
+        },
+      }]);
+      setChange(!isChange); // 상태 변경하여 useEffect 트리거
+    } catch (err) {
+      console.log("Error updating size: ", err);
+    }
   };
 
   //재료명 입력
@@ -306,6 +322,75 @@ function Inven() {
   const toggleAddContainer = () => {
     setShowAddContainer(!showAddContainer); // 버튼 클릭 시 addContainer를 토글합니다.
   };
+
+
+
+
+  const [show, setShow] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [formData, setFormData] = useState({
+    ingredientname: '',
+    status: {
+      size: '',
+      count: 0,
+    }
+  });
+
+  const handleClose = () => setShow(false);
+  const handleShow = (item) => {
+    setSelectedItem(item);
+    setFormData({
+      ingredientname: item.ingredientname,
+      status: {
+        size: item.status.size,
+        count: item.status.count,
+      }
+    });
+    setShow(true);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleStatusChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      status: {
+        ...formData.status,
+        [name]: value,
+      }
+    });
+  };
+
+  const handleSaveChanges = () => {
+    console.log("Updated item: ", formData);
+    axiosInstance.patch(`/inven/manage/updateOne/${userId}`, formData).then(async res => {
+      console.log("Updated item: ", res.data);
+      const params = {userId: userId};
+      try {
+        const res = await axiosInstance.get("inven/manage", {params});
+        if (res != null) {
+          console.log(res.data);
+          setData(res.data);
+          setChange(true);
+        }
+      } catch (err) {
+        console.log("err message : " + err);
+      }
+    }).catch(err => {
+        console.log("Error updating item: ", err);
+    });
+    handleClose(); // 저장 후 모달 닫기
+  };
+
+
+
   
   return (
     <>
@@ -338,9 +423,8 @@ function Inven() {
                         className={styles.searchIcon}
                     />
                   </div>
-                  <button className={styles.button}>찾기</button>
-                  <button className={styles.button} onClick={toggleAddContainer}>추가</button>
-                  <button className={styles.button} onClick={updateData}>저장</button>
+                  <button className={styles.button} onClick={handleShowAddModal}>추가</button>
+                  {/*<button className={styles.button} onClick={updateData}>저장</button>*/}
                 </div>
               </Col>
             </Row>
@@ -348,7 +432,7 @@ function Inven() {
           </Col>
         </Row>
           {/* 재료 추가 컨테이너를 조건부 렌더링 */}
-          {showAddContainer && (
+          {/*{showAddContainer && (
               <Row className={styles.addContentRow}>
                 <Col md={{span: 10, offset: 1}} className={styles.addContent}>
                   <Row className={styles.addline}>
@@ -368,12 +452,12 @@ function Inven() {
                       <Form.Control type="number" className={styles.count} onChange={setCount} value={(isNewData.status.count===null)?0:isNewData.status.count} placeholder="0"/>
                     </Col>
                     <Col>
-                      <Button className={styles.addBtn} variant="none" onClick={addData}>추가</Button>
+                      <button className={styles.button} onClick={handleAddData}>추가</button>
                     </Col>
                   </Row>
                 </Col>
               </Row>
-          )}
+          )}*/}
           {/* 식재료 나타나는 공간 */}
           <Row className={styles.contentRow}>
             <Col md={{span: 10, offset: 1}} className={styles.content}>
@@ -392,9 +476,29 @@ function Inven() {
                            xs={12} sm={6} md={4} lg={3} xl={2}  // 반응형으로 설정
                            className="item">
                         <div className={combinedClassName} onClick={(e) => selectIngred(item.ingredientname)}>
-                          <h3 className={styles.title}>{item.ingredientname}</h3>
-                          <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.size==="없음"} onClick={(e) => updateSize(index,e)}>없음</Button>
-                          <Button className={styles.delBtn} onClick={() => deleteData(index)} variant="danger">삭제</Button>
+                          <div className={styles.ingredient} style={{backgroundImage: `url('/tmp/딸기.png')`}}>
+                            <h3 className={styles.title}>{item.ingredientname}</h3>
+                          </div>
+
+
+                          {/* 버튼 클릭 시 이벤트 버블링 방지 */}
+                          <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.size === "없음"} onClick={async (e) => {
+                            e.stopPropagation(); // 버블링 방지
+                            await updateSize(index, {target: {value: 0}}); // Set size to 0
+                            setChange(!isChange); // Trigger re-fetch of the list
+                          }}>없음</Button>
+
+                          <Button className={styles.delBtn} onClick={(e) => {
+                            e.stopPropagation(); // 버블링 방지
+                            deleteData(index);
+                          }} variant="danger">삭제</Button>
+
+                          <Button className={styles.infoBtn} variant="info" onClick={(e) => {
+                            e.stopPropagation(); // 버블링 방지
+                            handleShow(item);
+                          }}>
+                            <FontAwesomeIcon icon={faInfoCircle} /> {/* FontAwesome 아이콘 */}
+                          </Button>
                         </div>
                       </Col>
                     );
@@ -405,6 +509,109 @@ function Inven() {
           </Row>
         </div>
       </Container>
+
+
+      {/* 모달 컴포넌트 */}
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>상세 정보 수정</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            {/* 재료명 수정 */}
+            <Form.Group controlId="ingredientName">
+              <Form.Label>재료명</Form.Label>
+              <Form.Control
+                  type="text"
+                  name="ingredientname"
+                  value={formData.ingredientname}
+                  onChange={handleInputChange}
+              />
+            </Form.Group>
+
+            {/* 사이즈 수정 */}
+            <Form.Group controlId="size">
+              <Form.Label>사이즈</Form.Label>
+              <Form.Control
+                  as="select"
+                  name="size"
+                  min="0" // 0 이상의 값만 허용
+                  value={formData.status.size}
+                  onChange={handleStatusChange}
+              >
+                <option value="적음">적음</option>
+                <option value="적당함">적당함</option>
+                <option value="많음">많음</option>
+              </Form.Control>
+            </Form.Group>
+
+            {/* 수량 수정 */}
+            <Form.Group controlId="count">
+              <Form.Label>수량</Form.Label>
+              <Form.Control
+                  type="number"
+                  name="count"
+                  min="0" // 0 이상의 값만 허용
+                  value={formData.status.count}
+                  onChange={handleStatusChange}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            닫기
+          </Button>
+          <Button variant="primary" onClick={handleSaveChanges}>
+            저장
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* 모달 컴포넌트: 식재료 추가 */}
+      <Modal show={showAddModal} onHide={handleCloseAddModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>재료 추가</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="ingredientName">
+              <Form.Label>재료명</Form.Label>
+              <Form.Control
+                  type="text"
+                  placeholder="재료명을 입력하세요"
+                  value={isNewData.ingredientname}
+                  onChange={setIngredName}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="size">
+              <Form.Label>양</Form.Label>
+              <div>
+                <Button variant="none" onClick={setSize} value={"없음"} disabled={isClickSize === "없음"}>없음</Button>
+                <Button variant="none" onClick={setSize} value={"적음"} disabled={isClickSize === "적음"}>적음</Button>
+                <Button variant="none" onClick={setSize} value={"적당함"} disabled={isClickSize === "적당함"}>적당함</Button>
+                <Button variant="none" onClick={setSize} value={"많음"} disabled={isClickSize === "많음"}>많음</Button>
+              </div>
+            </Form.Group>
+
+            <Form.Group controlId="count">
+              <Form.Label>수량</Form.Label>
+              <Form.Control
+                  type="number"
+                  min="0" // 0 이상의 값만 허용
+                  placeholder="수량을 입력하세요"
+                  value={isNewData.status.count || 0}
+                  onChange={setCount}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseAddModal}>닫기</Button>
+          <Button variant="primary" onClick={handleAddData}>추가</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
