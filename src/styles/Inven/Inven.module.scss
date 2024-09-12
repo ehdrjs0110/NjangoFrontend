@@ -133,17 +133,25 @@
         //padding: 10px;
         //background-color: rgba(255, 255, 255, 0.5);
         border-radius: 15px;
-        margin: 0 auto;
-        width: 95%;
+        width: 180px;
+        height: 250px;
+        position: relative;
         display: flex;
         padding: 5px;
-        margin-bottom: 10px;
+        margin: 0 auto 10px;
         justify-content: center;
         align-items: center;
         text-align: center;
         //border-radius: 5px;
         //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+
+
+        &:hover {
+            .btn, .delBtn {
+                //opacity: 1; // 마우스 호버 시에 버튼 보이기
+            }
+        }
 
         .title {
             //font-weight: bold;
@@ -156,17 +164,28 @@
         }
 
         .btn {
-            margin: 5px;
             background-color: $p-color;
-            color: $white-color;
-            font-weight: bold;
+            left: 0;
+            border-top-right-radius: 0;  // 오른쪽 위 모서리 둥글기 제거
+            border-bottom-right-radius: 0;  // 오른쪽 아래 모서리 둥글기 제거
+            //border-radius: ;
         }
 
         .delBtn {
-            margin: 5px;
             background-color: $danger-color;
+            right: 0;
+            border-top-left-radius: 0;  // 오른쪽 위 모서리 둥글기 제거
+            border-bottom-left-radius: 0;  // 오른쪽 아래 모서리 둥글기 제거
+        }
+        .btn, .delBtn{
             color: $white-color;
             font-weight: bold;
+            height: 25%;
+            position: absolute;
+            width: 50%;
+            bottom: 0;
+            //opacity: 0; // 기본적으로 숨김
+            //transition: opacity 0.3s ease; // 호버 시 애니메이션
         }
 
         .count {

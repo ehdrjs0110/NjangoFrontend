@@ -374,48 +374,35 @@ function Inven() {
                 </Col>
               </Row>
           )}
-        <Row className={styles.contentRow}>
-          <Col md={{span: 10, offset: 1}} className={styles.content}>
-          {/*<Scrollbars className={styles.scroll}>*/}
-            <div className={styles.item}>
-            {isData && isData.map((item, index) => {
-              // 클래스 네임 결합
-              const combinedClassName = classNames(
-                styles.line,
-                {
-                  [styles.select]: Object.values(isIngred).includes(item.ingredientname),
-                }
-              );
+          {/* 식재료 나타나는 공간 */}
+          <Row className={styles.contentRow}>
+            <Col md={{span: 10, offset: 1}} className={styles.content}>
+              <div className={styles.item}>
+                <Row style={{ width: '100%', margin: '0 auto' }}>
+                  {isData && isData.map((item, index) => {
+                    const combinedClassName = classNames(
+                      styles.line,
+                      {
+                        [styles.select]: Object.values(isIngred).includes(item.ingredientname),
+                      }
+                    );
 
-              return (
-                <div key={index} className="item" style={{width:"30%"}}>
-                  <Row className={combinedClassName} onClick={(e) => selectIngred(item.ingredientname)}>
-                    <Col>
-                      <h3 className={styles.title}>{item.ingredientname}</h3>
-                    </Col>
-                    <Col>
-                      <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.size==="없음"} onClick={(e) => updateSize(index,e)}>없음</Button>
-                    </Col>
-                    {/*<Col>*/}
-                    {/*  <Button className={styles.btn}  variant="none" value={"적음"} disabled={item.status.size==="적음"} onClick={(e) => updateSize(index,e)}>적음</Button>*/}
-                    {/*  <Button className={styles.btn} variant="none" value={"적당함"} disabled={item.status.size==="적당함"} onClick={(e) => updateSize(index,e)}>적당함</Button>*/}
-                    {/*  <Button className={styles.btn} variant="none" value={"많음"} disabled={item.status.size==="많음"} onClick={(e) => updateSize(index,e)}>많음</Button>*/}
-                    {/*</Col>*/}
-                    {/*<Col>*/}
-                    {/*  <p className={styles.text}>수량</p>*/}
-                    {/*  <Form.Control type="number" className={styles.count} placeholder={item.status.count} onChange={(e) => updateCount(index, e)} />*/}
-                    {/*</Col>*/}
-                    <Col>
-                      <Button className={styles.delBtn} onClick={() => deleteData(index)} variant="danger">삭제</Button>
-                    </Col>
-                  </Row>
-                </div>
-              );
-            })}   
-            </div>
-            {/*</Scrollbars>*/}
-          </Col>
-        </Row>
+                    return (
+                      <Col key={index}
+                           xs={12} sm={6} md={4} lg={3} xl={2}  // 반응형으로 설정
+                           className="item">
+                        <div className={combinedClassName} onClick={(e) => selectIngred(item.ingredientname)}>
+                          <h3 className={styles.title}>{item.ingredientname}</h3>
+                          <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.size==="없음"} onClick={(e) => updateSize(index,e)}>없음</Button>
+                          <Button className={styles.delBtn} onClick={() => deleteData(index)} variant="danger">삭제</Button>
+                        </div>
+                      </Col>
+                    );
+                  })}
+                </Row>
+              </div>
+            </Col>
+          </Row>
         </div>
       </Container>
     </>
