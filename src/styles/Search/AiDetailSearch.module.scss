@@ -119,6 +119,23 @@
       }
     }
 
+    .iconButtonClicked
+    {
+      background-color: #F75690;
+      width: 30%;
+      .icon{
+        color: #FFFFFF;
+      }
+    }
+
+    .iconButtonClicked:hover
+    {
+      background-color: #fff;
+      .icon{
+        color: #F75690;
+      }
+    }
+
     .icon
     {
       //font-size: 1.5rem;

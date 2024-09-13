@@ -32,12 +32,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {axiosInstance} from "../../middleware/customAxios";
 import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
 
-import styles from '../../styles/History/HistoryDetail.module.scss';
+import styles from '../../styles/Search/AiDetailSearch.module.scss';
 
 const RecipeShareDetail = () => {
     const navigate = useNavigate();
     const location = useLocation(); // 현재 위치 객체를 가져옴
-    const { recipeShareId } = location.state || {}; // 전달된 상태에서 recipe 추출, 없을 경우 빈 객체로 대체
+    const { recipeShareId } = location.state || {}; // 전달된 상태에서 recipeShareId 추출, 없을 경우 빈 객체로 대체
+    const [isChange, setChange] = useState(false);
     const [detailRecipe, setDetailRecipe] = useState(null);
     const [title, setTitle] = useState(null);
     const [ingredient, setIngredient] = useState(null);
@@ -46,6 +47,8 @@ const RecipeShareDetail = () => {
     const [serve,setServe] = useState(0);
     const [content,setContent] = useState(null);
     const [image,setImage] = useState(null);
+    const [likecount, setLikecount] = useState(0);
+    const [recipeId, setRecipeId] = useState(null);
 
     // auth 관련 --
     const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
@@ -54,6 +57,9 @@ const RecipeShareDetail = () => {
     let  userId = useSelector(state=> state.userEmail.value);
     const dispatch = useDispatch();
     // --
+
+    //라이크 클릭 체크
+    const [isLikeClick,setLikeClick] = useState(false);
 
     console.log(recipeShareId);  
 
@@ -74,6 +80,7 @@ const RecipeShareDetail = () => {
                     const detailRecipeArray = JSON.parse(storedRecipe[0].progress);
                     const detailIngredientsArray = JSON.parse(storedRecipe[0].ingredients);
 
+                    setRecipeId(storedRecipe[0].recipeId);
                     setDetailRecipe(detailRecipeArray);
                     setTitle(storedRecipe[0].title);
                     setIngredient(detailIngredientsArray);
@@ -82,6 +89,7 @@ const RecipeShareDetail = () => {
                     setTime(storedRecipe[0].time);
                     setContent(storedRecipe[0].content);
                     setImage(storedRecipe[0].imagePath);
+                    setLikecount(storedRecipe[0].likeCount);
                 }
         
             }catch(err){
@@ -90,7 +98,28 @@ const RecipeShareDetail = () => {
         }
         fetchData();
 
-    }, [recipeShareId]);
+    }, [recipeShareId, isChange]);
+
+    //라이크 눌렸는지 확인
+    useEffect(() => {
+        const checkLike = async() => {
+            try{
+                await tokenHandler();
+                const res = await axiosInstance.get(`like/check/${recipeId}/${userId}`);
+                console.log("라이크 존재는!?? "+res.data);
+                if(res.data){
+                    setLikeClick(true);
+                }else{
+                    setLikeClick(false);
+                }
+
+            }catch(err){
+                console.log(err);
+            }
+        }
+
+        checkLike();
+    },[isChange, recipeId]);
 
     async function tokenHandler() {
 
@@ -154,12 +183,6 @@ const RecipeShareDetail = () => {
         }
     }
 
-    const userAll = async() => {
-        await tokenHandler();
-        const res = await axiosInstance.get("/user/userAll");
-        console.log(res.data);
-    }
-
     // ingredients 객체를 문자열로 변환하여 사람이 읽기 쉽게 포맷팅하는 함수
     const formatIngredients = (ingredients) => {
         if(ingredients){
@@ -168,6 +191,23 @@ const RecipeShareDetail = () => {
             .join(', ');
         }else {
             return "";
+        }
+    };
+
+    //좋아요 증가
+    const likeUp = async() => {
+
+        console.log("유저 아이디 "+userId);
+        console.log("레시피 공유 아이디 "+recipeShareId);
+
+        try{
+            await tokenHandler();
+            const res = await axiosInstance.post(`recipeShare/like/${userId}/${recipeShareId}`);
+            const result = res.data;
+            console.log("likeup : " + result);
+            setChange(!isChange);
+        }catch(err){
+            console.error(err);
         }
     };
 
@@ -222,8 +262,9 @@ const RecipeShareDetail = () => {
                                                     <div  className={styles.bottomLine}></div>
                                                 </Col>
                                                 <Col className={styles.iconCol}>
-                                                    <Button  className={styles.iconButton} variant="outline-secondary" onClick={userAll}>
+                                                    <Button  className={isLikeClick?styles.iconButtonClicked:styles.iconButton} variant="outline-secondary" onClick={likeUp}>
                                                         <FontAwesomeIcon className={styles.icon} icon={faHeart} />
+                                                        {' ' + likecount}
                                                     </Button>{' '}
                                                     <Button  className={styles.iconButton}  variant="outline-secondary" >
                                                         <FontAwesomeIcon className={styles.icon} icon={faMobile} />
@@ -318,7 +359,7 @@ const RecipeShareDetail = () => {
                                     <div className={styles.detailContainer}>
                                             <Card className={styles.recipeContainCard}>
                                                 <Card.Body>
-                                                    <img src={`${process.env.PUBLIC_URL}/${image}`} alt='' />
+                                                    <img src={`${process.env.PUBLIC_URL}/image/${image}`} alt='' />
                                                 </Card.Body>
                                             </Card>
                                         </div>

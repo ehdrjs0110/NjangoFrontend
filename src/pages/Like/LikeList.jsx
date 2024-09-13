@@ -163,7 +163,7 @@ const LikeList = () => {
     // 레시피 상세 보기로 값 넘겨주가
     const startDetailAiSearch = (recipe) =>
     {
-        navigate('/HistoryDetail', { state: { recipe } }); // 레시피 전달
+        navigate('/LikeDetail', { state: { recipe } }); // 레시피 전달
     }
 
     // ingredients 객체를 문자열로 변환하여 사람이 읽기 쉽게 포맷팅하는 함수

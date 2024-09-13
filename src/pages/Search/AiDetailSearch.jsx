@@ -31,23 +31,19 @@ import  {axiosInstance,axiosInstance2} from "../../middleware/customAxios";
 
 
 const AiDetaileSearch = () => {
-    var today = new Date(); //현재시간 가져오기
-    let year = today.getFullYear(); // 년도
-    let month = today.getMonth() + 1;  // 월
-    let date = today.getDate();  // 날짜
-    let hours = today.getHours(); // 시
-    let minutes = today.getMinutes();  // 분
-    let seconds = today.getSeconds();  // 초
-    const nowTime = year + "" + month + "" + date + "" + hours + "" + minutes + "" + seconds;
 
     const location = useLocation(); // 현재 위치 객체를 가져옴
-    const { recipe } = location.state || {}; // 전달된 상태에서 recipe 추출, 없을 경우 빈 객체로 대체
+    const { recipe, recipeId } = location.state || {}; // 전달된 상태에서 recipe 추출, 없을 경우 빈 객체로 대체
     // const {detailRecipe, setDetailRecipe} = useState(null);
+    const [isChange, setChange] = useState(false);
     const [detailRecipe, setDetailRecipe] = useState(null);
     const [etc, setEtc] = useState(null);
     const [level,setLevel] = useState(0);
     const [time,setTime] = useState(0);
     const [serve,setServe] = useState(0);
+
+    //라이크 클릭 체크
+    const [isLikeClick,setLikeClick] = useState(false);
 
     //modal 창 띄우기
     const [modalOpen, setModalOpen] = useState(false);
@@ -66,7 +62,6 @@ const AiDetaileSearch = () => {
     let  id = useSelector(state=> state.userEmail.value);
     const dispatch = useDispatch();
 
-
     console.log(recipe);
 
     let recipyTitle = recipe.title;
@@ -80,20 +75,11 @@ const AiDetaileSearch = () => {
     useEffect(() => {
         setModalOpen(true);
 
-
-
-
-
         axios.all([aiSearchRequest(),aiSearchEtcRequest()])
             .then(axios.spread((aiSearchResponse, aiEtcResponce) =>
             {
-
-
-
                 let response1 = aiSearchResponse.data;
                 console.log("최종 응답");
-
-                // console.log(response);
 
                 let jsonString1 = JSON.stringify(response1);
                 // ```json과 ```를 제거하는 코드
@@ -106,16 +92,9 @@ const AiDetaileSearch = () => {
                 console.log(recipesList);
                 setDetailRecipe(recipesList);
 
-
-
-
                 let response = aiEtcResponce.data;
 
                 let jsonString = JSON.stringify(response);
-
-
-
-
 
                 // JSON 문자열을 JavaScript 객체로 변환
                 const etc = JSON.parse(jsonString);
@@ -137,7 +116,6 @@ const AiDetaileSearch = () => {
                     setTime(etcList[2].소요시간);
                 }
 
-
                 setModalOpen(false);
 
             }))
@@ -147,12 +125,25 @@ const AiDetaileSearch = () => {
         // setRecipyTitle(recipe.요리제목);
     }, []);
 
+    //라이크 눌렸는지 확인
+    useEffect(() => {
+        const checkLike = async() => {
+            try{
+                await tokenHandler();
+                const res = await axiosInstance.get(`like/check/${recipeId}/${id}`);
+                if(res.data){
+                    setLikeClick(true);
+                }else{
+                    setLikeClick(false);
+                }
 
-    //Recipe ID 생성
-    const recipeId = id + nowTime;
-    console.log(recipeId);
+            }catch(err){
+                console.log(err);
+            }
+        }
 
-
+        checkLike();
+    },[isChange]);
 
     function makeString () {
         let string;
@@ -213,50 +204,12 @@ const AiDetaileSearch = () => {
         let ectResponse;
         console.log("요청중");
 
-
         const requestBody = {
             "userContent": level
         };
 
         await tokenHandler();
         return await axiosInstance.post("api/v1/chat-gpt", requestBody);
-
-        // try {
-        //
-        //     await tokenHandler();
-        //     ectResponse = await axiosInstance.post("api/v1/chat-gpt", requestBody);
-        // } catch (e) {
-        //     console.error(e);
-        //
-        // }
-        //
-        //
-        // let response = ectResponse.data;
-        // console.log(response);
-        // let jsonString = JSON.stringify(response);
-        //
-        //
-        //
-        // // JSON 문자열을 JavaScript 객체로 변환
-        // const etc = JSON.parse(jsonString);
-        // const etcList =  Object.values(etc);
-        // console.log(etcList);
-        //
-        // console.log(etcList[0]);
-        //
-        // setEtc(etcList);
-        // // 난이도
-        // setLevel(etcList[0].난이도);
-        // setServe(etcList[1].인분);
-        // // setTime(etcList[2].소요시간);
-        // // etcList[2].소요시간이 존재하고 문자열이라면 '분'을 제거한 후 setTime에 설정
-        // if (etcList[2] && typeof etcList[2].소요시간 === 'string') {
-        //     setTime(etcList[2].소요시간.replace('분', ''));
-        // } else {
-        //     // 소요시간이 정의되어 있지 않거나 문자열이 아닌 경우
-        //     setTime(etcList[2].소요시간);
-        // }
-
 
     }
 
@@ -274,63 +227,8 @@ const AiDetaileSearch = () => {
             "userContent": request
         };
 
-        let searchResponse;
         await tokenHandler();
         return axiosInstance2.post("api/v1/chat-gpt",requestBody);
-        // try {
-        //     // searchResponse = await axios.post(
-        //     //     "http://localhost:8080/api/v1/chat-gpt",
-        //     //     requestBody,
-        //     //     {
-        //     //         headers: {
-        //     //             "Content-Type": "application/json",
-        //     //             "Authorization": `Bearer ${accessToken}` // auth 설정
-        //     //         },
-        //     //     }
-        //     // )
-        //     await tokenHandler();
-        //     searchResponse = axiosInstance2.post("api/v1/chat-gpt",requestBody);
-        // } catch (e) {
-        //     console.error(e);
-        //     // checkAccessToken2();
-        //     // try {
-        //     //     searchResponse = await axios.post(
-        //     //         "http://localhost:8080/api/v1/chat-gpt",
-        //     //         requestBody,
-        //     //         {
-        //     //             headers: {
-        //     //                 "Content-Type": "application/json",
-        //     //                 "Authorization": `Bearer ${accessToken}` // auth 설정
-        //     //             },
-        //     //         }
-        //     //     )
-        //     // } catch (e) {
-        //     //     console.error(e);
-        //     //
-        //     // }
-        //
-        // }
-        //
-        // console.log(searchResponse);
-        //
-        // let response = searchResponse.data;
-        // console.log("최종 응답");
-        //
-        // // console.log(response);
-        //
-        // let jsonString = JSON.stringify(response);
-        // // ```json과 ```를 제거하는 코드
-        // // const cleanString = response.replace(/```json|```/g, '').trim();
-        //
-        // // JSON 문자열을 JavaScript 객체로 변환
-        // const recipes = JSON.parse(jsonString);
-        // const recipesList =  Object.values(recipes);
-        //
-        // console.log(recipesList);
-        // // console.log("JavaScript 객체를 콘솔에 출력");
-        // // console.log(recipes);
-        // setDetailRecipe(recipesList);
-        // setModalOpen(false);
 
     }
 
@@ -417,7 +315,6 @@ const AiDetaileSearch = () => {
         
         console.log("출력! : "+detailRecipe);
 
-
         const requestBody = {
             "recipeId": recipeId,
             "title": recipyTitle,
@@ -431,12 +328,11 @@ const AiDetaileSearch = () => {
         try{
             await tokenHandler();
             await axiosInstance.post(`like/likeAdd/${userId}`,requestBody);
+
+            setChange(!isChange);
         }catch(err){
             console.log("err message : " + err);
         }
-        
-
-        alert("좋아요!!");
         
     };
 
@@ -497,7 +393,7 @@ const AiDetaileSearch = () => {
                                                     <div  className={styles.bottomLine}></div>
                                                 </Col>
                                                 <Col className={styles.iconCol}>
-                                                    <Button  className={styles.iconButton} variant="outline-secondary" onClick={clickLike}>
+                                                    <Button  className={isLikeClick?styles.iconButtonClicked:styles.iconButton} variant="outline-secondary" onClick={clickLike}>
                                                         <FontAwesomeIcon className={styles.icon} icon={faHeart} />
                                                     </Button>{' '}
                                                     <Button  className={styles.iconButton}  variant="outline-secondary">

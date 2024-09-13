@@ -261,7 +261,23 @@ const AiSimpleSearch = () => {
 
     const startDetailAiSearch = (recipe) =>
     {
-        navigate('/AiDetailSearch', { state: { recipe } }); // 레시피 전달
+        var today = new Date(); //현재시간 가져오기
+        let year = today.getFullYear(); // 년도
+        let month = today.getMonth() + 1;  // 월
+        let date = today.getDate();  // 날짜
+        let hours = today.getHours(); // 시
+        let minutes = today.getMinutes();  // 분
+        let seconds = today.getSeconds();  // 초
+        const nowTime = year + "" + month + "" + date + "" + hours + "" + minutes + "" + seconds;
+        
+        //Recipe ID 생성
+        const recipeId = userId + nowTime;
+        console.log("recipeId"+recipeId);
+
+        navigate('/AiDetailSearch', { state: { 
+            recipe : recipe,
+            recipeId : recipeId
+        } }); // 레시피 전달
 
     }
 

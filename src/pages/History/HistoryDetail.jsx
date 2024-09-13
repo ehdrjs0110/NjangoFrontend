@@ -172,21 +172,22 @@ const HistoryDetail = () => {
 
     const fetchData = async () => {
 
-        let currentRecipeId;
+        // let currentRecipeId;
         
-        if(currentRecipeId && currentRecipeId.length > 0){
-            currentRecipeId = recipe.recipeId;
-        }
+        // if(currentRecipeId && currentRecipeId.length > 0){
+        //     currentRecipeId = recipe.recipeId;
+        // }
             
-        currentRecipeId = isRecipeCookies.recipeId;
+        // currentRecipeId = isRecipeCookies.recipeId;
 
 
-        if (!currentRecipeId) {
-            console.log("recipeId가 정의되지 않았습니다.");
-            return; // recipeId가 없으면 fetch를 하지 않음
-        }
+        // if (!currentRecipeId) {
+        //     console.log("recipeId가 정의되지 않았습니다.");
+        //     return; // recipeId가 없으면 fetch를 하지 않음
+        // }
 
-        setRecipeId(currentRecipeId);
+        // setRecipeId(currentRecipeId);
+        setRecipeId(recipe.recipeId);
 
         console.log("레시피 있어?" + isRecipeId);
         
@@ -348,9 +349,6 @@ const HistoryDetail = () => {
                                                     <div  className={styles.bottomLine}></div>
                                                 </Col>
                                                 <Col className={styles.iconCol}>
-                                                    <Button  className={styles.iconButton} variant="outline-secondary" onClick={userAll}>
-                                                        <FontAwesomeIcon className={styles.icon} icon={faHeart} />
-                                                    </Button>{' '}
                                                     <Button  className={styles.iconButton}  variant="outline-secondary" onClick={kakaoShare}>
                                                         <FontAwesomeIcon className={styles.icon} icon={faMobile} />
                                                     </Button>{' '}
