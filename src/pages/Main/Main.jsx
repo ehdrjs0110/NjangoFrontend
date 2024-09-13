@@ -4,7 +4,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import Navigation from '../../components/Nav/Navigation'
 
 import '../../styles/Bootstrap/Bootstrap.scss';
-import styles from '../../styles/Main/Main.module.scss';
+import styles from '../../styles/Main/Main.module.scss'
 
 import recipeImg from "../../assets/Main/recipe.jpg";
 import managerImg from "../../assets/Main/manager.jpg";
@@ -34,64 +34,54 @@ function Main() {
   const inven = () => {
     navigate('/Inven');
   };
-  
+
+  const recipeshare = () => {
+    navigate('/RecipeShareList');
+  }
+
+  const gallery = () => {
+    navigate('/gallery');
+  }
+
   return (
     <>
-      <Navigation></Navigation>
-      <Container fluid className={styles.container}>
-        <div className={styles.main}>
-          <div className={styles.linkbox} onClick={AiSearch}>
-            <div className={`${styles.wave} ${styles.one}`}></div>
-            <div className={`${styles.wave} ${styles.two}`}></div>
-            <div className={`${styles.wave} ${styles.three}`}></div>
-            <div className={`${styles.text} ${styles.englishFont}`}>
-              <div>Recipe</div>
-              <div>Search</div>
-              <div className={styles.golink}>Go to</div>
-            </div>
-            <div className={styles.iconbox}>
-              <a className={`${styles.icon} ${styles.amethyst}`} onClick={AiSearch}/>
-            </div>
+        <Navigation></Navigation>
+        <Container fluid className={styles.container}>
+          <div className={styles.main}>
+          <Row className={styles.linkrow}>
+            <Col md={{span: 3, offset: 2}} className={styles.linkbox}>
+              <img src={recipeImg} className={styles.img} alt='' />
+              <div className={styles.panel}>
+                <h2 className={styles.text}>레시피 검색</h2>
+                <a onClick={AiSearch}>바로가기</a>
+              </div>
+            </Col>
+            <Col md={{span: 3, offset: 2}} className={styles.linkbox}>
+            <img src={managerImg} className={styles.img} alt='' />
+              <div className={styles.panel}>
+                <h2 className={styles.text}>냉장고 관리</h2>
+                <a onClick={inven}>바로가기</a>
+              </div>
+            </Col>
+          </Row>
+          <Row className={styles.linkrow}>
+            <Col md={{span: 3, offset: 2}} className={styles.linkbox}>
+            <img src={comuImg} className={styles.img} alt='' />
+              <div className={styles.panel}>
+                <h2 className={styles.text}>커뮤니티</h2>
+                <a onClick={recipeshare}>바로가기</a>
+              </div>
+            </Col>
+            <Col md={{span: 3, offset: 2}} className={styles.linkbox}>
+            <img src={galleryImg} className={styles.img} alt='' />
+              <div className={styles.panel}>
+                <h2 className={styles.text}>갤러리</h2>
+                <a onClick={gallery}>바로가기</a>
+              </div>
+            </Col>
+          </Row>
           </div>
-          <div className={styles.linkbox} onClick={inven}>
-            <div className={`${styles.wave} ${styles.one}`}></div>
-            <div className={`${styles.wave} ${styles.two}`}></div>
-            <div className={`${styles.wave} ${styles.three}`}></div>
-            <div className={`${styles.text} ${styles.englishFont}`}>
-              <div>Refrigerator</div>
-              <div>Management</div>
-              <div className={styles.golink}>Go to</div>
-            </div>
-            <div className={styles.iconbox}>
-              <a className={`${styles.icon} ${styles.amethyst}`} onClick={inven}/>
-            </div>
-          </div>
-          <div className={styles.linkbox} onClick={signin}>
-            <div className={`${styles.wave} ${styles.one}`}></div>
-            <div className={`${styles.wave} ${styles.two}`}></div>
-            <div className={`${styles.wave} ${styles.three}`}></div>
-            <div className={`${styles.text} ${styles.englishFont}`}>
-              <div>Community</div>
-              <div className={styles.golink}>Go to</div>
-            </div>
-            <div className={styles.iconbox}>
-              <a className={`${styles.icon} ${styles.amethyst}`} onClick={signin}/>
-            </div>
-          </div>
-          <div className={styles.linkbox} onClick={signin}>
-            <div className={`${styles.wave} ${styles.one}`}></div>
-            <div className={`${styles.wave} ${styles.two}`}></div>
-            <div className={`${styles.wave} ${styles.three}`}></div>
-            <div className={`${styles.text} ${styles.englishFont}`}>
-              <div>Gallery</div>
-              <div className={styles.golink}>Go to</div>
-            </div>
-            <div className={styles.iconbox}>
-              <a className={`${styles.icon} ${styles.amethyst}`} onClick={signin}/>
-            </div>
-          </div>
-        </div>
-      </Container>
+        </Container>
     </>
   );
 }

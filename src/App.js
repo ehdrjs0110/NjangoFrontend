@@ -24,6 +24,9 @@ import HistoryList from './pages/History/HistoryList';
 import HistoryDetail from './pages/History/HistoryDetail';
 import LikeList from './pages/Like/LikeList';
 import LikeDetail from './pages/Like/LikeDetail';
+import RecipeShareList from './pages/RecipeShare/RecipeShareList';
+import RecipeShareDetail from './pages/RecipeShare/RecipeShareDetail';
+import EditRecipe from './pages/RecipeShare/EditRecipe.jsx'
 import ManagementLogin from './pages/Management/ManagementLogin';
 import ManagementNav from "./pages/Management/ManagementNav";
 import ManagementDashboard from "./pages/Management/ManagementDashboard";
@@ -77,6 +80,9 @@ function App() {
           <Route path="/HistoryDetail" element={<PrivateRoute component={<HistoryDetail />}/>}/>
           <Route path="/LikeList" element={<PrivateRoute component={<LikeList />}/>}/>
           <Route path="/LikeDetail" element={<PrivateRoute component={<LikeDetail />}/>}/>
+          <Route path="/RecipeShareList" element={<PrivateRoute component={<RecipeShareList />}/>}/>
+          <Route path="/RecipeShareDetail" element={<PrivateRoute component={<RecipeShareDetail />}/>}/>
+          <Route path="/EditRecipe" element={<PrivateRoute component={<EditRecipe />}/>}/>
 
 
           {/* Management Pages*/}

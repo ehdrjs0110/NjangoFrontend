@@ -278,7 +278,6 @@ const AiDetaileSearch = () => {
             await axiosInstance.post(`like/likeAdd/${userId}`,requestBody);
         }catch(err){
             console.log("err message : " + err);
-            // 첫 랜더링 시에 받아온 토큰이 기간이 만료했을 경우 다시 받아오기 위함
         }
         
 

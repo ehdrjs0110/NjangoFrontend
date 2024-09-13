@@ -10,17 +10,12 @@ import Navigation from '../../components/Nav/Navigation'
 import Card from "react-bootstrap/Card";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import {
-    faEllipsis,
-    faHandHoldingHeart,
     faHourglassHalf,
-    faMobile,
     faStar,
     faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import {useLocation} from "react-router-dom";
-import axios from "axios";
 import {useNavigate} from "react-router-dom";
 // auth 관련 --
 import {useCookies} from "react-cookie";
@@ -29,171 +24,55 @@ import {containToken} from "../../Store/tokenSlice";
 import {useDispatch, useSelector} from "react-redux";
 //--
 
-import {axiosInstance} from "../../middleware/customAxios";
-import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
+import {axiosInstance, axiosInstanceFormData} from "../../middleware/customAxios";
 
 import styles from '../../styles/History/HistoryDetail.module.scss';
 
-const HistoryDetail = () => {
+const EditRecipe = () => {
     const navigate = useNavigate();
     const location = useLocation(); // 현재 위치 객체를 가져옴
-    const { recipe } = location.state || {}; // 전달된 상태에서 recipe 추출, 없을 경우 빈 객체로 대체
-    const [detailRecipe, setDetailRecipe] = useState(null);
+    const { recipeId } = location.state || {}; // 전달된 상태에서 recipe 추출, 없을 경우 빈 객체로 대체
+    const [detailRecipe, setDetailRecipe] = useState([]);
     const [title, setTitle] = useState(null);
-    const [ingredient, setIngredient] = useState(null);
+    const [ingredient, setIngredient] = useState([]);
     const [level,setLevel] = useState(0);
     const [time,setTime] = useState(0);
     const [serve,setServe] = useState(0);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isKakaoToken, setKakaoToken] = useState(null);
-    const [isRecipeId, setRecipeId] = useState(null);
+    const [content, setContent] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
 
-    //recipeId 저장 쿠키
-    const [isRecipeCookies, setRecipeCookie, removeRecipeCookie] = useCookies(null);
+    //레시피ID 만들기를 위한 시간 가져오기
+    var today = new Date(); //현재시간 가져오기
+    let year = today.getFullYear(); // 년도
+    let month = today.getMonth() + 1;  // 월
+    let date = today.getDate();  // 날짜
+    let hours = today.getHours(); // 시
+    let minutes = today.getMinutes();  // 분
+    let seconds = today.getSeconds();  // 초
+    const nowTime = year + "" + month + "" + date + "" + hours + "" + minutes + "" + seconds;
 
     // auth 관련 --
     const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
     // redux에서 가져오기
-    let accessToken = useSelector(state => state.token.value);
     let  userId = useSelector(state=> state.userEmail.value);
     const dispatch = useDispatch();
     // --
 
-    console.log(recipe);
+    console.log(recipeId);  
 
-    //카카오톡 로그인
-    const CLIENT_ID = '7a2afab08fdef9ddd3b09ac451ca30b9';
-    const REDIRECT_URI = 'http://localhost:3000/HistoryDetail';
-    const JavaScript_KEY = '88fa71808a81095402801be7c2034792';
-
-    const code = new URL(window.location.href).searchParams.get("code");
-  
-    useEffect(() => {
-      if (code) {
-        sendCode();
-      }
-    }, [code]);
-    
-    async function sendCode() {
-
-        const body = {
-          code: code,
-        };
-    
-        await axios
-        .post("http://localhost:8080/kakaoMessage/kakaoCode", body)
-        .then((res) => {
-          if(res.data!=null){
-            console.log(res.data);
-    
-            const kakaotoken = res.data;
-    
-            console.log("kakaotoken "+ kakaotoken);
-            setKakaoToken(kakaotoken);
-          }
-        });
-    
-      }
-
-    useEffect(() => {
-        // Kakao SDK 초기화
-        const kakaoScript = document.createElement('script');
-        kakaoScript.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js';
-        kakaoScript.integrity = 'sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4';
-        kakaoScript.crossOrigin = 'anonymous';
-        kakaoScript.onload = () => {
-          window.Kakao.init(JavaScript_KEY); // JavaScript 키 입력
-          displayToken(); // 토큰이 있는지 확인
-        };
-        document.head.appendChild(kakaoScript);
-      }, [isKakaoToken]);
-    
-      const sendToFriends = () => {
-        if (!window.confirm('메시지를 전송하시겠습니까?')) return;
-    
-        window.Kakao.Picker.selectFriends({
-          showMyProfile: false,
-          maxPickableCount: 10,
-          minPickableCount: 1,
-        })
-          .then(res => {
-            const uuids = res.users.map(e => e.uuid);
-    
-            return window.Kakao.API.request({
-              url: '/v1/api/talk/friends/message/default/send',
-              data: {
-                receiver_uuids: uuids,
-                template_object: {
-                  object_type: 'text',
-                  text:
-                    '테스트 동건 테스트 은희',
-                  link: {
-                    mobile_web_url: 'http://localhost:3000',
-                    web_url: 'http://localhost:3000',
-                  },
-                },
-              },
-            });
-          })
-          .then(res => {
-            alert('success: ' + JSON.stringify(res));
-          })
-          .catch(err => {
-            alert('error: ' + JSON.stringify(err));
-          });
-      };
-    
-      const displayToken = () => {
-        const kakaotoken = isKakaoToken;
-
-        if (kakaotoken && Object.values(kakaotoken) == '') {
-          window.Kakao.Auth.setAccessToken(kakaotoken);
-          setIsLoggedIn(true);
-        }
-      };
-
-    const kakaoShare = async() => {
-
-        //recipeId 쿠키에 저장
-        setRecipeCookie(
-            'recipeId',
-            recipe.recipeId
-        )
-
-        const kakaoUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=talk_message,friends`;
-        window.location.href = kakaoUrl;
-
-        if(isLoggedIn){
-            sendToFriends();
-        }
-    };
+        //Recipe ID 생성
+    const newRecipeId = userId + nowTime;
+    console.log(newRecipeId);
 
     useEffect(() => {
 
     const fetchData = async () => {
 
-        let currentRecipeId;
+        console.log(recipeId);
         
-        if(currentRecipeId && currentRecipeId.length > 0){
-            currentRecipeId = recipe.recipeId;
-        }
-            
-        currentRecipeId = isRecipeCookies.recipeId;
-
-
-        if (!currentRecipeId) {
-            console.log("recipeId가 정의되지 않았습니다.");
-            return; // recipeId가 없으면 fetch를 하지 않음
-        }
-
-        setRecipeId(currentRecipeId);
-
-        console.log("레시피 있어?" + isRecipeId);
-        
-
         try{
             await tokenHandler();
-            const res = await axiosInstance.get(`recipe/${isRecipeId}`);
+            const res = await axiosInstance.get(`recipe/${recipeId}`);
             const storedRecipe = res.data;
 
             if(storedRecipe && storedRecipe.length > 0) {
@@ -204,7 +83,7 @@ const HistoryDetail = () => {
 
                 setDetailRecipe(detailRecipeArray);
                 setTitle(storedRecipe[0].title);
-                setIngredient(detailIngredientsArray);
+                setIngredient(formatIngredients(detailIngredientsArray).replace(/\"/gi, ""));
                 setLevel(storedRecipe[0].level);
                 setServe(storedRecipe[0].servings);
                 setTime(storedRecipe[0].time);
@@ -216,7 +95,7 @@ const HistoryDetail = () => {
     }
     
         fetchData();
-    }, [recipe, isRecipeId]);
+    }, [recipeId]);
 
     async function tokenHandler() {
 
@@ -280,12 +159,6 @@ const HistoryDetail = () => {
         }
     }
 
-    const userAll = async() => {
-        await tokenHandler();
-        const res = await axiosInstance.get("/user/userAll");
-        console.log(res.data);
-    }
-
     // ingredients 객체를 문자열로 변환하여 사람이 읽기 쉽게 포맷팅하는 함수
     const formatIngredients = (ingredients) => {
         if(ingredients){
@@ -295,6 +168,97 @@ const HistoryDetail = () => {
         }else {
             return "";
         }
+    };
+
+    // 포멧한 ingredients 문자열을 객체로 파싱하는 함수
+    function parseIngredients(ingredientString) {
+        const ingredientObject = {};
+        const ingredients = ingredientString.split(", ");
+        ingredients.forEach(item => {
+            const [key, value] = item.split(": ");
+            ingredientObject[key.trim()] = value.trim();
+        });
+        return ingredientObject;
+    }
+
+    //레시피 공유 게시
+    const postRecipe = async() => {
+
+        let progress = JSON.stringify(detailRecipe);
+        let ingredients = JSON.stringify(parseIngredients(ingredient));
+
+        const formData = new FormData();
+        formData.append("recipeId",newRecipeId);
+        formData.append("title",title);
+        formData.append("ingredients",ingredients);
+        formData.append("progress", progress);
+        formData.append("level",level);
+        formData.append("time",time);
+        formData.append("servings",serve);
+        formData.append("content",content);
+
+        if(selectedFile!=null){
+            formData.append('file', selectedFile);
+        }
+        
+
+        // formData.forEach((value, key) => {
+        //     console.log("key : " + key + " value : " + value);
+        // });
+
+        try{
+            await tokenHandler();
+            const res = await axiosInstanceFormData.post(`recipeShare/${userId}`, formData);
+            //const storedRecipe = res.data;
+            alert("저장 성공!");
+
+        } catch(err){
+            console.log("err message : " + err);
+        }
+        
+
+    };
+
+    //Title 변경
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+    }
+
+    //Ingredient 변경
+    const handleIngredientChange = (e) => {
+        setIngredient(e.target.value);
+    }
+
+    //level 변경
+    const handleLevelChange = (e) => {
+        setLevel(e.target.value);
+    }
+
+    //Time 변경
+    const handleTimeChange = (e) => {
+        setTime(e.target.value);
+    }
+
+    //Serve 변경
+    const handleServeChange = (e) => {
+        setServe(e.target.value);
+    }
+
+    //Content 변경
+    const handleContentChange = (e) => {
+        setContent(e.target.value);
+    }
+
+    // 파일 선택 핸들러
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+    };
+
+    // 레시피 변경 핸들러
+    const handleDetailRecipeChange = (index, field, value) => {
+        const updatedDetailRecipe = [...detailRecipe];
+        updatedDetailRecipe[index][0][field] = value;
+        setDetailRecipe(updatedDetailRecipe);
     };
 
     // 레시피 자세히 보기 ui
@@ -317,9 +281,9 @@ const HistoryDetail = () => {
                         <Col className={styles.recipeCol} xs={11}>
                             <Card className={styles.card}>
                                 <Card.Body className={styles.body}>
-                                    <Card.Title>{recipe[0].과정제목}</Card.Title>
+                                    <Card.Title><Form.Control type="text" value={recipe[0].과정제목} onChange={(e) => handleDetailRecipeChange(index, '과정제목', e.target.value)}/></Card.Title>
                                     <Card.Text>
-                                        {recipe[0].process || recipe[1].process}
+                                        <Form.Control type="text" value={recipe[0].process || recipe[1].process} onChange={(e) => handleDetailRecipeChange(index, 'process', e.target.value)}/>
                                     </Card.Text>
                                 </Card.Body>
                             </Card>
@@ -344,19 +308,7 @@ const HistoryDetail = () => {
                                         <Card.Title className={styles.upperHalfContain}>
                                             <Row xs={2} md={2} lg={2}>
                                                 <Col className={styles.titleCol}>
-                                                    {title}
-                                                    <div  className={styles.bottomLine}></div>
-                                                </Col>
-                                                <Col className={styles.iconCol}>
-                                                    <Button  className={styles.iconButton} variant="outline-secondary" onClick={userAll}>
-                                                        <FontAwesomeIcon className={styles.icon} icon={faHeart} />
-                                                    </Button>{' '}
-                                                    <Button  className={styles.iconButton}  variant="outline-secondary" onClick={kakaoShare}>
-                                                        <FontAwesomeIcon className={styles.icon} icon={faMobile} />
-                                                    </Button>{' '}
-                                                    <Button  className={styles.iconButton}  variant="outline-secondary">
-                                                        <FontAwesomeIcon className={styles.icon} icon={faEllipsis} />
-                                                    </Button>{' '}
+                                                    <Form.Control size="lg" type="text" value={title} onChange={handleTitleChange}/>
                                                 </Col>
                                             </Row>
                                         </Card.Title>
@@ -383,21 +335,26 @@ const HistoryDetail = () => {
                                                                 {/*    여기는 비율 맞추기 위한 공백  */}
                                                             </Col>
                                                             <Col>
-                                                                <Button variant="outline-secondary" className={styles.cookingClearButton} >요리완료</Button>
+                                                                <Button variant="outline-secondary" className={styles.cookingClearButton} onClick={postRecipe} >게시하기</Button>
                                                             </Col>
                                                         </Row>
                                                     </Row>
                                                     <Row  style={{margin:0}} xs={2} md={2} lg={2}>
                                                         <Row style={{margin:0}} xs={3} md={3} lg={3}>
                                                             <Col>
+                                                            <Form.Select aria-label="Default select example" onChange={handleLevelChange}>
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                            </Form.Select>
                                                                 <p>난이도</p>
                                                             </Col>
                                                             <Col>
-                                                                <p>{serve}인분</p>
+                                                                <p><Form.Control type="text" value={serve} onChange={handleServeChange}/>인분</p>
                                                             </Col>
                                                             {/*{aiSearchEtcRequest()}*/}
                                                             <Col>
-                                                                <p>{time}분</p>
+                                                                <p><Form.Control type="text" value={time} onChange={handleTimeChange}/>분</p>
                                                             </Col>
                                                         </Row>
                                                         <Row xs={2} md={2} lg={2}>
@@ -416,7 +373,7 @@ const HistoryDetail = () => {
                                                 <Card.Body>
                                                     <Card.Title className={styles.ingredientTitle}>재료</Card.Title>
                                                     <div className={styles.ingredientList}>
-                                                        {formatIngredients(ingredient).replace(/\"/gi, "")}
+                                                        <Form.Control type="text" value={ingredient} onChange={handleIngredientChange}/>
                                                     </div>
                                                 </Card.Body>
                                             </Card>
@@ -441,6 +398,22 @@ const HistoryDetail = () => {
                                         {/*레시피 종료*/}
                                     </Card.Body>
                                 </Card>
+                                <Card className={styles.contentContainer} >
+                                    <Card.Body>
+                                        <div className={styles.detailContainer}>
+                                            <Card className={styles.recipeContainCard}>
+                                                <Card.Body>
+                                                    <Form.Control type="file" onChange={handleFileChange} />
+                                                </Card.Body>
+                                            </Card>
+                                            <Card className={styles.recipeContainCard}>
+                                                <Card.Body>
+                                                    <Form.Control as="textarea" rows={3} placeholder='내용' onChange={handleContentChange}/>
+                                                </Card.Body>
+                                            </Card>
+                                        </div>
+                                    </Card.Body>
+                                </Card>  
                             </Col>
                         </Col>
                     </Row>
@@ -450,4 +423,4 @@ const HistoryDetail = () => {
     );
 }
 
-export default HistoryDetail;
+export default EditRecipe;
