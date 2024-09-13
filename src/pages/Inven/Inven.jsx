@@ -396,15 +396,15 @@ function Inven() {
                     <Col>
                       <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.size==="없음"} onClick={(e) => updateSize(index,e)}>없음</Button>
                     </Col>
-                    {/*<Col>*/}
-                    {/*  <Button className={styles.btn}  variant="none" value={"적음"} disabled={item.status.size==="적음"} onClick={(e) => updateSize(index,e)}>적음</Button>*/}
-                    {/*  <Button className={styles.btn} variant="none" value={"적당함"} disabled={item.status.size==="적당함"} onClick={(e) => updateSize(index,e)}>적당함</Button>*/}
-                    {/*  <Button className={styles.btn} variant="none" value={"많음"} disabled={item.status.size==="많음"} onClick={(e) => updateSize(index,e)}>많음</Button>*/}
-                    {/*</Col>*/}
-                    {/*<Col>*/}
-                    {/*  <p className={styles.text}>수량</p>*/}
-                    {/*  <Form.Control type="number" className={styles.count} placeholder={item.status.count} onChange={(e) => updateCount(index, e)} />*/}
-                    {/*</Col>*/}
+                    <Col>
+                      <Button className={styles.btn}  variant="none" value={"적음"} disabled={item.status.size==="적음"} onClick={(e) => updateSize(index,e)}>적음</Button>
+                      <Button className={styles.btn} variant="none" value={"적당함"} disabled={item.status.size==="적당함"} onClick={(e) => updateSize(index,e)}>적당함</Button>
+                      <Button className={styles.btn} variant="none" value={"많음"} disabled={item.status.size==="많음"} onClick={(e) => updateSize(index,e)}>많음</Button>
+                    </Col>
+                    <Col>
+                      <p className={styles.text}>수량</p>
+                      <Form.Control type="number" className={styles.count} placeholder={item.status.count} onChange={(e) => updateCount(index, e)} />
+                    </Col>
                     <Col>
                       <Button className={styles.delBtn} onClick={() => deleteData(index)} variant="danger">삭제</Button>
                     </Col>
