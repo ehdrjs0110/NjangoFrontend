@@ -194,6 +194,10 @@
             border-top-right-radius: 0;  // 오른쪽 위 모서리 둥글기 제거
             border-bottom-right-radius: 0;  // 오른쪽 아래 모서리 둥글기 제거
             //border-radius: ;
+
+            &:hover {
+                background-color: darken($p-color, 10%); // 호버 시 배경색 어둡게
+            }
         }
 
         .delBtn {
@@ -202,8 +206,13 @@
             border-top-right-radius: 0;  // 오른쪽 위 모서리 둥글기 제거
             border-top-left-radius: 0;  // 오른쪽 위 모서리 둥글기 제거
             border-bottom-left-radius: 0;  // 오른쪽 아래 모서리 둥글기 제거
+
+            &:hover {
+                background-color: darken($danger-color, 10%); // 호버 시 배경색 어둡게
+            }
         }
-        .btn, .delBtn{
+
+       .btn, .delBtn {
             color: $white-color;
             font-weight: bold;
             height: 70px;
@@ -211,7 +220,13 @@
             width: 50%;
             bottom: 0;
             opacity: 0; // 기본적으로 숨김
-            transition: opacity 0.3s ease; // 호버 시 애니메이션
+            transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.3s ease, font-size 0.3s ease; // 호버 시 애니메이션
+
+            &:hover {
+                cursor: pointer;
+                transform: scale(1.05); // 살짝 확대
+                z-index: 999;
+            }
         }
 
         .infoBtn {
@@ -222,11 +237,12 @@
             background-color: transparent;  // 배경 투명하게
             border: none;
             color: $p-color;  // 아이콘 색상 설정
-            transition: opacity 0.3s ease; // 호버 시 애니메이션
+            transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.3s ease, font-size 0.3s ease; // 호버 시 애니메이션
             cursor: pointer;
 
             &:hover {
                 color: $primary-color;  // 호버 시 색상 변경
+                transform: scale(1.2); // 살짝 확대
             }
         }
 
