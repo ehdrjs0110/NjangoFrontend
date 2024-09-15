@@ -41,8 +41,7 @@ function Excel() {
     const [isNewData, setNewData] = useState({
       ingredientname: "",
       status: {
-        size: "없음",
-        count: "",
+        size: 0,
       }
     });
     //select박스 체크
@@ -62,14 +61,14 @@ function Excel() {
     //columns 변수에는 테이블의 제목에 들어갈 내용을 배열에 객체 요소로 담는다.
     const columns = [
         { field: "ingredientname", headerName: "재료명", width: 150},
+        { field: "size", headerName: "재료 양", type: "number", width: 130, editable: true },
         { 
-            field: "size", 
-            headerName: "재료양", 
+            field: "unit", 
+            headerName: "단위", 
             width: 150, 
             editable: true,
             renderEditCell: (params) => <SelectEditor {...params} />
         },
-        { field: "count", headerName: "개수", type: "number", width: 130, editable: true },
         { field: "dateofuse", headerName: "사용기한", type: "Date", width: 200, editable: true },
         { field: "lastuse", headerName: "마지막 사용 날짜", type: "Date", width: 200, editable: true },
         { field: "lastget", headerName: "마지막 구입 날짜", type: "Date", width: 200, editable: true },
@@ -102,7 +101,7 @@ function Excel() {
         setRows(data.map((item) => ({
           ingredientname: item.ingredientname,
           size: item.status.size,
-          count: item.status.count,
+          unit: item.status.unit,
           dateofuse: item.status.dateofuse,
           lastuse: item.status.lastuse,
           lastget: item.status.lastget,
@@ -181,8 +180,8 @@ function Excel() {
         return;
       }
       
-      if (!data.status || !data.status.count) {
-        alert("재료의 수량을 입력해주세요.");
+      if (!data.status || !data.status.size) {
+        alert("재료의 양을 입력해주세요.");
         return;
       }
         await tokenHandler();
@@ -197,7 +196,7 @@ function Excel() {
         "ingredientname" : "",
         "status" : {
           "size" : isNewData.status.size,
-          "count" : "",
+          "unit" : "g",
         }
       }));
 
@@ -216,7 +215,7 @@ function Excel() {
             ingredientname: newRow.ingredientname,
             status: {
               size: newRow.size,
-              count: newRow.count,
+              unit: newRow.unit,
               dateofuse: newRow.dateofuse,
               lastuse: newRow.lastuse,
               lastget: newRow.lastget,
@@ -307,16 +306,17 @@ function Excel() {
               <Form.Control type="text" id='ingredientname' className={styles.ingredientname} onChange={setIngredName} value={isNewData.ingredientname} placeholder="재료명"/>
               </Col>
               <Col>
-                <Form.Select id='size' className={styles.selectSize} onChange={setInsertData} defaultValue={isNewData.status.size}>
-                  <option  value={"없음"}>없음</option>
-                  <option value={"적음"}>적음</option>
-                  <option value={"적당함"}>적당함</option>
-                  <option value={"많음"}>많음</option>
-                </Form.Select>
+              <p className={styles.text}>재료 양</p>
+              <Form.Control type="number" id='size' className={styles.count} onChange={setInsertData} value={isNewData.status.size} placeholder="0"/>
               </Col>
               <Col>
-                <p className={styles.text}>수량</p>
-                <Form.Control type="number" id='count' className={styles.count} onChange={setInsertData} value={isNewData.status.count} placeholder="0"/>
+                <p className={styles.text}>단위</p>
+                <Form.Select id='unit' className={styles.selectSize} onChange={setInsertData} defaultValue={isNewData.status.unit}>
+                  <option  value={"g"}>g</option>
+                  <option value={"개"}>개</option>
+                  <option value={"ml"}>ml</option>
+                  <option value={"통"}>통</option>
+                </Form.Select>
               </Col>
               <Col>
                 <p className={styles.text}>사용기한</p>
