@@ -529,22 +529,6 @@ function Inven() {
               />
             </Form.Group>
 
-            {/* 사이즈 수정 */}
-            <Form.Group controlId="size">
-              <Form.Label>사이즈</Form.Label>
-              <Form.Control
-                  as="select"
-                  name="size"
-                  min="0" // 0 이상의 값만 허용
-                  value={formData.status.size}
-                  onChange={handleStatusChange}
-              >
-                <option value="적음">적음</option>
-                <option value="적당함">적당함</option>
-                <option value="많음">많음</option>
-              </Form.Control>
-            </Form.Group>
-
             {/* 수량 수정 */}
             <Form.Group controlId="count">
               <Form.Label>수량</Form.Label>
@@ -553,6 +537,17 @@ function Inven() {
                   name="count"
                   min="0" // 0 이상의 값만 허용
                   value={formData.status.count}
+                  onChange={handleStatusChange}
+              />
+            </Form.Group>
+
+            {/* 단위 수정 */}
+            <Form.Group controlId="size">
+              <Form.Label>단위</Form.Label>
+              <Form.Control
+                  type="text"
+                  name="size"
+                  value={formData.status.size}
                   onChange={handleStatusChange}
               />
             </Form.Group>
@@ -585,16 +580,6 @@ function Inven() {
               />
             </Form.Group>
 
-            <Form.Group controlId="size">
-              <Form.Label>양</Form.Label>
-              <div>
-                <Button variant="none" onClick={setSize} value={"없음"} disabled={isClickSize === "없음"}>없음</Button>
-                <Button variant="none" onClick={setSize} value={"적음"} disabled={isClickSize === "적음"}>적음</Button>
-                <Button variant="none" onClick={setSize} value={"적당함"} disabled={isClickSize === "적당함"}>적당함</Button>
-                <Button variant="none" onClick={setSize} value={"많음"} disabled={isClickSize === "많음"}>많음</Button>
-              </div>
-            </Form.Group>
-
             <Form.Group controlId="count">
               <Form.Label>수량</Form.Label>
               <Form.Control
@@ -603,6 +588,16 @@ function Inven() {
                   placeholder="수량을 입력하세요"
                   value={isNewData.status.count || 0}
                   onChange={setCount}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="size">
+              <Form.Label>단위</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="단위를 입력하세요"
+                value={isNewData.status.size}
+                onChange={setSize}
               />
             </Form.Group>
           </Form>
