@@ -42,26 +42,18 @@
         justify-content: center;
         align-items: center;
         text-align: center;
-
-        .serch {
-            width: 20%;
-            display: inline-block;
-        }
-    
-        .serchbtn{
-            margin-left: 10px;
-            background-color: $p-color;
-            color: $white-color;
-        }
-
-        .btn {
-            margin-left: 50px;
-            background-color: $p-color;
-            color : $white-color;
-            font-weight: bold;
-        }
     }
     
+}
+
+.btn {
+    background-color: $p-color !important;
+    color : $white-color !important;
+    font-weight: bold;
+
+    &:hover {
+        background-color: #f87904 !important;
+    }
 }
 
 .content {
@@ -80,13 +72,11 @@
         width: 100%;
         padding: 20px 20px;
     }
-    
-    
-
 }
 
 .addContent {
-    background-color: $accent-color;
+    //background-color: $accent-color;
+    background-color: $white-color;
     height: 100%;
     border: 1px solid lightgrey;
     border-radius: 5px;
@@ -95,46 +85,70 @@
     align-items: center;
 
     .addline {
+        border-collapse: collapse; /* 중복된 경계를 제거 */
         margin: 0 auto;
         width: 95%;
-        display: flex;
+        //display: flex;
         justify-content: center;
         align-items: center;
         text-align: center;
-        
+
+        th:first-child, td:first-child {
+            border-left: 0; /* 첫 번째 열에만 왼쪽 경계선 제거 */
+        }
+
+        th:last-child, td:last-child {
+            border-right: 0; /* 마지막 열에만 오른쪽 경계선 제거 */
+        }
+
+        thead tr th{
+            border-top: 0; /* 첫 번째 행에만 윗쪽 경계선 제거 */
+        }
+
+        tbody tr td{
+            border-bottom: 0; /* 첫 번째 행에만 윗쪽 경계선 제거 */
+        }
+
+        th, td {
+            border: 1px solid #ddd; /* 각 셀에만 border 적용 */
+            padding: 8px;
+        }
+
         .text {
-            color: $white-color;
+            //color: $white-color;
             display: inline-block;
             margin: 0;
         }
     
         .selectSize {
-            width: 50%;
+            //width: 50%;
             margin: 0 auto;
-        }
-
-        .addBtn {
-            margin: 5px;
-            background-color: $primary-color;
-            color : $white-color;
-            font-weight: bold;
         }
     
         .count {
-            margin-left: 10px;
             display: inline-block;
-            width: 30%;
+            width: 50%;
             text-align: right;
         }
 
         .day {
-            margin-left: 10px;
             display: inline-block;
-            width: 50%;
+            width: 70%;
         }
     }
-    
+}
 
+.addBtn {
+    min-width: 5rem !important;
+    min-height: 2rem !important;
+    margin: 1rem;
+    background-color: $primary-color !important;
+    color : $white-color !important;
+    font-weight: bold;
+
+    &:hover{
+        background-color: #0a4eb2 !important;
+    }
 }
 
 /* ( 크롬, 사파리, 오페라, 엣지 ) 동작 */

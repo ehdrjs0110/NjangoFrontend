@@ -27,6 +27,7 @@ import { containNickName } from "../../Store/userNickName";
 import { axiosInstance } from "../../middleware/customAxios";
 import { arrayNestedArray, makeFlatArray } from "../../services/arrayChecker";
 import { getRegExp, engToKor } from 'korean-regexp';
+import Table from "react-bootstrap/Table";
 
 function Excel() {
     const navigate = useNavigate();
@@ -261,14 +262,7 @@ function Excel() {
                     <Col md={{ span: 10, offset: 1 }} className={styles.controller}>
                         <Row className={styles.controllerRow}>
                             <Col className={styles.controlform}>
-                                <div className={styles.serch}>
-                                    <Form.Control type="text" placeholder="재료검색" />
-                                </div>
-                                <Button className={styles.serchbtn} variant="none">검색</Button>
                                 <Button className={styles.btn} onClick={normalmode} variant="none">일반 모드</Button>
-                                <Button className={styles.btn} onClick={cookmode} variant="none">나의 재료로 요리하기</Button>
-                                <Button className={styles.btn} onClick={updateData} variant="none">일괄 저장</Button>
-                                <Button className={styles.btn} onClick={deleteData} variant="none">선택 삭제</Button>
                             </Col>
                         </Row>
                     </Col>
@@ -276,78 +270,102 @@ function Excel() {
 
                 <Row className={styles.addContentRow}>
                     <Col md={{ span: 10, offset: 1 }} className={styles.addContent}>
-                        <Row className={styles.addline}>
-                            <Col>
-                                <Form.Control
-                                    type="text"
-                                    id='ingredientname'
-                                    className={styles.ingredientname}
-                                    onChange={setIngredName}
-                                    value={isNewData.ingredientname}
-                                    placeholder="재료명"
-                                />
-                            </Col>
-                            <Col>
-                                <p className={styles.text}>재료 양</p>
-                                <Form.Control
-                                    type="number"
-                                    id='size'
-                                    className={styles.count}
-                                    onChange={setInsertData}
-                                    value={isNewData.status.size}
-                                    placeholder="0"
-                                />
-                            </Col>
-                            <Col>
-                                <p className={styles.text}>단위</p>
-                                <Form.Select
-                                    id='unit'
-                                    className={styles.selectSize}
-                                    onChange={setInsertData}
-                                    defaultValue={isNewData.status.unit}
-                                >
-                                    <option value={"g"}>g</option>
-                                    <option value={"개"}>개</option>
-                                    <option value={"ml"}>ml</option>
-                                    <option value={"통"}>통</option>
-                                </Form.Select>
-                            </Col>
-                            <Col>
-                                <p className={styles.text}>사용기한</p>
-                                <Form.Control
-                                    type="date"
-                                    id='dateofuse'
-                                    className={styles.day}
-                                    onChange={setInsertData}
-                                />
-                            </Col>
-                            <Col>
-                                <p className={styles.text}>마지막 구입날짜</p>
-                                <Form.Control
-                                    type="date"
-                                    id='lastget'
-                                    className={styles.day}
-                                    onChange={setInsertData}
-                                />
-                            </Col>
-                            <Col>
-                                <Button className={styles.addBtn} variant="none" onClick={addData}>추가</Button>
-                            </Col>
-                        </Row>
+                        <table className={styles.addline}>
+                            <thead>
+                                <tr>
+                                    <th><label className={styles.text}>재료명</label></th>
+                                    <th><label className={styles.text}>재료 양</label></th>
+                                    <th><label className={styles.text}>단위</label></th>
+                                    <th><label className={styles.text}>사용기한</label></th>
+                                    <th><label className={styles.text}>마지막 구입날짜</label></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <Form.Control
+                                        type="text"
+                                        id="ingredientname"
+                                        className={styles.ingredientname}
+                                        onChange={setIngredName}
+                                        value={isNewData.ingredientname}
+                                    />
+                                </td>
+                                <td>
+                                    <Form.Control
+                                        type="number"
+                                        id="size"
+                                        className={styles.count}
+                                        onChange={setInsertData}
+                                        value={isNewData.status.size}
+                                        placeholder="0"
+                                    />
+                                </td>
+                                <td>
+                                    <Form.Select
+                                        id="unit"
+                                        className={styles.selectSize}
+                                        onChange={setInsertData}
+                                        defaultValue={isNewData.status.unit}
+                                    >
+                                        <option value="g">g</option>
+                                        <option value="개">개</option>
+                                        <option value="ml">ml</option>
+                                        <option value="통">통</option>
+                                    </Form.Select>
+                                </td>
+                                <td>
+                                    <Form.Control
+                                        type="date"
+                                        id="dateofuse"
+                                        className={styles.day}
+                                        onChange={setInsertData}
+                                    />
+                                </td>
+                                <td>
+                                    <Form.Control
+                                        type="date"
+                                        id="lastget"
+                                        className={styles.day}
+                                        onChange={setInsertData}
+                                    />
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <Button className={styles.addBtn} variant="none" onClick={addData}>
+                            추가
+                        </Button>
                     </Col>
                 </Row>
 
                 <Row className={styles.contentRow}>
-                    <Col md={{ span: 10, offset: 1 }} className={styles.content}>
+                <Col md={{span: 10, offset: 1}} className={styles.content}>
                         <Row className={styles.row}>
                             <Col>
                                 <div className={styles.excel}>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="재료검색"
-                                        value={searchQuery}
-                                        onChange={(e) => handleSearch(e.target.value)}
-                                    />
+                                    <div style={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                        marginBottom: "10px"
+                                    }}>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="재료검색"
+                                            value={searchQuery}
+                                            onChange={(e) => handleSearch(e.target.value)}
+                                            style={{flex: "1 1 30%", minWidth: "200px"}}
+                                        />
+                                        <Button className={styles.btn} onClick={cookmode} variant="none">나의 재료로 요리하기</Button>
+                                        <Button className={styles.btn} onClick={updateData} variant="none">
+                                            일괄 저장
+                                        </Button>
+                                        <Button className={styles.btn} onClick={deleteData} variant="none">
+                                            선택 삭제
+                                        </Button>
+                                    </div>
                                     <DataGrid
                                         rows={filteredRows}
                                         columns={columns}
