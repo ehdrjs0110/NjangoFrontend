@@ -49,6 +49,10 @@ const RecipeShareDetail = () => {
     const [image,setImage] = useState(null);
     const [likecount, setLikecount] = useState(0);
     const [recipeId, setRecipeId] = useState(null);
+    //새 댓글
+    const [newComment, setNewComment] = useState('');
+    //댓글
+    const [comment, setComment] = useState([]);
 
     // auth 관련 --
     const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
@@ -96,7 +100,28 @@ const RecipeShareDetail = () => {
                 console.log("err message : " + err);
             }
         }
+
+        const fetchCommentData = async () => {
+
+            console.log(recipeShareId);
+            
+            try{
+                await tokenHandler();
+                const res = await axiosInstance.get(`comment/${recipeShareId}`);
+                const storedComment = res.data;
+
+                if(storedComment && storedComment.length > 0) {
+                    console.log(storedComment);
+                    setComment(storedComment);
+                }
+        
+            }catch(err){
+                console.log("err message : " + err);
+            }
+        }
+
         fetchData();
+        fetchCommentData();
 
     }, [recipeShareId, isChange]);
 
@@ -210,6 +235,66 @@ const RecipeShareDetail = () => {
             console.error(err);
         }
     };
+
+    //댓글 이벤트 핸들러
+    const commentSet = (e) => {
+        setNewComment(e.target.value);
+    };
+
+    //댓글 추가
+    const commentAdd = async() => {
+        if(newComment==''&&!newComment){
+            alert("댓글을 입력해주세요.");
+            return;
+        }
+
+        try{
+            await tokenHandler();
+            await axiosInstance.post(`comment/add/${userId}/${recipeShareId}`, newComment);
+            setChange(!isChange);
+        }catch(err){
+            console.log(err);
+        }
+    };
+
+    //재료 삭제
+    const deleteComment = async (commentId) => {
+
+        if(window.confirm(`정말 댓글을 삭제하시겠습니까?`)){
+        try{ 
+            await tokenHandler();
+            await axiosInstance.delete(`comment/${commentId}`);
+            alert("삭제 되었습니다.");
+            setChange(!isChange);
+        }catch(err){
+            console.log("err message : " + err);
+        }
+        }else {
+        alert("취소 되었습니다.");
+        }  
+    };
+
+    function commentList() {
+        if(comment != null && comment.length > 0){
+            return comment.map((comment, index) => {
+                const date = new Date(comment.update);
+                const formattedDate = date.toLocaleDateString();
+
+                return (
+                    <Card.Body key={index}>
+                        {comment.content}
+                        {comment.nickname}
+                        {formattedDate}
+                        {comment.userId === userId && (
+                        <Button className={styles.delBtn} onClick={() => deleteComment(comment.commentId)} variant="danger">삭제</Button>
+                        )}
+                    </Card.Body>
+                );
+            });
+        }else {
+            return <Card.Body>아무런 댓글이 없습니다.</Card.Body>  // comment가 null일 경우
+        }
+    }
 
     // 레시피 자세히 보기 ui
     function makeDetailRecipe()
@@ -372,8 +457,14 @@ const RecipeShareDetail = () => {
                                         </div>
                                         <div className={styles.detailContainer}>
                                             <Card className={styles.recipeContainCard}>
+                                                {commentList()}
+                                            </Card>
+                                        </div>
+                                        <div className={styles.detailContainer}>
+                                            <Card className={styles.recipeContainCard}>
                                                 <Card.Body>
-                                                    오 흑역사 대박...
+                                                    <Form.Control type="text" onChange={commentSet} placeholder='타인의 권리를 침해하거나 명예를 훼손하는 댓글은 운영원칙 및 관련 법률에 제재를 받을 수 있습니다.' />
+                                                    <Button onClick={commentAdd}>등록</Button>
                                                 </Card.Body>
                                             </Card>
                                         </div>
