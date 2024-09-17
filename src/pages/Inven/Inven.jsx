@@ -37,6 +37,15 @@ function Inven() {
   const [isClickSize, setClickSize] = useState("");
   const [isIngred, setIngred] = useState([]);
   const [isIndex, setIndex] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredItemsWithSize = isData.filter(item =>
+      item.status.size > 0 && item.ingredientname.includes(searchQuery)
+  );
+  const filteredItemsWithoutSize = isData.filter(item =>
+      item.status.size === 0 && item.ingredientname.includes(searchQuery)
+  );
+
   const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
   let accessToken = useSelector(state => state.token.value);
   let userId = useSelector(state => state.userEmail.value);
@@ -338,13 +347,15 @@ function Inven() {
                   <div className={`${styles.buttonGroup} ${styles.middleGroup}`}>
                     <div className={`${styles.serch} ${styles.searchContainer}`}>
                       <input
-                        type="text"
-                        placeholder="재료검색"
-                        className={styles.searchInput}
+                          type="text"
+                          placeholder="재료검색"
+                          className={styles.searchInput}
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
                       />
                       <FontAwesomeIcon
-                        icon={faMagnifyingGlass}
-                        className={styles.searchIcon}
+                          icon={faMagnifyingGlass}
+                          className={styles.searchIcon}
                       />
                     </div>
                     <button className={styles.button} onClick={handleShowAddModal}>추가</button>
@@ -358,12 +369,12 @@ function Inven() {
               <h2>갖고있어요!</h2>
               <div className={styles.item}>
                 <Row style={{ width: '100%', margin: '0 auto' }}>
-                  {itemsWithSize.map((item, index) => {
+                  {filteredItemsWithSize.map((item, index) => {
                     const combinedClassName = classNames(
-                      styles.line,
-                      {
-                        [styles.select]: Object.values(isIngred).includes(item.ingredientname),
-                      }
+                        styles.line,
+                        {
+                          [styles.select]: Object.values(isIngred).includes(item.ingredientname),
+                        }
                     );
                     return (
                       <Col key={index}
@@ -398,12 +409,12 @@ function Inven() {
               <h2>사주세요ㅠㅠ</h2>
               <div className={styles.item}>
                 <Row style={{ width: '100%', margin: '0 auto' }}>
-                  {itemsWithoutSize.map((item, index) => {
+                  {filteredItemsWithoutSize.map((item, index) => {
                     const combinedClassName = classNames(
-                      styles.line,
-                      {
-                        [styles.select]: Object.values(isIngred).includes(item.ingredientname),
-                      }
+                        styles.line,
+                        {
+                          [styles.select]: Object.values(isIngred).includes(item.ingredientname),
+                        }
                     );
                     return (
                       <Col key={index}
