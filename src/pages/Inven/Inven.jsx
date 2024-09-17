@@ -121,39 +121,54 @@ function Inven() {
 
   //재료 추가
   const handleAddData = async () => {
+  const data = isNewData;
 
-    const data = isNewData;
+  try {
+    console.log(data);
 
-    try{
-      console.log(data);
+    if (!data || !data.ingredientname) {
+      alert("재료명을 입력해주세요.");
+      return;
+    }
 
-      if (!data || !data.ingredientname) {
-        alert("재료명을 입력해주세요.");
-        return;
+    if (!data.status || !data.status.unit) {
+      alert("재료의 단위를 선택해주세요.");
+      return;
+    }
+
+    await tokenHandler();
+    await axiosInstance.patch(`inven/manage/add/${userId}`, data);
+    setChange(!isChange);
+    setClickSize("");
+    setNewData({
+      ingredientname: "",
+      status: {
+        unit: "",
+        size: "",
+      },
+    });
+
+    toast("추가 완료!", { type: "success", autoClose: 2000 });
+  } catch (err) {
+    if (err.response) {
+      switch (err.response.status) {
+        case 409:
+          alert("이미 존재하는 재료입니다.");
+          break;
+        case 404:
+          alert("유저 관련 문제가 발생했습니다.");
+          break;
+        case 400:
+          alert("서버 문제로 인해 요청을 처리할 수 없습니다.");
+          break;
+        default:
+          alert("알 수 없는 오류가 발생했습니다.");
       }
-
-      if (!data.status || !data.status.unit) {
-        alert("재료의 단위를 선택해주세요.");
-        return;
-      }
-
-      await tokenHandler();
-      await axiosInstance.patch(`inven/manage/add/${userId}`, data);
-      setChange(!isChange);
-      setClickSize("");
-      setNewData((isNewData) => ({
-        "ingredientname" : "",
-        "status" : {
-          "unit" : "",
-          "size" : "",
-        }
-      }));
-
-      toast("추가 완료!", { type: "success", autoClose: 2000 });
-    }catch(err){
+    } else {
       console.log("err message : " + err);
     }
-  };
+  }
+};
 
   //재료 삭제
   const deleteData = async (selectIndex) => {
