@@ -17,6 +17,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {
+  getRegExp,
+  engToKor,
+  korToEng,
+  correctPostpositions,
+  explode,
+  implode,
+  getPhonemes,
+} from 'korean-regexp';
 
 function Inven() {
   const navigate = useNavigate();
@@ -37,13 +46,15 @@ function Inven() {
   const [isClickSize, setClickSize] = useState("");
   const [isIngred, setIngred] = useState([]);
   const [isIndex, setIndex] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchQueryInKorean = engToKor(searchQuery);
+  const searchRegExp = getRegExp(searchQueryInKorean, { initialSearch: true });
   const filteredItemsWithSize = isData.filter(item =>
-      item.status.size > 0 && item.ingredientname.includes(searchQuery)
+      item.status.size > 0 && searchRegExp.test(item.ingredientname)
   );
   const filteredItemsWithoutSize = isData.filter(item =>
-      item.status.size === 0 && item.ingredientname.includes(searchQuery)
+      item.status.size === 0 && searchRegExp.test(item.ingredientname)
   );
 
   const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
