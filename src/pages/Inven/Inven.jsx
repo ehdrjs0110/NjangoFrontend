@@ -1,10 +1,8 @@
-import React, {useState, useRef, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
-import Scrollbars from '../../components/Inven/CustomScrollbar';
 import classNames from 'classnames';
 
 import Navigation from '../../components/Nav/Navigation'
-import axios from "axios";
 
 import '../../styles/Bootstrap/Bootstrap.scss';
 import styles from '../../styles/Inven/Inven.module.scss'
@@ -13,28 +11,23 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import { Modal, Button, Form } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
 
 import {useCookies} from "react-cookie";
 import {expired, getNewToken} from "../../services/auth2";
 import {containToken} from "../../Store/tokenSlice";
 import {useDispatch, useSelector} from "react-redux";
-
-import {jwtDecode} from "jwt-decode";
-import {containEmail} from "../../Store/userEmailSlice";
-import {containNickName} from "../../Store/userNickName";
-
 import {axiosInstance} from "../../middleware/customAxios";
-import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Inven() {
   const navigate = useNavigate();
 
   const [showAddContainer, setShowAddContainer] = useState(false);
-
   //페이지 변화
   const [isChange, setChange] = useState(false);
   //재료 데이터
@@ -62,9 +55,6 @@ function Inven() {
   const [isIndex, setIndex] = useState(0);
 
   const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
-
-  let reduxEmail = useSelector(state => state.userEmail.value);
-  let reduxNickname = useSelector( state => state.userNickName.value);
 
   // redux에서 가져오기
   let accessToken = useSelector(state => state.token.value);
@@ -159,6 +149,7 @@ function Inven() {
         }
       }));
 
+      toast("추가 완료!", { type: "success", autoClose: 2000 });
     }catch(err){
       console.log("err message : " + err);
     }
@@ -254,6 +245,7 @@ function Inven() {
         },
       }]);
       setChange(!isChange); // 상태 변경하여 useEffect 트리거
+      toast("처리 완료!", { type: "success", autoClose: 2000 });
     } catch (err) {
       console.log("Error updating size: ", err);
     }
@@ -448,10 +440,9 @@ function Inven() {
                            xs={12} sm={6} md={4} lg={3} xl={2}  // 반응형으로 설정
                            className="item">
                         <div className={combinedClassName} onClick={(e) => selectIngred(item.ingredientname)}>
-                          <div className={styles.ingredient} style={{backgroundImage: `url('/tmp/딸기.png')`}}>
+                          <div className={styles.ingredient} style={{backgroundImage: `url('/ingredients/${item.ingredientname}.png')`}}>
                             <h3 className={styles.title}>{item.ingredientname}</h3>
                           </div>
-
 
                           {/* 버튼 클릭 시 이벤트 버블링 방지 */}
                           <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.unit === "없음"} onClick={async (e) => {
@@ -481,7 +472,6 @@ function Inven() {
           </Row>
         </div>
       </Container>
-
 
       {/* 모달 컴포넌트 */}
       <Modal show={show} onHide={handleClose}>
@@ -586,6 +576,8 @@ function Inven() {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <ToastContainer />
     </>
   );
 }
