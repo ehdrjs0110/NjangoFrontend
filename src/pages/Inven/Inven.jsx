@@ -43,8 +43,8 @@ function Inven() {
   const [isNewData, setNewData] = useState({
     ingredientname: "",
     status: {
+      unit: "",
       size: "",
-      count: "",
     }
   });
   const [showAddModal, setShowAddModal] = useState(false); // 추가 모달 상태
@@ -141,9 +141,9 @@ function Inven() {
         alert("재료명을 입력해주세요.");
         return;
       }
-      
-      if (!data.status || !data.status.size) {
-        alert("재료의 양을 선택해주세요.");
+
+      if (!data.status || !data.status.unit) {
+        alert("재료의 단위를 선택해주세요.");
         return;
       }
 
@@ -154,8 +154,8 @@ function Inven() {
       setNewData((isNewData) => ({
         "ingredientname" : "",
         "status" : {
+          "unit" : "",
           "size" : "",
-          "count" : "",
         }
       }));
 
@@ -175,7 +175,7 @@ function Inven() {
     };
 
     if(window.confirm(`정말 ${selectedItem.ingredientname}를 삭제하시겠습니까?`)){
-      try{ 
+      try{
         console.log(params);
         await tokenHandler();
         await axiosInstance.delete("inven/manage", {params});
@@ -187,16 +187,16 @@ function Inven() {
     }else {
       alert("취소 되었습니다.");
     }
-    
+
   };
 
   //재료 수정
   const updateData = async () => {
 
     const data = Object.values(isUpdateData);
-    
+
     const showdata = data
-    .map(item => `${item.ingredientname} - ` + (item.status.size == null ? "" : `양 : ${item.status.size},`) + (item.status.count == null ? "" : ` 수량 : ${item.status.count} `))
+    .map(item => `${item.ingredientname} - ` + (item.status.unit == null ? "" : `단위 : ${item.status.unit},`) + (item.status.size == null ? "" : ` 양 : ${item.status.size} `))
     .join('\n ');
 
     if(window.confirm(`수정내용 확인 \n ${showdata}`)){
@@ -213,7 +213,7 @@ function Inven() {
     }
   };
 
-  const updateCount = (index,e) => {
+  const updateSize = (index,e) => {
     setUpdateData((isUpdateData) => ({
       ...isUpdateData,
       [index] : {
@@ -221,16 +221,16 @@ function Inven() {
         "ingredientname" : isData[index].ingredientname,
         "status" : {
           ...isUpdateData[index]?.status,
-          "count" : e.target.value,
+          "size" : e.target.value,
         }
       }
     }));
   };
 
-  const updateSize = async (index, e) => {
-    const newCount = e.target.value;
+  const updateUnit = async (index, e) => {
+    const newSize = e.target.value;
     const updatedData = [...isData];
-    updatedData[index].status.count = newCount;
+    updatedData[index].status.size = newSize;
     setData(updatedData);
 
     setUpdateData((isUpdateData) => ({
@@ -240,7 +240,7 @@ function Inven() {
         ingredientname: isData[index].ingredientname,
         status: {
           ...isUpdateData[index]?.status,
-          count: newCount,
+          size: newSize,
         },
       },
     }));
@@ -250,7 +250,7 @@ function Inven() {
       await axiosInstance.patch(`inven/manage/update/${userId}`, [{
         ingredientname: isData[index].ingredientname,
         status: {
-          count: newCount,
+          size: newSize,
         },
       }]);
       setChange(!isChange); // 상태 변경하여 useEffect 트리거
@@ -268,26 +268,26 @@ function Inven() {
 
   };
 
-  //재료양 입력
-  const setSize = (e) => {
+  //재료단위 입력
+  const setUnit = (e) => {
     setClickSize(e.target.value);
     setNewData((isNewData) => ({
       ...isNewData,
       "status" : {
         ...isNewData.status,
-        "size" : e.target.value,
+        "unit" : e.target.value,
       }
     }));
 
   };
-  
-  //재료수량 입력
-  const setCount = (e) => {
+
+  //재료양 입력
+  const setSize = (e) => {
     setNewData((isNewData) => ({
       ...isNewData,
       "status" : {
         ...isNewData.status,
-        "count" : e.target.value,
+        "size" : e.target.value,
       }
     }));
 
@@ -331,8 +331,8 @@ function Inven() {
   const [formData, setFormData] = useState({
     ingredientname: '',
     status: {
-      size: '',
-      count: 0,
+      unit: '',
+      size: 0,
     }
   });
 
@@ -342,8 +342,8 @@ function Inven() {
     setFormData({
       ingredientname: item.ingredientname,
       status: {
+        unit: item.status.unit,
         size: item.status.size,
-        count: item.status.count,
       }
     });
     setShow(true);
@@ -391,7 +391,7 @@ function Inven() {
 
 
 
-  
+
   return (
     <>
       <Navigation></Navigation>
@@ -424,40 +424,12 @@ function Inven() {
                     />
                   </div>
                   <button className={styles.button} onClick={handleShowAddModal}>추가</button>
-                  {/*<button className={styles.button} onClick={updateData}>저장</button>*/}
                 </div>
               </Col>
             </Row>
 
           </Col>
         </Row>
-          {/* 재료 추가 컨테이너를 조건부 렌더링 */}
-          {/*{showAddContainer && (
-              <Row className={styles.addContentRow}>
-                <Col md={{span: 10, offset: 1}} className={styles.addContent}>
-                  <Row className={styles.addline}>
-                    <Col>
-                      <Form.Control type="text" className={styles.ingredientname} onChange={setIngredName} value={isNewData.ingredientname} placeholder="재료명"/>
-                    </Col>
-                    <Col>
-                      <Button className={styles.btn} variant="none" onClick={setSize} value={"없음"} disabled={isClickSize==="없음"} >없음</Button>
-                    </Col>
-                    <Col>
-                      <Button className={styles.btn} variant="none" onClick={setSize} value={"적음"} disabled={isClickSize==="적음"} >적음</Button>
-                      <Button className={styles.btn} variant="none" onClick={setSize} value={"적당함"} disabled={isClickSize==="적당함"} >적당함</Button>
-                      <Button className={styles.btn} variant="none" onClick={setSize} value={"많음"} disabled={isClickSize==="많음"} >많음</Button>
-                    </Col>
-                    <Col>
-                      <p className={styles.text}>수량</p>
-                      <Form.Control type="number" className={styles.count} onChange={setCount} value={(isNewData.status.count===null)?0:isNewData.status.count} placeholder="0"/>
-                    </Col>
-                    <Col>
-                      <button className={styles.button} onClick={handleAddData}>추가</button>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-          )}*/}
           {/* 식재료 나타나는 공간 */}
           <Row className={styles.contentRow}>
             <Col md={{span: 10, offset: 1}} className={styles.content}>
@@ -482,9 +454,9 @@ function Inven() {
 
 
                           {/* 버튼 클릭 시 이벤트 버블링 방지 */}
-                          <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.size === "없음"} onClick={async (e) => {
+                          <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.unit === "없음"} onClick={async (e) => {
                             e.stopPropagation(); // 버블링 방지
-                            await updateSize(index, {target: {value: 0}}); // Set size to 0
+                            await updateUnit(index, {target: {value: 0}}); // Set unit to 0
                             setChange(!isChange); // Trigger re-fetch of the list
                           }}>없음</Button>
 
@@ -529,25 +501,25 @@ function Inven() {
               />
             </Form.Group>
 
-            {/* 수량 수정 */}
-            <Form.Group controlId="count">
-              <Form.Label>수량</Form.Label>
+            {/* 양 수정 */}
+            <Form.Group controlId="size">
+              <Form.Label>양</Form.Label>
               <Form.Control
                   type="number"
-                  name="count"
+                  name="size"
                   min="0" // 0 이상의 값만 허용
-                  value={formData.status.count}
+                  value={formData.status.size}
                   onChange={handleStatusChange}
               />
             </Form.Group>
 
             {/* 단위 수정 */}
-            <Form.Group controlId="size">
+            <Form.Group controlId="unit">
               <Form.Label>단위</Form.Label>
               <Form.Control
                   type="text"
-                  name="size"
-                  value={formData.status.size}
+                  name="unit"
+                  value={formData.status.unit}
                   onChange={handleStatusChange}
               />
             </Form.Group>
@@ -570,41 +542,48 @@ function Inven() {
         </Modal.Header>
         <Modal.Body>
           <Form>
+            {/* 재료명 입력 */}
             <Form.Group controlId="ingredientName">
               <Form.Label>재료명</Form.Label>
               <Form.Control
                   type="text"
-                  placeholder="재료명을 입력하세요"
+                  name="ingredientname"
                   value={isNewData.ingredientname}
                   onChange={setIngredName}
               />
             </Form.Group>
 
-            <Form.Group controlId="count">
-              <Form.Label>수량</Form.Label>
+            {/* 양 입력 */}
+            <Form.Group controlId="size">
+              <Form.Label>양</Form.Label>
               <Form.Control
                   type="number"
-                  min="0" // 0 이상의 값만 허용
-                  placeholder="수량을 입력하세요"
-                  value={isNewData.status.count || 0}
-                  onChange={setCount}
+                  name="size"
+                  min="0"
+                  value={isNewData.status.size}
+                  onChange={setSize}
               />
             </Form.Group>
 
-            <Form.Group controlId="size">
+            {/* 단위 입력 */}
+            <Form.Group controlId="unit">
               <Form.Label>단위</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="단위를 입력하세요"
-                value={isNewData.status.size}
-                onChange={setSize}
+                  type="text"
+                  name="unit"
+                  value={isNewData.status.unit}
+                  onChange={setUnit}
               />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseAddModal}>닫기</Button>
-          <Button variant="primary" onClick={handleAddData}>추가</Button>
+          <Button variant="secondary" onClick={handleCloseAddModal}>
+            닫기
+          </Button>
+          <Button variant="primary" onClick={handleAddData}>
+            추가
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
