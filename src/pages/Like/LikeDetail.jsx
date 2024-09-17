@@ -202,9 +202,6 @@ const AiDetaileSearch = () => {
                                                     <div  className={styles.bottomLine}></div>
                                                 </Col>
                                                 <Col className={styles.iconCol}>
-                                                    <Button  className={styles.iconButton} variant="outline-secondary">
-                                                        <FontAwesomeIcon className={styles.icon} icon={faHeart} />
-                                                    </Button>{' '}
                                                     <Button  className={styles.iconButton}  variant="outline-secondary">
                                                         <FontAwesomeIcon className={styles.icon} icon={faMobile} />
                                                     </Button>{' '}

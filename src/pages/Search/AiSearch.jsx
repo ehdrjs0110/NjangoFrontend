@@ -75,7 +75,25 @@ const AiSearch = () => {
             // setRecipe(JSON.parse(storedRecipe));
         }
 
+        //재료 가져오기
+        const fetchData = async () => {
 
+            const params = {userId:userId};
+
+            try{
+                await tokenHandler();
+                const res = await axiosInstance.get("inven/manage/name",{params});
+            if(res!=null){
+                console.log(res.data);
+            }
+
+            setIngredients(res.data);
+
+            }catch(err){
+            console.log("err message : " + err);
+            }
+        }
+        fetchData();
     }, []);
 
 
@@ -130,18 +148,21 @@ const AiSearch = () => {
 
     //  재료선택
     function makeIngredientList() {
-        const IngredientList = isIngredients.map((item,index) =>
+        if (isIngredients && Array.isArray(isIngredients)) {
+            const IngredientList = isIngredients.map((item,index) =>
 
-            <Form.Check
-                inline
-                type="checkbox"
-                name="group3"
-                id={item.ingredientname}
-                className={styles.check}
-                label={item.ingredientname}
-                onChange={myIngredientHandler}
-            />)
-        return IngredientList;
+                <Form.Check
+                    inline
+                    type="checkbox"
+                    name="group3"
+                    id={item.ingredientname}
+                    className={styles.check}
+                    label={item.ingredientname}
+                    onChange={myIngredientHandler}
+                />)
+            return IngredientList;
+        }
+        return null;
     }
 
     const myIngredientHandler = (event) => {
@@ -375,7 +396,23 @@ const AiSearch = () => {
 
     const startDetailAiSearch = (recipe) =>
     {
-        navigate('/AiDetailSearch', { state: { recipe } }); // 레시피 전달
+        var today = new Date(); //현재시간 가져오기
+        let year = today.getFullYear(); // 년도
+        let month = today.getMonth() + 1;  // 월
+        let date = today.getDate();  // 날짜
+        let hours = today.getHours(); // 시
+        let minutes = today.getMinutes();  // 분
+        let seconds = today.getSeconds();  // 초
+        const nowTime = year + "" + month + "" + date + "" + hours + "" + minutes + "" + seconds;
+        
+        //Recipe ID 생성
+        const recipeId = userId + nowTime;
+        console.log("recipeId"+recipeId);
+
+        navigate('/AiDetailSearch', { state: { 
+            recipe : recipe,
+            recipeId : recipeId
+        } }); // 레시피 전달
 
     }
 
