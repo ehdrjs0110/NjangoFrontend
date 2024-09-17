@@ -99,15 +99,19 @@ function Inven() {
 
   const handleAddData = async () => {
     const data = isNewData;
+
+    data.status.unit = "";
+    data.status.size = 1;
+
     try {
       if (!data || !data.ingredientname) {
         alert("재료명을 입력해주세요.");
         return;
       }
-      if (!data.status || !data.status.unit) {
+      /*if (!data.status || !data.status.unit) {
         alert("재료의 단위를 선택해주세요.");
         return;
-      }
+      }*/
       await tokenHandler();
       await axiosInstance.patch(`inven/manage/add/${userId}`, data);
       setChange(!isChange);
@@ -520,7 +524,8 @@ function Inven() {
                 onChange={setIngredName}
               />
             </Form.Group>
-            <Form.Group controlId="size">
+
+            {/*<Form.Group controlId="size">
               <Form.Label>양</Form.Label>
               <Form.Control
                 type="number"
@@ -538,7 +543,8 @@ function Inven() {
                 value={isNewData.status.unit}
                 onChange={setUnit}
               />
-            </Form.Group>
+            </Form.Group>*/}
+
           </Form>
         </Modal.Body>
         <Modal.Footer>
