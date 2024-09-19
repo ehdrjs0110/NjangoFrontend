@@ -22,7 +22,7 @@ const IngredientItem = ({ item, index, isIngred, selectIngred, updateUnit, delet
                 </div>
                 <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.size === "없음"} onClick={async (e) => {
                     e.stopPropagation();
-                    await updateUnit(item.ingredientname, { target: { value: 1 } });
+                    await updateUnit(item.ingredientname, { target: { value: (item.status.size > 0 ? 0 : 1) } });
                     setChange(prev => !prev);
                 }}>{message}</Button>
                 <Button className={styles.delBtn} onClick={async (e) => {
