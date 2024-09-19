@@ -446,9 +446,9 @@ function Inven() {
                           </div>
                           <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.size === "없음"} onClick={async (e) => {
                             e.stopPropagation();
-                            await updateUnit(item.ingredientname, { target: { value: 0 } });
+                            await updateUnit(item.ingredientname, { target: { value: 1 } });
                             setChange(!isChange);
-                          }}>없음</Button>
+                          }}>있음</Button>
                           <Button className={styles.delBtn} onClick={async (e) => {
                             e.stopPropagation();
                             await deleteData(item.ingredientname);
