@@ -24,7 +24,6 @@ import {
 
 function Inven() {
   const navigate = useNavigate();
-  const [showAddContainer, setShowAddContainer] = useState(false);
   const [isChange, setChange] = useState(false);
   const [isData, setData] = useState([]);
   const [isNewData, setNewData] = useState({
@@ -37,8 +36,6 @@ function Inven() {
   const [showAddModal, setShowAddModal] = useState(false);
   const handleShowAddModal = () => setShowAddModal(true);
   const handleCloseAddModal = () => setShowAddModal(false);
-  const [isUpdateData, setUpdateData] = useState([]);
-  const [isClickSize, setClickSize] = useState("");
   const [isIngred, setIngred] = useState([]);
   const [isIndex, setIndex] = useState(0);
 
@@ -104,14 +101,9 @@ function Inven() {
         alert("재료명을 입력해주세요.");
         return;
       }
-      /*if (!data.status || !data.status.unit) {
-        alert("재료의 단위를 선택해주세요.");
-        return;
-      }*/
       await tokenHandler();
       await axiosInstance.patch(`inven/manage/add/${userId}`, data);
       setChange(!isChange);
-      setClickSize("");
       setNewData({
         ingredientname: "",
         status: {
@@ -161,39 +153,6 @@ function Inven() {
     }
   };
 
-  const updateData = async () => {
-    const data = Object.values(isUpdateData);
-    const showdata = data
-      .map(item => `${item.ingredientname} - ` + (item.status.unit == null ? "" : `단위 : ${item.status.unit},`) + (item.status.size == null ? "" : ` 양 : ${item.status.size} `))
-      .join('\n ');
-    if (window.confirm(`수정내용 확인 \n ${showdata}`)) {
-      try {
-        await tokenHandler();
-        await axiosInstance.patch(`inven/manage/update/${userId}`, data);
-        alert("수정 되었습니다.");
-        setChange(!isChange);
-      } catch (err) {
-        console.log("err message : " + err);
-      }
-    } else {
-      alert("취소 되었습니다.");
-    }
-  };
-
-  const updateSize = (index, e) => {
-    setUpdateData((isUpdateData) => ({
-      ...isUpdateData,
-      [index]: {
-        ...isUpdateData[index],
-        "ingredientname": isData[index].ingredientname,
-        "status": {
-          ...isUpdateData[index]?.status,
-          "size": e.target.value,
-        }
-      }
-    }));
-  };
-
   const updateUnit = async (ingredientname, e) => {
     const newSize = e.target.value;
     const updatedData = [...isData];
@@ -201,17 +160,6 @@ function Inven() {
 
     updatedData[index].status.size = newSize;
     setData(updatedData);
-    setUpdateData((isUpdateData) => ({
-      ...isUpdateData,
-      [index]: {
-        ...isUpdateData[index],
-        ingredientname: isData[index].ingredientname,
-        status: {
-          ...isUpdateData[index]?.status,
-          size: newSize,
-        },
-      },
-    }));
 
     const params = [{
       ingredientname: isData[index].ingredientname,
@@ -238,27 +186,6 @@ function Inven() {
     }));
   };
 
-  const setUnit = (e) => {
-    setClickSize(e.target.value);
-    setNewData((isNewData) => ({
-      ...isNewData,
-      "status": {
-        ...isNewData.status,
-        "unit": e.target.value,
-      }
-    }));
-  };
-
-  const setSize = (e) => {
-    setNewData((isNewData) => ({
-      ...isNewData,
-      "status": {
-        ...isNewData.status,
-        "size": e.target.value,
-      }
-    }));
-  };
-
   const selectIngred = (ingred) => {
     if (Object.values(isIngred).includes(ingred)) {
       const newIsIngred = { ...isIngred };
@@ -280,10 +207,6 @@ function Inven() {
 
   const cookmode = () => {
     navigate('/AiSimpleSearch', { state: isIngred });
-  };
-
-  const toggleAddContainer = () => {
-    setShowAddContainer(!showAddContainer);
   };
 
   const [show, setShow] = useState(false);
@@ -347,9 +270,6 @@ function Inven() {
     });
     handleClose();
   };
-
-  const itemsWithSize = isData.filter(item => item.status.size > 0);
-  const itemsWithoutSize = isData.filter(item => item.status.size === 0);
 
   return (
     <>
