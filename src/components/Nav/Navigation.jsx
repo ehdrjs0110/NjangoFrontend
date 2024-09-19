@@ -110,12 +110,7 @@ function Navigation() {
 
   }
 
-
-
-
-
-
-    const goToMain = () => {
+  const goToMain = () => {
     navigate("/Main");
   }
 
@@ -135,6 +130,14 @@ function Navigation() {
     navigate("/SignIn");
   }
 
+  const goToCommunity = () => {
+    navigate("/RecipeShareList");
+  }
+
+  const goToGallery = () => {
+    navigate('/Gallery');
+  }
+
 
   return (
       <div className={styles.navContainer}>
@@ -146,7 +149,8 @@ function Navigation() {
             <Nav className={`${styles.navCenter} me-auto`}>
               <Nav.Link onClick={goToInven}>냉장고 관리</Nav.Link>
               <Nav.Link onClick={goToSearch}>레시피 검색</Nav.Link>
-              <Nav.Link>커뮤니티</Nav.Link>
+              <Nav.Link onClick={goToCommunity}>커뮤니티</Nav.Link>
+              <Nav.Link onClick={goToGallery}>갤러리</Nav.Link>
             </Nav>
             <Nav>
               <a className={styles.shop}>

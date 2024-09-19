@@ -110,8 +110,7 @@ function App() {
           />
 
           <Route path="/Demo" element={<Demo/>}/>
-          {/*<Route path="/Gallery" element={<Gallery/>} />*/}
-
+          <Route path="/Gallery" element={<Gallery/>} />
           <Route path="/Sidebar" element={<Sidebar/>} />
 
         </Routes>

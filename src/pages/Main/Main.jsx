@@ -31,6 +31,14 @@ function Main() {
     navigate('/SignIn');
   };
 
+  const recipeShareList = () => {
+    navigate('/RecipeShareList');
+  };
+
+  const gallery = () => {
+    navigate('/Gallery');
+  }
+
   const inven = () => {
     navigate('/Inven');
   };
@@ -57,18 +65,18 @@ function Main() {
             </div>
           </div>
           <div className={styles.box}>
-            <div className={styles.linkbox} onClick={signin}>
+            <div className={styles.linkbox} onClick={recipeShareList}>
               <img src={comuImg} alt="" className={styles.img}/>
             </div>
-            <div className={`${styles.text}`} onClick={signin}>
+            <div className={`${styles.text}`} onClick={recipeShareList}>
                 <div>커뮤니티</div>
             </div>
           </div>
           <div className={styles.box}>
-            <div className={styles.linkbox} onClick={signin}>
+            <div className={styles.linkbox} onClick={gallery}>
               <img src={galleryImg} alt="" className={styles.img}/>
             </div>
-            <div className={`${styles.text}`} onClick={signin}>
+            <div className={`${styles.text}`} onClick={gallery}>
                 <div>갤러리</div>
             </div>
           </div>
