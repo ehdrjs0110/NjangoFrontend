@@ -168,8 +168,6 @@ function Inven() {
       },
     }];
 
-    console.log(params);
-
     try {
       await axiosInstance.patch(`inven/manage/update/${userId}`, params);
       setChange(!isChange);
@@ -210,7 +208,6 @@ function Inven() {
   };
 
   const [show, setShow] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
   const [formData, setFormData] = useState({
     ingredientname: '',
     status: {
@@ -221,7 +218,6 @@ function Inven() {
 
   const handleClose = () => setShow(false);
   const handleShow = (item) => {
-    setSelectedItem(item);
     setFormData({
       ingredientname: item.ingredientname,
       status: {
@@ -449,7 +445,6 @@ function Inven() {
                 onChange={setIngredName}
               />
             </Form.Group>
-
             {/*<Form.Group controlId="size">
               <Form.Label>양</Form.Label>
               <Form.Control
@@ -469,7 +464,6 @@ function Inven() {
                 onChange={setUnit}
               />
             </Form.Group>*/}
-
           </Form>
         </Modal.Body>
         <Modal.Footer>
