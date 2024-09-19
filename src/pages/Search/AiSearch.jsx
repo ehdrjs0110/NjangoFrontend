@@ -123,9 +123,6 @@ const AiSearch = () => {
     }
 
 
-
-
-
     function CustomToggle({ children, eventKey }) {
 
         const decoratedOnClick = useAccordionButton(eventKey, () =>
@@ -179,16 +176,11 @@ const AiSearch = () => {
         console.log(selectedKindOfFood);
         console.log(selectedKindOfFood);
     }
-
-
     // option - 종류
-
     var kindOfFoodList = ["한식", "중식", "양식"];
-
     const kindOfFoodHandler = (event) => {
         const kind = event.target.id;
         const isCheked = event.target.checked;
-
         setSelectedKindOfFood((prevState) => {
             if(!isCheked)
                 return prevState.filter(preItem => preItem !== kind)
@@ -196,15 +188,8 @@ const AiSearch = () => {
                 return [...prevState, kind];
             }
         })
-
         console.log(selectedKindOfFood);
-
-        console.log(selectedKindOfFood);
-
-
     }
-
-
 
 
     function makeKindOfFoodList() {
@@ -369,12 +354,9 @@ const AiSearch = () => {
                     </Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            {/*<strong>재료:</strong> {JSON.stringify(recipe.재료)}*/}
-                            {/*<strong>재료:</strong> {makeIngredient(recipe.재료) }*/}
                             <strong>재료:</strong> { makeIngredient(recipe.ingredients)}
                         </Card.Text>
                         <Card.Text>
-                            {/*<strong>과정:</strong> {JSON.stringify(recipe.과정)}*/}
                             <strong>과정:</strong> { JSON.stringify(recipe.process)}
                         </Card.Text>
                     </Card.Body>
