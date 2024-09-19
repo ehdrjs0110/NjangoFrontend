@@ -20,11 +20,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
   getRegExp,
   engToKor,
-  korToEng,
-  correctPostpositions,
-  explode,
-  implode,
-  getPhonemes,
 } from 'korean-regexp';
 
 function Inven() {
@@ -66,8 +61,9 @@ function Inven() {
     const fetchData = async () => {
       const params = { userId: userId };
       try {
+        console.log(params);
         const res = await axiosInstance.get("inven/manage", { params });
-        if (res != null) {
+        if (res && res.data) {
           setData(res.data);
           setChange(true);
         }
@@ -145,13 +141,13 @@ function Inven() {
     }
   };
 
-  const deleteData = async (selectIndex) => {
-    const selectedItem = isData[selectIndex];
+  const deleteData = async (ingredientname) => {
     const params = {
       userId: userId,
-      ingredientname: selectedItem.ingredientname
+      ingredientname: ingredientname
     };
-    if (window.confirm(`정말 ${selectedItem.ingredientname}를 삭제하시겠습니까?`)) {
+
+    if (window.confirm(`정말 ${ingredientname}를 삭제하시겠습니까?`)) {
       try {
         await tokenHandler();
         await axiosInstance.delete("inven/manage", { params });
@@ -198,9 +194,11 @@ function Inven() {
     }));
   };
 
-  const updateUnit = async (index, e) => {
+  const updateUnit = async (ingredientname, e) => {
     const newSize = e.target.value;
     const updatedData = [...isData];
+    const index = updatedData.findIndex(item => item.ingredientname === ingredientname);
+
     updatedData[index].status.size = newSize;
     setData(updatedData);
     setUpdateData((isUpdateData) => ({
@@ -214,13 +212,18 @@ function Inven() {
         },
       },
     }));
+
+    const params = [{
+      ingredientname: isData[index].ingredientname,
+      status: {
+        size: newSize,
+      },
+    }];
+
+    console.log(params);
+
     try {
-      await axiosInstance.patch(`inven/manage/update/${userId}`, [{
-        ingredientname: isData[index].ingredientname,
-        status: {
-          size: newSize,
-        },
-      }]);
+      await axiosInstance.patch(`inven/manage/update/${userId}`, params);
       setChange(!isChange);
       toast("처리 완료!", { type: "success", autoClose: 2000 });
     } catch (err) {
@@ -326,7 +329,9 @@ function Inven() {
   };
 
   const handleSaveChanges = () => {
-    axiosInstance.patch(`/inven/manage/updateOne/${userId}`, formData).then(async res => {
+    console.log('업데이트 데이터 : ', formData);
+
+    axiosInstance.patch(`/inven/manage/update/${userId}`, [formData]).then(async res => {
       const params = { userId: userId };
       try {
         const res = await axiosInstance.get("inven/manage", { params });
@@ -396,17 +401,17 @@ function Inven() {
                         xs={12} sm={6} md={4} lg={3} xl={2}
                         className="item">
                         <div className={combinedClassName} onClick={(e) => selectIngred(item.ingredientname)}>
-                          <div className={styles.ingredient} style={{ backgroundImage: `url('/ingredients/${item.ingredientname}.png')` }}>
+                          <div className={styles.ingredient} style={{ backgroundImage: `url('/ingredients/${item.ingredientname}.webp')` }}>
                             <h3 className={styles.title}>{item.ingredientname}</h3>
                           </div>
                           <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.unit === "없음"} onClick={async (e) => {
                             e.stopPropagation();
-                            await updateUnit(index, { target: { value: 0 } });
+                            await updateUnit(item.ingredientname, { target: { value: 0 } });
                             setChange(!isChange);
                           }}>없음</Button>
-                          <Button className={styles.delBtn} onClick={(e) => {
+                          <Button className={styles.delBtn} onClick={async (e) => {
                             e.stopPropagation();
-                            deleteData(index);
+                            await deleteData(item.ingredientname);
                           }} variant="danger">삭제</Button>
                           <Button className={styles.infoBtn} variant="info" onClick={(e) => {
                             e.stopPropagation();
@@ -436,17 +441,17 @@ function Inven() {
                         xs={12} sm={6} md={4} lg={3} xl={2}
                         className="item">
                         <div className={`${combinedClassName} ${styles.zeroCount}`} onClick={(e) => selectIngred(item.ingredientname)}>
-                          <div className={styles.ingredient} style={{ backgroundImage: `url('/ingredients/${item.ingredientname}.png')` }}>
+                          <div className={styles.ingredient} style={{ backgroundImage: `url('/ingredients/${item.ingredientname}.webp')` }}>
                             <h3 className={styles.title}>{item.ingredientname}</h3>
                           </div>
                           <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.size === "없음"} onClick={async (e) => {
                             e.stopPropagation();
-                            await updateUnit(index, { target: { value: 0 } });
+                            await updateUnit(item.ingredientname, { target: { value: 0 } });
                             setChange(!isChange);
                           }}>없음</Button>
-                          <Button className={styles.delBtn} onClick={(e) => {
+                          <Button className={styles.delBtn} onClick={async (e) => {
                             e.stopPropagation();
-                            deleteData(index);
+                            await deleteData(item.ingredientname);
                           }} variant="danger">삭제</Button>
                           <Button className={styles.infoBtn} variant="info" onClick={(e) => {
                             e.stopPropagation();
