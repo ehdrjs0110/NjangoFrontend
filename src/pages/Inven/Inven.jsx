@@ -21,6 +21,7 @@ import {
   getRegExp,
   engToKor,
 } from 'korean-regexp';
+import IngredientItem from "../../components/Inven/IngredientItem";
 
 function Inven() {
   const navigate = useNavigate();
@@ -305,80 +306,40 @@ function Inven() {
               <h2>갖고있어요!</h2>
               <div className={styles.item}>
                 <Row style={{ width: '100%', margin: '0 auto' }}>
-                  {filteredItemsWithSize.map((item, index) => {
-                    const combinedClassName = classNames(
-                        styles.line,
-                        {
-                          [styles.select]: Object.values(isIngred).includes(item.ingredientname),
-                        }
-                    );
-                    return (
-                      <Col key={index}
-                        xs={12} sm={6} md={4} lg={3} xl={2}
-                        className="item">
-                        <div className={combinedClassName} onClick={(e) => selectIngred(item.ingredientname)}>
-                          <div className={styles.ingredient} style={{ backgroundImage: `url('/ingredients/${item.ingredientname}.webp')` }}>
-                            <h3 className={styles.title}>{item.ingredientname}</h3>
-                          </div>
-                          <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.unit === "없음"} onClick={async (e) => {
-                            e.stopPropagation();
-                            await updateUnit(item.ingredientname, { target: { value: 0 } });
-                            setChange(!isChange);
-                          }}>없음</Button>
-                          <Button className={styles.delBtn} onClick={async (e) => {
-                            e.stopPropagation();
-                            await deleteData(item.ingredientname);
-                          }} variant="danger">삭제</Button>
-                          <Button className={styles.infoBtn} variant="info" onClick={(e) => {
-                            e.stopPropagation();
-                            handleShow(item);
-                          }}>
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                          </Button>
-                        </div>
-                      </Col>
-                    );
-                  })}
+                  {filteredItemsWithSize.map((item, index) => (
+                      <IngredientItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          isIngred={isIngred}
+                          selectIngred={selectIngred}
+                          updateUnit={updateUnit}
+                          deleteData={deleteData}
+                          handleShow={handleShow}
+                          setChange={setChange}
+                          message={"없음"}
+                      />
+                  ))}
                 </Row>
               </div>
-              <hr/>
+              <hr />
               <h2>사주세요ㅠㅠ</h2>
               <div className={styles.item}>
                 <Row style={{ width: '100%', margin: '0 auto' }}>
-                  {filteredItemsWithoutSize.map((item, index) => {
-                    const combinedClassName = classNames(
-                        styles.line,
-                        {
-                          [styles.select]: Object.values(isIngred).includes(item.ingredientname),
-                        }
-                    );
-                    return (
-                      <Col key={index}
-                        xs={12} sm={6} md={4} lg={3} xl={2}
-                        className="item">
-                        <div className={`${combinedClassName} ${styles.zeroCount}`} onClick={(e) => selectIngred(item.ingredientname)}>
-                          <div className={styles.ingredient} style={{ backgroundImage: `url('/ingredients/${item.ingredientname}.webp')` }}>
-                            <h3 className={styles.title}>{item.ingredientname}</h3>
-                          </div>
-                          <Button className={styles.btn} variant="none" value={"없음"} disabled={item.status.size === "없음"} onClick={async (e) => {
-                            e.stopPropagation();
-                            await updateUnit(item.ingredientname, { target: { value: 1 } });
-                            setChange(!isChange);
-                          }}>있음</Button>
-                          <Button className={styles.delBtn} onClick={async (e) => {
-                            e.stopPropagation();
-                            await deleteData(item.ingredientname);
-                          }} variant="danger">삭제</Button>
-                          <Button className={styles.infoBtn} variant="info" onClick={(e) => {
-                            e.stopPropagation();
-                            handleShow(item);
-                          }}>
-                            <FontAwesomeIcon icon={faInfoCircle} />
-                          </Button>
-                        </div>
-                      </Col>
-                    );
-                  })}
+                  {filteredItemsWithoutSize.map((item, index) => (
+                      <IngredientItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          isIngred={isIngred}
+                          selectIngred={selectIngred}
+                          updateUnit={updateUnit}
+                          deleteData={deleteData}
+                          handleShow={handleShow}
+                          setChange={setChange}
+                          message={"있음"}
+                      />
+                  ))}
                 </Row>
               </div>
             </Col>
