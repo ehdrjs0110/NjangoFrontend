@@ -16,7 +16,7 @@ const IngredientItem = ({ item, index, isIngred, selectIngred, updateUnit, delet
 
     return (
         <Col key={index} xs={12} sm={6} md={4} lg={3} xl={2} className="item">
-            <div className={`${combinedClassName} ${styles.zeroCount}`} onClick={(e) => selectIngred(item.ingredientname)}>
+            <div className={`${combinedClassName} ${item.status.size !== 0 ? "" : styles.zeroCount}`} onClick={(e) => selectIngred(item.ingredientname)}>
                 <div className={styles.ingredient} style={{ backgroundImage: `url('/ingredients/${item.ingredientname}.webp')` }}>
                     <h3 className={styles.title}>{item.ingredientname}</h3>
                 </div>
