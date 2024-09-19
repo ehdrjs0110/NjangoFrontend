@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 import {axiosInstance} from "../../middleware/customAxios";
 
 
-const AllergyModel = (props) => {
+const AllergyModal = (props) => {
     const [selectedCategories, setSelectedCategories] = useState({});
     const [filterData,setFilterData] = useState([]);
     const [isChange, setIsChange] = useState(false);
@@ -200,4 +200,4 @@ const AllergyModel = (props) => {
     );
 };
 
-export default AllergyModel;
+export default AllergyModal;

@@ -5,7 +5,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import UpdateModel from '../../components/MyPage/UpdateModel';
+import UpdateModal from '../../components/MyPage/UpdateModal';
 
 
 import Card from 'react-bootstrap/Card';
@@ -20,6 +20,7 @@ import {containToken} from "../../Store/tokenSlice";
 import {useDispatch, useSelector} from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import AllergyModal from "../../components/MyPage/AllergyModal";
 
 
 
@@ -35,75 +36,11 @@ const MyPagec = () => {
     let accessToken = useSelector(state => state.token.value);
     let reduxEmail = useSelector(state => state.userEmail.value);
     const dispatch = useDispatch();
-    // --
-
-    let refreshToken = cookies.refreshToken;
     let newAccessToken;
 
+    const [filterModalShow, setFilterModalShow] = useState(false);
 
 
-
-    // useEffect(() => {
-    //     // access token의 유무에 따라 재발급 --
-    //
-    //     async function checkAccessToken() {
-    //         try {
-    //             // console.log("useEffect에서 실행")
-    //
-    //             console.log("원래 refresh token" + refreshToken);
-    //
-    //             // getNewToken 함수 호출 (비동기 함수이므로 await 사용)
-    //             const result = await getNewToken(refreshToken);
-    //             console.log("result" + result);
-    //             refreshToken = result.newRefreshToken;
-    //
-    //             console.log("refreshToken : " + refreshToken);
-    //             console.log("newToken: " + result.newToken);
-    //
-    //
-    //             newAccessToken = result.newToken;
-    //
-    //             // refresh token cookie에 재설정
-    //             setCookie(
-    //                 'refreshToken',
-    //                 refreshToken,
-    //                 {
-    //                     path:'/',
-    //                     maxAge: 7 * 24 * 60 * 60, // 7일
-    //                     // expires:new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000)
-    //                 }
-    //             )
-    //
-    //             // Redux access token 재설정
-    //             dispatch(containToken(result.newToken));
-    //
-    //         } catch (error) {
-    //             console.log(error);
-    //             navigate('/SignIn');
-    //         }
-    //     }
-    //     // checkAccessToken();
-    //
-    //     // checkAccessToken();
-    //     if(accessToken == null || accessToken == undefined)
-    //     {
-    //         console.log("없어서 다시 가져오기");
-    //
-    //         checkAccessToken();
-    //         setIschange(true);
-    //
-    //
-    //
-    //     }else {
-    //         fetchDate();
-    //     }
-    //
-    //
-    //
-    //     // --
-    // }, []);
-    
-    
     useEffect(() => {
         setIschange(true);
         console.log("isChange 난 후에 실행" + accessToken)
@@ -219,47 +156,32 @@ const MyPagec = () => {
                 <Container fluid  className={myPageStyle.MyPageContainer} >
                     <div className={myPageStyle.ContainerRow} >
                         <Col className={myPageStyle.LayoutWrapper}>
-                            <Sidebar />
+                            <Sidebar setFilterModalShow={setFilterModalShow} />
                             <Col md={8} className={myPageStyle.MyPageCardContainCol}>
                                 <Card className={`text-center ${myPageStyle.MyPageCard}`} >
                                     <Card.Body className={myPageStyle.MyPageCardBody}>
-                                        {/* <img src={imgPath}/> */}
-                                        {/* <Card.Text className={myPageStyle.MyPageCardText}> */}
-                                            {/* <Row xs={2} lg={2} className={myPageStyle.row}>
-                                                <Col><p> 아이디 </p></Col>
-                                                <Col><p>{infoData ? infoData.id : 'Loading...'}</p></Col>
-                                            </Row>
-                                            <Row xs={2} lg={2} className={myPageStyle.row}>
-                                                <Col><p>닉네임</p></Col>
-                                                <Col><p>{infoData ? infoData.nickname : 'Loading...'}</p></Col>
-                                            </Row>
-                                            <Row xs={2} lg={2} className={myPageStyle.row}>
-                                                <Col><p>전화번호</p></Col>
-                                                <Col><p>{infoData ? infoData.phoneNumber : 'Loading...'}</p></Col>
-                                            </Row> */}
-                                            <div className={myPageStyle.profile}>
-                                                <img src={imgPath} alt="User profile" />
-                                                <div className={myPageStyle.info}>
-                                                <p className={myPageStyle.name}>{infoData ? infoData.nickname : 'Loading...'}</p>
-                                                <p>{infoData ? infoData.id : 'Loading...'}</p>
-                                                </div>
+                                        <div className={myPageStyle.profile}>
+                                            <img src={imgPath} alt="User profile" />
+                                            <div className={myPageStyle.info}>
+                                            <p className={myPageStyle.name}>{infoData ? infoData.nickname : 'Loading...'}</p>
+                                            <p>{infoData ? infoData.id : 'Loading...'}</p>
                                             </div>
+                                        </div>
 
-                                            <div className={myPageStyle.infoRow}>
-                                                <p className={myPageStyle.label}>닉네임</p>
-                                                <p>{infoData ? infoData.nickname : 'Loading...'}</p>
-                                            </div>
-                                            <div className={myPageStyle.infoRow}>
-                                                <p className={myPageStyle.label}>아이디</p>
-                                                <p>{infoData ? infoData.id : 'Loading...'}</p>
-                                            </div>
-                                            <div className={myPageStyle.infoRow}>
-                                                <p className={myPageStyle.label}>전화번호</p>
-                                                <p>{infoData ? infoData.phoneNumber : 'Loading...'}</p>
-                                            </div>
-                                        {/* </Card.Text> */}
+                                        <div className={myPageStyle.infoRow}>
+                                            <p className={myPageStyle.label}>닉네임</p>
+                                            <p>{infoData ? infoData.nickname : 'Loading...'}</p>
+                                        </div>
+                                        <div className={myPageStyle.infoRow}>
+                                            <p className={myPageStyle.label}>아이디</p>
+                                            <p>{infoData ? infoData.id : 'Loading...'}</p>
+                                        </div>
+                                        <div className={myPageStyle.infoRow}>
+                                            <p className={myPageStyle.label}>전화번호</p>
+                                            <p>{infoData ? infoData.phoneNumber : 'Loading...'}</p>
+                                        </div>
                                         <button onClick={() => setModalShow(true)} className={myPageStyle.MyPageButton}>정보수정</button>
-                                        <UpdateModel
+                                        <UpdateModal
                                             show={modalShow}
                                             onHide={() => {
                                                 setModalShow(false);
@@ -274,6 +196,13 @@ const MyPagec = () => {
                     </div>
                 </Container>
             </div>
+            <AllergyModal
+                show={filterModalShow}
+                onHide={() => {
+                    setFilterModalShow(false);
+                }
+                }
+            />
         </>
     );
 }

@@ -7,7 +7,7 @@ import {getNewToken} from "../../services/auth2";
 import {containToken} from "../../Store/tokenSlice";
 import {useNavigate} from "react-router-dom";
 
-const UpdateModel = (props) => {
+const UpdateModal = (props) => {
     const [nickname,setNickname] = useState(null);
     const [phoneNumber,setPhoneNumber] = useState(null);
     const [tokenCheck,setTokenCheck] = useState(false);
@@ -233,4 +233,4 @@ const UpdateModel = (props) => {
     );
 }
 
-export default UpdateModel;
+export default UpdateModal;
