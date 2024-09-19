@@ -5,6 +5,10 @@ import {useEffect, useState} from "react";
 import {getNewToken} from "./auth2"
 import {containToken} from "../Store/tokenSlice";
 import {useDispatch, useSelector} from "react-redux";
+import {containEmail} from "../Store/userEmailSlice";
+import {containNickName} from "../Store/userNickName";
+import {containIsKaKao} from "../Store/isKakaoSlice";
+import {jwtDecode} from "jwt-decode";
 // import {containIsAdmin} from "../Store/isAdminSlice";
 
 const PrivateRoute = ({component: Component}) => {
@@ -108,6 +112,15 @@ const PrivateRoute = ({component: Component}) => {
                 // 새로 발급받은 accessToken을 Redux 스토어에 저장합니다.
                 dispatch(containToken(result.newToken));
                 token = result.newToken;
+                const decoded = jwtDecode(refreshToken);
+                // useremail
+                let reduxEmail = decoded.sub;
+                dispatch(containEmail(reduxEmail));
+
+                // // 리덕스 내용 적용
+                // dispatch(containEmail(reduxEmail));
+                // dispatch(containNickName(reduxNickname));
+                // dispatch(containIsKaKao(isKakao));
 
             } catch (error) {
                 dispatch(containToken(null));
