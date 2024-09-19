@@ -11,7 +11,7 @@ import UpdateModel from '../../components/MyPage/updateModel';
 import Card from 'react-bootstrap/Card';
 import Navigation from '../../components/Nav/Navigation'
 import imgPath from '../../assets/MyPageImg/img.png';
-import myPageStyle from '../../styles/MyPage/MyPagec.module.scss'
+import myPageStyle from '../../styles/MyPage/MyPage.module.scss'
 import Sidebar from '../../components/MyPage/Sidebar';
 
 import {useCookies} from "react-cookie";
