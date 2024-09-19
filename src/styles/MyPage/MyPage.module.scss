@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   min-height: 100vh;
-  background-color: #f7f8fa; // 좀 더 부드러운 배경 색상
+  background-color: $bg-color; // 좀 더 부드러운 배경 색상
 }
 
 .LayoutWrapper {
