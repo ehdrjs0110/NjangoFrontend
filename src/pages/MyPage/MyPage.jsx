@@ -12,6 +12,7 @@ import Card from 'react-bootstrap/Card';
 import Navigation from '../../components/Nav/Navigation'
 import imgPath from '../../assets/MyPageImg/img.png';
 import myPageStyle from '../../styles/MyPage/MyPage.module.scss'
+import Sidebar from '../../components/MyPage/Sidebar';
 
 import {useCookies} from "react-cookie";
 import {getNewToken} from "../../services/auth2";
@@ -22,7 +23,7 @@ import axios from "axios";
 
 
 
-const MyPage = () => {
+const MyPagec = () => {
     const [infoData,setInfoData] = useState(null);
     // auth 관련 --
     const navigate = useNavigate();
@@ -214,29 +215,50 @@ const MyPage = () => {
     return (
         <>
             <Navigation />
-            <div>
+            <div className={myPageStyle.MyPageLayout}>
                 <Container fluid  className={myPageStyle.MyPageContainer} >
-                    <Row className={myPageStyle.ContainerRow} >
-                        <Col md={{ span:  10, offset: 1 }} className={myPageStyle.ContainerCol}>
-                            <Col md={{ span:  6, offset: 3 }} className={myPageStyle.MyPageCardContainCol}>
+                    <div className={myPageStyle.ContainerRow} >
+                        <Col className={myPageStyle.LayoutWrapper}>
+                            <Sidebar />
+                            <Col md={8} className={myPageStyle.MyPageCardContainCol}>
                                 <Card className={`text-center ${myPageStyle.MyPageCard}`} >
                                     <Card.Body className={myPageStyle.MyPageCardBody}>
-                                        <img src={imgPath}/>
-                                        <Card.Text >
-                                            <Row xs={2} lg={2}>
+                                        {/* <img src={imgPath}/> */}
+                                        {/* <Card.Text className={myPageStyle.MyPageCardText}> */}
+                                            {/* <Row xs={2} lg={2} className={myPageStyle.row}>
                                                 <Col><p> 아이디 </p></Col>
                                                 <Col><p>{infoData ? infoData.id : 'Loading...'}</p></Col>
                                             </Row>
-                                            <Row xs={2} lg={2}>
+                                            <Row xs={2} lg={2} className={myPageStyle.row}>
                                                 <Col><p>닉네임</p></Col>
                                                 <Col><p>{infoData ? infoData.nickname : 'Loading...'}</p></Col>
                                             </Row>
-                                            <Row xs={2} lg={2}>
+                                            <Row xs={2} lg={2} className={myPageStyle.row}>
                                                 <Col><p>전화번호</p></Col>
                                                 <Col><p>{infoData ? infoData.phoneNumber : 'Loading...'}</p></Col>
-                                            </Row>
-                                        </Card.Text>
-                                        <Button variant="outline-secondary" onClick={() => setModalShow(true)}>정보수정</Button>
+                                            </Row> */}
+                                            <div className={myPageStyle.profile}>
+                                                <img src={imgPath} alt="User profile" />
+                                                <div className={myPageStyle.info}>
+                                                <p className={myPageStyle.name}>{infoData ? infoData.nickname : 'Loading...'}</p>
+                                                <p>{infoData ? infoData.id : 'Loading...'}</p>
+                                                </div>
+                                            </div>
+
+                                            <div className={myPageStyle.infoRow}>
+                                                <p className={myPageStyle.label}>닉네임</p>
+                                                <p>{infoData ? infoData.nickname : 'Loading...'}</p>
+                                            </div>
+                                            <div className={myPageStyle.infoRow}>
+                                                <p className={myPageStyle.label}>아이디</p>
+                                                <p>{infoData ? infoData.id : 'Loading...'}</p>
+                                            </div>
+                                            <div className={myPageStyle.infoRow}>
+                                                <p className={myPageStyle.label}>전화번호</p>
+                                                <p>{infoData ? infoData.phoneNumber : 'Loading...'}</p>
+                                            </div>
+                                        {/* </Card.Text> */}
+                                        <button onClick={() => setModalShow(true)} className={myPageStyle.MyPageButton}>정보수정</button>
                                         <UpdateModel
                                             show={modalShow}
                                             onHide={() => {
@@ -246,21 +268,14 @@ const MyPage = () => {
                                             }
                                         />
                                     </Card.Body>
-                                    <Card.Footer className="text-muted">
-                                        <Button variant="outline-secondary">필터 설정</Button>{' '}
-                                        <Button variant="outline-secondary" onClick={goHistory}>레시피 기록</Button>{' '}
-                                        <Button variant="outline-secondary" onClick={goLike}>Like🖤</Button>{' '}
-                                    </Card.Footer>
                                 </Card>
-
                             </Col>
-
                         </Col>
-                    </Row>
+                    </div>
                 </Container>
             </div>
         </>
     );
 }
 
-export default MyPage;
+export default MyPagec;

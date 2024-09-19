@@ -1,37 +1,119 @@
+@import "../index.scss";
 
-.MyPageContainer
-{
-  padding: 0;
-  .ContainerRow{
-    background-color: beige;
-    height: 100vh;
-    padding-left: 0;
-    padding-right: 0;
-    margin-bottom: 0;
-
-    .ContainerCol{
-      background-color: wheat;
-      padding-right: 0;
-      padding-left: 0;
-      height: 100%;
-    }
-
-  }
-
+.MyPageLayout {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f7f8fa; // 좀 더 부드러운 배경 색상
 }
 
-.MyPageCardContainCol
-{
-  padding-left: 0;
-  padding-right: 0;
-  margin-bottom: 0;
-  height: 50vh;
-  .MyPageCard{
-    height: 100%;
-    margin-top: 5vh;
+.LayoutWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  max-width: 800px;
+  width: 100%;
+  margin: 3% auto;
+}
 
-    .MyPageCardBody {
-      background-color: beige;
+.MyPageCardContainCol {
+  padding: 0;
+  max-width: 600px;
+  width: 100%;
+}
+
+.MyPageCard {
+  background-color: $white-color !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // 카드에 섀도우 추가
+  padding: 20px;
+}
+
+.MyPageCardBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 30px;
+
+  .profile {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    
+    img {
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      margin-right: 15px;
     }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      
+      p {
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .name {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 5px;
+        text-align: left;
+      }
+    }
+  }
+
+  .infoRow {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px 0;
+    border-bottom: 1px solid #e5e5e5;
+    
+    &:last-child {
+      border-bottom: none; // 마지막 줄의 경계선 없애기
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+  }
+}
+
+.MyPageButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  background-color: $p-color;
+  color: $white-color;
+  font-weight: bold;
+  border: none;
+  margin-left: 77%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: #dd934e;
+  }
+}
+
+.MyPageContainer {
+  padding: 0;
+  .ContainerRow {
+    height: 100vh;
   }
 }

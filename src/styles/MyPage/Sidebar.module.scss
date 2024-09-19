@@ -1,0 +1,28 @@
+@import "../index.scss";
+
+.sidebar {
+  width: 240px;
+  background-color: $white-color;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--bs-border-color-translucent);
+  border-radius: 8px;
+  margin-right: 20px;
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    
+    li {
+      padding: 10px 0;
+      border-bottom: 1px solid #e5e5e5;
+      font-size: 16px;
+      color: #333;
+      cursor: pointer;
+      
+      &:hover {
+        color: $p-color;
+      }
+    }
+  }
+}

@@ -39,6 +39,7 @@ import ManagementLayout from "./pages/Management/ManagementLayout";
 import PrivateRouteAdmin from "./services/Management/PrivateRouteAdmin"
 import PrivateRoute  from "./services/PrivateRoute";
 import Gallery from "./pages/Gallery/Gallery.jsx";
+import Sidebar from "./components/MyPage/Sidebar";
 
 
 
@@ -110,6 +111,8 @@ function App() {
 
           <Route path="/Demo" element={<Demo/>}/>
           {/*<Route path="/Gallery" element={<Gallery/>} />*/}
+
+          <Route path="/Sidebar" element={<Sidebar/>} />
 
         </Routes>
       </Router>
