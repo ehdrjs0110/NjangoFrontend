@@ -319,7 +319,7 @@ const AiSearch = () => {
         {
             return recipe.map((recipe, index) => (
                 <Card className={styles.recipeCard} key={index}>
-                    <Card.Header  className={styles.hearder}>
+                    <Card.Header  className={styles.header}>
                         <Row xs={1} md={2}>
                             <Col className={styles.recipeTitleCol}>
                                 {recipe.title}
