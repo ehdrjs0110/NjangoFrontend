@@ -1,5 +1,10 @@
 @import '../index.scss';
 
+* {
+  margin: 0 ;
+  padding: 0;
+}
+
 .aiSimpleSearchContiner{
   height: 100%;
   background-color: $bg-color;
@@ -10,10 +15,18 @@
 
     .aiSearchMainCol {
       padding: 1.5rem !important;
-      border-radius: 2%;
-      min-height: 85vh;
-      height: 100%;
+      margin: 0 auto;
+      width: 60%;
+      min-width: 800px;
       background-color: #FFFFFF;
+      border-radius: 2rem;
+      min-height: 85vh;
+      margin-bottom: 1rem;
+
+      .header{
+        font-weight: 800;
+        padding-bottom: 10px;
+      }
     }
   }
 }
@@ -126,20 +139,22 @@
 
   .recipeCard
   {
-    border: solid 2px $accent-color;
     margin-bottom: 2vh;
+    border: $accent-color 2px solid;
+    color: $p-font-color;
 
-    .hearder
-    {
+    .cardHeader{
       background-color: #FFFFFF;
+      color: black;
+      border-bottom: $accent-color 2px solid;
+      font-weight: 600;
     }
 
     // 레시피 제목 부분
     .recipeTitleCol
     {
-      //text-align: center;
-      font-size: 1.5rem;
-      //color: $p-font-color;
+      padding-left: 1rem !important;
+      font-size: 1.8rem;
     }
 
     // 레시피 상세보기 버튼 부분

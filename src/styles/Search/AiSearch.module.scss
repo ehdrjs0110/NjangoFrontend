@@ -135,15 +135,13 @@
   {
     margin-bottom: 2vh;
     border: $accent-color 2px solid;
-
     color: $p-font-color;
 
-    .header
-    {
+    .cardHeader {
       background-color: #FFFFFF;
-      //color: #FFFFFF;
+      color: black;
       border-bottom: $accent-color 2px solid;
-
+      font-weight: 600;
     }
 
     // 레시피 제목 부분

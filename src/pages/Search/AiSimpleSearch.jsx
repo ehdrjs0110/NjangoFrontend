@@ -89,14 +89,14 @@ const AiSimpleSearch = () => {
                 const res = await axiosInstance.get("inven/manage/name",{params});
 
 
-            if(res!=null){
-                console.log(res.data);
-            }
+                if(res!=null){
+                    console.log(res.data);
+                }
 
-            setIngredients(res.data);
+                setIngredients(res.data);
 
             }catch(err){
-            console.log("err message : " + err);
+                console.log("err message : " + err);
 
             }
         }
@@ -259,18 +259,17 @@ const AiSimpleSearch = () => {
         let minutes = today.getMinutes();  // 분
         let seconds = today.getSeconds();  // 초
         const nowTime = year + "" + month + "" + date + "" + hours + "" + minutes + "" + seconds;
-        
+
         //Recipe ID 생성
         const recipeId = userId + nowTime;
         console.log("recipeId"+recipeId);
 
-        navigate('/AiDetailSearch', { state: { 
-            recipe : recipe,
-            recipeId : recipeId
-        } }); // 레시피 전달
+        navigate('/AiDetailSearch', { state: {
+                recipe : recipe,
+                recipeId : recipeId
+            } }); // 레시피 전달
 
     }
-
 
     // recipe UI
     function recipeResponce()
@@ -279,10 +278,10 @@ const AiSimpleSearch = () => {
         {
             return recipe.map((recipe, index) => (
                 <Card className={aiSimpleCss.recipeCard} key={index}>
-                    <Card.Header className={aiSimpleCss.hearder}>
+                    <Card.Header className={aiSimpleCss.cardHeader}>
                         <Row xs={1} md={2}>
                             <Col className={aiSimpleCss.recipeTitleCol}>
-                                {JSON.stringify(recipe.title)  }
+                                {recipe.title}
                             </Col>
                             <Col className={aiSimpleCss.recipeDetailSearchCol}>
                                 <Button className={aiSimpleCss.recipeDetailSearchButton}  variant="outline-secondary" onClick={() =>startDetailAiSearch(recipe)}>
@@ -293,10 +292,12 @@ const AiSimpleSearch = () => {
                     </Card.Header>
                     <Card.Body className={aiSimpleCss.recipeText}>
                         <Card.Text>
-                            <strong>재료:</strong> {JSON.stringify(recipe.ingredients)}
+                            <strong>재료:</strong>&nbsp;
+                            <span>{Object.entries(recipe.ingredients).map(([key, value]) => `${key} ${value}`).join(', ')}</span>
                         </Card.Text>
                         <Card.Text>
-                            <strong>과정:</strong> {JSON.stringify(recipe.process)}
+                            <strong>과정:</strong>&nbsp;
+                            <span>{recipe.process}</span>
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -315,7 +316,9 @@ const AiSimpleSearch = () => {
             <Navigation/>
             <Container fluid style={{padding:0}} className={aiSimpleCss.aiSimpleSearchContiner} >
                 <Row className={aiSimpleCss.aiSimpleSearchContinerRow} style={{paddingLeft:0, paddingRight:0}}>
-                    <Col style={{ paddingLeft: 0, paddingRight: 0 }} md={{ span: 10, offset: 1 }}  className={aiSimpleCss.aiSearchMainCol}>
+                    <Col style={{paddingLeft: 0, paddingRight: 0}} md={{span: 10, offset: 1}}
+                         className={aiSimpleCss.aiSearchMainCol}>
+                        <h2 className={aiSimpleCss.header}>레시피 검색</h2>
                         {/* 내 재료 시작점 */}
                         <Form.Group className={aiSimpleCss.foodTypeGroup}>
                             <Form.Label className={aiSimpleCss.foodTypeLabel}>내 재료</Form.Label>
@@ -365,10 +368,10 @@ const AiSimpleSearch = () => {
 
                         </div>
                         <div className={styles.loading}>
-                                <h2 className={styles.text}>Loading...</h2>
-                            </div>
+                            <h2 className={styles.text}>Loading...</h2>
                         </div>
-                    }
+                    </div>
+                }
             </Container>
         </div>
     )
