@@ -269,144 +269,148 @@ function Inven() {
   };
 
   return (
-    <>
-      <Navigation></Navigation>
-      <Container fluid className={styles.container}>
-        <div className={styles.main}>
-          <Row className={styles.controllerRow}>
-            <Col md={{ span: 10, offset: 1 }} className={styles.controller}>
-              <Row className={styles.controllerRow}>
-                <Col className={styles.controlform}>
-                  <div className={`${styles.buttonGroup} ${styles.topGroup}`}>
-                    <button className={styles.button} onClick={cookmode}>요리 시작</button>
-                    <button className={styles.button} onClick={excelmode}>전문가 모드</button>
-                  </div>
-                  <div className={`${styles.buttonGroup} ${styles.middleGroup}`}>
-                    <div className={`${styles.serch} ${styles.searchContainer}`}>
-                      <input
-                          type="text"
-                          placeholder="재료검색"
-                          className={styles.searchInput}
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                      />
-                      <FontAwesomeIcon
-                          icon={faMagnifyingGlass}
-                          className={styles.searchIcon}
-                      />
+      <>
+        <Navigation></Navigation>
+        <Container fluid className={styles.container}>
+          <div className={styles.main}>
+            <Row className={styles.controllerRow}>
+              <Col md={{ span: 10, offset: 1 }} className={styles.controller}>
+                <Row className={styles.controllerRow}>
+                  <Col className={styles.controlform}>
+                    <div className={`${styles.buttonGroup} ${styles.topGroup}`}>
+                      <button className={styles.button} onClick={cookmode}>요리 시작</button>
+                      <button className={styles.button} onClick={excelmode}>전문가 모드</button>
                     </div>
-                    <button className={styles.button} onClick={handleShowAddModal}>추가</button>
-                  </div>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-          <Row className={styles.contentRow}>
-            <Col md={{ span: 10, offset: 1 }} className={styles.content}>
-              <h2>갖고있어요!</h2>
-              <div className={styles.item}>
-                <Row style={{ width: '100%', margin: '0 auto' }}>
-                  {filteredItemsWithSize.map((item, index) => (
-                      <IngredientItem
-                          key={index}
-                          item={item}
-                          index={index}
-                          isIngred={isIngred}
-                          selectIngred={selectIngred}
-                          updateUnit={updateUnit}
-                          deleteData={deleteData}
-                          handleShow={handleShow}
-                          setChange={setChange}
-                          message={"없음"}
-                      />
-                  ))}
+                    <div className={`${styles.buttonGroup} ${styles.middleGroup}`}>
+                      <div className={`${styles.serch} ${styles.searchContainer}`}>
+                        <input
+                            type="text"
+                            placeholder="재료검색"
+                            className={styles.searchInput}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <FontAwesomeIcon
+                            icon={faMagnifyingGlass}
+                            className={styles.searchIcon}
+                        />
+                      </div>
+                      <button className={styles.button} onClick={handleShowAddModal}>추가</button>
+                    </div>
+                  </Col>
                 </Row>
-              </div>
-              <hr />
-              <h2>사주세요ㅠㅠ</h2>
-              <div className={styles.item}>
-                <Row style={{ width: '100%', margin: '0 auto' }}>
-                  {filteredItemsWithoutSize.map((item, index) => (
-                      <IngredientItem
-                          key={index}
-                          item={item}
-                          index={index}
-                          isIngred={isIngred}
-                          selectIngred={selectIngred}
-                          updateUnit={updateUnit}
-                          deleteData={deleteData}
-                          handleShow={handleShow}
-                          setChange={setChange}
-                          message={"있음"}
-                      />
-                  ))}
-                </Row>
-              </div>
-            </Col>
-          </Row>
-        </div>
-      </Container>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>상세 정보 수정</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="ingredientName">
-              <Form.Label>재료명</Form.Label>
-              <Form.Control
-                type="text"
-                name="ingredientname"
-                value={formData.ingredientname}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="size">
-              <Form.Label>양</Form.Label>
-              <Form.Control
-                type="number"
-                name="size"
-                min="0"
-                value={formData.status.size}
-                onChange={handleStatusChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="unit">
-              <Form.Label>단위</Form.Label>
-              <Form.Control
-                type="text"
-                name="unit"
-                value={formData.status.unit}
-                onChange={handleStatusChange}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            닫기
-          </Button>
-          <Button variant="primary" onClick={handleSaveChanges}>
-            저장
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal show={showAddModal} onHide={handleCloseAddModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>재료 추가</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="ingredientName">
-              <Form.Label>재료명</Form.Label>
-              <Form.Control
-                type="text"
-                name="ingredientname"
-                value={isNewData.ingredientname}
-                onChange={setIngredName}
-              />
-            </Form.Group>
-            {/*<Form.Group controlId="size">
+              </Col>
+            </Row>
+            <Row className={styles.contentRow}>
+              <Col md={{ span: 10, offset: 1 }} className={styles.content}>
+                <h2>갖고있어요!</h2>
+                <div className={styles.item}>
+                  <Row style={{ width: '100%', margin: '0 auto' }}>
+                    {filteredItemsWithSize.map((item, index) => (
+                        <IngredientItem
+                            key={index}
+                            item={item}
+                            index={index}
+                            isIngred={isIngred}
+                            selectIngred={selectIngred}
+                            updateUnit={updateUnit}
+                            deleteData={deleteData}
+                            handleShow={handleShow}
+                            setChange={setChange}
+                            message={"없음"}
+                        />
+                    ))}
+                  </Row>
+                </div>
+                <hr />
+                <h2>사주세요ㅠㅠ</h2>
+                <div className={styles.item}>
+                  <Row style={{ width: '100%', margin: '0 auto' }}>
+                    {filteredItemsWithoutSize.map((item, index) => (
+                        <IngredientItem
+                            key={index}
+                            item={item}
+                            index={index}
+                            isIngred={isIngred}
+                            selectIngred={selectIngred}
+                            updateUnit={updateUnit}
+                            deleteData={deleteData}
+                            handleShow={handleShow}
+                            setChange={setChange}
+                            message={"있음"}
+                        />
+                    ))}
+                  </Row>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </Container>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>상세 정보 수정</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group controlId="ingredientName">
+                <Form.Label>재료명</Form.Label>
+                <Form.Control
+                    type="text"
+                    name="ingredientname"
+                    value={formData.ingredientname}
+                    onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group controlId="size">
+                <Form.Label>양</Form.Label>
+                <Form.Control
+                    type="number"
+                    name="size"
+                    min="0"
+                    value={formData.status.size}
+                    onChange={handleStatusChange}
+                />
+              </Form.Group>
+              <Form.Group controlId="unit">
+                <Form.Label>단위</Form.Label>
+                <Form.Control
+                    type="text"
+                    name="unit"
+                    value={formData.status.unit}
+                    onChange={handleStatusChange}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              닫기
+            </Button>
+            <Button variant="primary" onClick={handleSaveChanges}>
+              저장
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={showAddModal} onHide={handleCloseAddModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>재료 추가</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={async (e) => {
+              e.preventDefault();
+              await handleAddData();
+            }}>
+              <Form.Group controlId="ingredientName">
+                <Form.Label>재료명</Form.Label>
+                <Form.Control
+                    type="text"
+                    name="ingredientname"
+                    value={isNewData.ingredientname}
+                    onChange={setIngredName}
+                />
+              </Form.Group>
+              {/*<Form.Group controlId="size">
               <Form.Label>양</Form.Label>
               <Form.Control
                 type="number"
@@ -425,19 +429,19 @@ function Inven() {
                 onChange={setUnit}
               />
             </Form.Group>*/}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseAddModal}>
-            닫기
-          </Button>
-          <Button variant="primary" onClick={handleAddData}>
-            추가
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <ToastContainer />
-    </>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseAddModal}>
+              닫기
+            </Button>
+            <Button variant="primary" onClick={handleAddData}>
+              추가
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <ToastContainer />
+      </>
   );
 }
 

@@ -74,8 +74,6 @@
     }
   }
 }
-
-
 // 내 재료
 .ingredientContainer {
   border-top: 1px solid $p-color;
@@ -162,13 +160,13 @@
       text-align: right;
       //text-align: center;
 
-      .recipeDetailSearchButton
-      {
+      .recipeDetailSearchButton {
         width: 30%;
         border: 3px solid $p-color;
         color: $p-color;
         font-size: 1.2rem;
         background-color: #FFFFFF;
+        font-weight: 800;
       }
 
       .recipeDetailSearchButton:hover
@@ -200,29 +198,55 @@
   }
 }
 
-.check{
-  input[type="checkbox"] {
-    display: none;
+.foodTypeGroup {
+  margin-top: 0.5rem; // 그룹 간의 간격 추가
+  margin-bottom: 0.5rem; // 그룹 간의 간격 추가
+  display: flex;
+  flex-direction: row; // 체크박스를 라벨의 오른쪽에 배치
+
+  > label {
+    width: 6rem;
+    text-align: center;
+    justify-content: center; // 텍스트 좌우 가운데 정렬
   }
 
-  label {
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Center vertically */
+  .foodTypeLabel {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4A4A4A;
+    display: flex;
+    align-items: center;
   }
 
-  input[type="checkbox"] + label::before {
-    content: "";
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-right: 8px;
-    border: 1px solid $p-color;/* Use your primary color */
-    cursor: pointer !important;
-    border-radius: 3px;
+  .checkboxContainer {
+    display: flex; // 가로로 배치
+    flex-wrap: wrap; // 체크박스가 넘치면 다음 줄로 배치
   }
 
-  input[type="checkbox"]:checked + label::before {
-    background-color: $p-color; /* Use your primary color */
+  .check{
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border: 1px solid $p-color; // 외곽선 색상
+      border-radius: 0.5rem;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+
+      &:hover {
+        background-color: lighten($p-color, 20%); // 호버 시 밝은 색상
+        border-color: lighten($p-color, 10%);
+      }
+    }
+
+    input[type="checkbox"]:checked + label {
+      background-color: $p-color; // 선택된 상태의 배경색
+      color: white; // 글자색 흰색으로
+    }
   }
 }
 

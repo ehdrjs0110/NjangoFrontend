@@ -418,30 +418,36 @@ const AiSearch = () => {
                                                           className={`${styles.button}`}>옵션</CustomToggle>
                                         </Card.Header>
                                         <Accordion.Collapse eventKey="0">
-                                            <Card.Body>
+                                            <div style={{padding: "0.5rem"}}>
                                                 <div>
-                                                    <Form.Group>
-                                                        종류&nbsp;&nbsp;&nbsp;
-                                                        {makeKindOfFoodList()}
+                                                    <Form.Group className={styles.foodTypeGroup}>
+                                                        <Form.Label className={styles.foodTypeLabel}>종류</Form.Label>
+                                                        <div className={styles.checkboxContainer}>
+                                                            {makeKindOfFoodList()}
+                                                        </div>
                                                     </Form.Group>
                                                 </div>
                                                 <div>
-                                                    <Form.Group>
-                                                        기타&nbsp;&nbsp;&nbsp;
-                                                        {makeEtcList()}
+                                                    <Form.Group className={styles.foodTypeGroup}>
+                                                        <Form.Label className={styles.foodTypeLabel}>기타</Form.Label>
+                                                        <div className={styles.checkboxContainer}>
+                                                            {makeEtcList()}
+                                                        </div>
                                                     </Form.Group>
                                                 </div>
                                                 <Accordion activeKey={activeKey}>
                                                     <Accordion.Collapse eventKey="1" className={styles.ingredientContainer}>
                                                         <div>
-                                                            <Form.Group>
-                                                                내 재료&nbsp;&nbsp;&nbsp;
-                                                                {makeIngredientList()}
+                                                            <Form.Group className={styles.foodTypeGroup}>
+                                                                <Form.Label className={styles.foodTypeLabel}>내 재료</Form.Label>
+                                                                <div className={styles.checkboxContainer}>
+                                                                    {makeIngredientList()}
+                                                                </div>
                                                             </Form.Group>
                                                         </div>
                                                     </Accordion.Collapse>
                                                 </Accordion>
-                                            </Card.Body>
+                                            </div>
                                         </Accordion.Collapse>
                                     </Card>
                                 </Accordion>
