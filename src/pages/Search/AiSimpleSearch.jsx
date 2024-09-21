@@ -142,19 +142,9 @@ const AiSimpleSearch = () => {
 
 
     // 레시피 갯수 입력받기
-    const recipeHendler = (event) => {
-        const {value} = event.target;
-        console.log(typeof value);
-        console.log(value);
-        if(Number(value) <= 5){
-            console.log("검색가능");
-            setRecipeCount(value);
-        }
-        else {
-            console.error("검색 불가능");
-        }
-
-
+    const recipeHandler = (event) => {
+        const { value } = event.target;
+        setRecipeCount(value);
     }
 
     // UI = 냉장고 속 재료 보여주기
@@ -323,82 +313,58 @@ const AiSimpleSearch = () => {
     return(
         <div>
             <Navigation/>
-
-
             <Container fluid style={{padding:0}} className={aiSimpleCss.aiSimpleSearchContiner} >
                 <Row className={aiSimpleCss.aiSimpleSearchContinerRow} style={{paddingLeft:0, paddingRight:0}}>
                     <Col style={{ paddingLeft: 0, paddingRight: 0 }} md={{ span: 10, offset: 1 }}  className={aiSimpleCss.aiSearchMainCol}>
-
                         {/* 내 재료 시작점 */}
-                        <div className={aiSimpleCss.myIngredientContainer} >
-                            <Card border="secondary" className={aiSimpleCss.myIngredientCard}>
-                                <Card.Body>
-                                    <Card.Title  className={aiSimpleCss.title}>내 재료</Card.Title>
-                                    <Card.Text as="div">
-                                        {/*재료 선택*/}
-                                        {makeMyIngredientList()}
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </div>
-                        {/*내 재료 카드 종료 */}
-
-                        {/*선택된 재료 내역 시작점*/}
-                        <div className={aiSimpleCss.checkedIngredientContainer}>
-                            <Card border="secondary" className={aiSimpleCss.card}>
-                                <Card.Body>
-                                    <Card.Title className={aiSimpleCss.title}>Check</Card.Title>
-
-                                    <Row xs={2} md={4} lg={6} className={aiSimpleCss.list}>
-                                        {makeCheckedList()}
-                                    </Row>
-                                    <Card.Text>
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </div>
-                        {/*선택된 재료 내역 종료*/}
-
-
+                        <Form.Group className={aiSimpleCss.foodTypeGroup}>
+                            <Form.Label className={aiSimpleCss.foodTypeLabel}>내 재료</Form.Label>
+                            <div className={aiSimpleCss.checkboxContainer}>
+                                {makeMyIngredientList()}
+                            </div>
+                        </Form.Group>
 
                         {/*레시피 검색 버튼 시작점*/}
                         <div className={aiSimpleCss.aiSearchNumberContainer}>
                             <InputGroup>
-                                <InputGroup.Text id="basic-addon1" >레시피 개수</InputGroup.Text>
-                                <Form.Control
-                                    aria-label="Recipient's username"
+                                <InputGroup.Text id="basic-addon1">레시피 개수</InputGroup.Text>
+                                <Form.Select
+                                    aria-label="Recipe count select"
                                     aria-describedby="basic-addon2"
                                     className="ai-search-input"
-                                    onChange={recipeHendler}
+                                    onChange={recipeHandler}
                                     value={recipeCount}
-
-                                />
-                                <Button variant="primary" id="button-addon2"  onClick={aiSearchRequest}>
+                                >
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </Form.Select>
+                                <Button variant="outline-secondary" id="button-addon2" onClick={aiSearchRequest}
+                                        className={aiSimpleCss.aiSearchButton}>
                                     검색
                                 </Button>
                             </InputGroup>
                         </div>
-                        {/*레시피 검색 버튼 종료*/}
-
 
                         {/*레시피 결과 리스트 시작점*/}
                         <div className={aiSimpleCss.aiSearchListContainer}>
                             {recipeResponce()}
                         </div>
-                        {/*레시피 결과 리스트 종료점*/}
 
                     </Col>
                 </Row>
-                    {
-                        modalOpen &&
-                        <div className={styles.modal_container} ref={modalBackground} onClick={e => {
-                        }}>
-                            <div className={styles.loader}>
-                                <div className={styles.character}></div>
-                                {/* <img src={char} className={styles.character}></img> */}
-                                
-                            </div>
-                            <div className={styles.loading}>
+                {
+                    modalOpen &&
+                    <div className={styles.modal_container} ref={modalBackground} onClick={e => {
+                    }}>
+                        <div className={styles.loader}>
+                            <div className={styles.character}></div>
+                            {/* <img src={char} className={styles.character}></img> */}
+
+                        </div>
+                        <div className={styles.loading}>
                                 <h2 className={styles.text}>Loading...</h2>
                             </div>
                         </div>
