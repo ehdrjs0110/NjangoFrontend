@@ -322,7 +322,7 @@ const AiSearch = () => {
                     <Card.Header  className={styles.hearder}>
                         <Row xs={1} md={2}>
                             <Col className={styles.recipeTitleCol}>
-                                {JSON.stringify(recipe.title)}
+                                {recipe.title}
                             </Col>
                             <Col className={styles.recipeDetailSearchCol}>
                                 <Button className={styles.recipeDetailSearchButton}  variant="outline-secondary" onClick={() =>startDetailAiSearch(recipe)}>
@@ -333,10 +333,12 @@ const AiSearch = () => {
                     </Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            <strong>재료:</strong> { makeIngredient(recipe.ingredients)}
+                            <strong>재료:</strong>&nbsp;
+                            <span>{Object.entries(recipe.ingredients).map(([key, value]) => `${key} ${value}`).join(', ')}</span>
                         </Card.Text>
                         <Card.Text>
-                            <strong>과정:</strong> { JSON.stringify(recipe.process)}
+                            <strong>과정:</strong>&nbsp;
+                            <span>{recipe.process}</span>
                         </Card.Text>
                     </Card.Body>
                 </Card>
