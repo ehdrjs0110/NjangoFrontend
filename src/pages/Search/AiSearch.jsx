@@ -383,7 +383,7 @@ const AiSearch = () => {
                 <div className={styles.aiSearchContainer}>
                     <Row className={styles.aiSearchRow}>
                         <Col md={{span: 10, offset: 1}} className={styles.aiSearchCol}>
-                            <h2 className={styles.header}>검색</h2>
+                            <h2 className={styles.header}>레시피 검색</h2>
                             {/*레시피 명 입력 지작점*/}
                             <InputGroup className={styles.aiSearchInputGroup}>
                                 <Form.Control
