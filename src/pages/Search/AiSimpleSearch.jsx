@@ -318,7 +318,7 @@ const AiSimpleSearch = () => {
                 <Row className={aiSimpleCss.aiSimpleSearchContinerRow} style={{paddingLeft:0, paddingRight:0}}>
                     <Col style={{paddingLeft: 0, paddingRight: 0}} md={{span: 10, offset: 1}}
                          className={aiSimpleCss.aiSearchMainCol}>
-                        <h2 className={aiSimpleCss.header}>레시피 검색</h2>
+                        <h2 className={aiSimpleCss.header}>가진 재료로 요리하기</h2>
                         {/* 내 재료 시작점 */}
                         <Form.Group className={aiSimpleCss.foodTypeGroup}>
                             <Form.Label className={aiSimpleCss.foodTypeLabel}>내 재료</Form.Label>
