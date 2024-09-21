@@ -26,9 +26,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {axiosInstance} from "../../middleware/customAxios";
 import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
 
-
-
-
 const AiSearch = () => {
     // 냉장고 재료 반영 선택 여부
     const [activeKey, setActiveKey] = useState(null);
@@ -47,9 +44,6 @@ const AiSearch = () => {
     // auth 관련 --
     const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
     // const { handleTokenRefresh } = useSetNewAuth();
-
-
-
 
     // redux에서 가져오기
     let accessToken = useSelector(state => state.token.value);
@@ -83,20 +77,18 @@ const AiSearch = () => {
             try{
                 await tokenHandler();
                 const res = await axiosInstance.get("inven/manage/name",{params});
-            if(res!=null){
-                console.log(res.data);
-            }
+                if(res!=null){
+                    console.log(res.data);
+                }
 
-            setIngredients(res.data);
+                setIngredients(res.data);
 
             }catch(err){
-            console.log("err message : " + err);
+                console.log("err message : " + err);
             }
         }
         fetchData();
     }, []);
-
-
 
 // accesstoken2 대체
     async function tokenHandler() {
@@ -121,7 +113,6 @@ const AiSearch = () => {
             }
         }
     }
-
 
     function CustomToggle({ children, eventKey }) {
 
@@ -177,7 +168,7 @@ const AiSearch = () => {
         console.log(selectedKindOfFood);
     }
     // option - 종류
-    var kindOfFoodList = ["한식", "중식", "양식"];
+    const kindOfFoodList = ["한식", "중식", "양식"];
     const kindOfFoodHandler = (event) => {
         const kind = event.target.id;
         const isCheked = event.target.checked;
@@ -190,7 +181,6 @@ const AiSearch = () => {
         })
         console.log(selectedKindOfFood);
     }
-
 
     function makeKindOfFoodList() {
         return kindOfFoodList.map((kind,index) =>
@@ -206,17 +196,11 @@ const AiSearch = () => {
             />)
     }
 
-
-
-
     const handleCheckboxChange = () => {
         setActiveKey(activeKey === "1" ? null : "1");
     };
 
-    var etcList = ["냉장고 재료 반영", "알레르기 반영", "소비 기한 우선 사용"];
-
-
-
+    const etcList = ["냉장고 재료 반영", "알레르기 반영", "소비 기한 우선 사용"];
     function makeEtcList() {
         return etcList.map((etc,index) =>
         {
@@ -249,11 +233,6 @@ const AiSearch = () => {
             }
         });
     }
-
-
-
-
-
 
     // prompt 요청
     async function aiSearchRequest () {
@@ -376,8 +355,7 @@ const AiSearch = () => {
 
     // 레시피 상세 보기로 값 넘겨주가
 
-    const startDetailAiSearch = (recipe) =>
-    {
+    const startDetailAiSearch = (recipe) => {
         var today = new Date(); //현재시간 가져오기
         let year = today.getFullYear(); // 년도
         let month = today.getMonth() + 1;  // 월
@@ -386,62 +364,58 @@ const AiSearch = () => {
         let minutes = today.getMinutes();  // 분
         let seconds = today.getSeconds();  // 초
         const nowTime = year + "" + month + "" + date + "" + hours + "" + minutes + "" + seconds;
-        
+
         //Recipe ID 생성
         const recipeId = userId + nowTime;
         console.log("recipeId"+recipeId);
 
-        navigate('/AiDetailSearch', { state: { 
-            recipe : recipe,
-            recipeId : recipeId
-        } }); // 레시피 전달
+        navigate('/AiDetailSearch', { state: {
+                recipe : recipe,
+                recipeId : recipeId
+            } }); // 레시피 전달
 
     }
-
-    const handleToggle = () => {
-        console.log(testKey);
-        setTestKey(!testKey);
-    };
-
-
 
     return (
         <div className={styles.aiSearchAllContainer} >
             <Navigation/>
-            {/*<Container fluid className={styles.aiSearchContainer}>*/}
-            <Container fluid style={{paddingLeft:0, paddingRight:0,heidth: "100%", minHeight: "100vh"}}>
+            <Container fluid>
                 <div className={styles.aiSearchContainer}>
-                    {/*<Row className="justify-content-md-center ai-search-row">*/}
-                    <Row  className={styles.aiSearchRow}>
-                        {/*<Col xs="0" lg="1"   className="ai-search-col">*/}
-                        {/*    1 of 3*/}
-                        {/*</Col>*/}
-                        <Col  style={{paddingLeft:0, paddingRight:0}} md={{ span: 10, offset: 1 }} className={styles.aiSearchCol} >
+                    <Row className={styles.aiSearchRow}>
+                        <Col md={{span: 10, offset: 1}} className={styles.aiSearchCol}>
+                            <h2 className={styles.header}>검색</h2>
                             {/*레시피 명 입력 지작점*/}
-                            <div  style={{padding:0}} >
-                                <InputGroup style={{padding:0}} className={styles.aiSearchInputGroup}>
-                                    <Form.Control  style={{padding:0}}
-                                                   placeholder="레시피 검색"
-                                                   aria-label="Recipient's username"
-                                                   aria-describedby="basic-addon2"
-                                        // className="ai-search-input"
-                                                   className={styles.form}
-                                                   onChange={searchInputHandler}
-                                                   value={searchValue}
-                                    />
-                                    <Button variant="outline-secondary" id="button-addon2" className={styles.aiSearchButton} onClick={aiSearchRequest}>
-                                        검색
-                                    </Button>
-                                </InputGroup>
-                            </div>
+                            <InputGroup className={styles.aiSearchInputGroup}>
+                                <Form.Control
+                                    placeholder="레시피 검색"
+                                    aria-label="Recipient's username"
+                                    aria-describedby="basic-addon2"
+                                    className={styles.form}
+                                    onChange={searchInputHandler}
+                                    value={searchValue}
+                                    onKeyPress={(event) => {
+                                        if (event.key === 'Enter') {
+                                            event.target.blur();
+                                            aiSearchRequest();
+                                        }
+                                    }}
+                                />
+                                <Button variant="outline-secondary" id="button-addon2" className={styles.aiSearchButton}
+                                        onClick={aiSearchRequest}>
+                                    검색
+                                </Button>
+                            </InputGroup>
                             {/*레시피 명 입력 종료점*/}
 
                             {/*레시피 옵션 시작점*/}
-                            <div className={`${styles.aiSearchOptionContainer} ${testKey === true ? styles.expanded : styles.collapsed}`}>
-                                <Accordion defaultActiveKey="" style={{ paddingRight: '0', paddingLeft: '0', width:'100%'}}>
-                                    <Card  className={styles.containCard} >
+                            <div
+                                className={`${styles.aiSearchOptionContainer} ${testKey === true ? styles.expanded : styles.collapsed}`}>
+                                <Accordion defaultActiveKey=""
+                                           style={{paddingRight: '0', paddingLeft: '0', width: '100%'}}>
+                                    <Card className={styles.containCard}>
                                         <Card.Header className={styles.aiSearchOptionHeader}>
-                                            <CustomToggle eventKey="0" className={`${styles.button}`}>Option</CustomToggle>
+                                            <CustomToggle eventKey="0"
+                                                          className={`${styles.button}`}>옵션</CustomToggle>
                                         </Card.Header>
                                         <Accordion.Collapse eventKey="0">
                                             <Card.Body>
@@ -457,20 +431,15 @@ const AiSearch = () => {
                                                         {makeEtcList()}
                                                     </Form.Group>
                                                 </div>
-                                                <Accordion activeKey={activeKey} className={styles.ingredientContainer}>
-                                                    <Card  className={styles.card}>
-                                                        <Accordion.Collapse eventKey="1">
-                                                            <Card.Body >
-                                                                <div>
-                                                                    <h5 className={styles.title}>내 재료</h5>
-                                                                    <Form.Group>
-                                                                        {makeIngredientList()}
-                                                                    </Form.Group>
-                                                                </div>
-
-                                                            </Card.Body>
-                                                        </Accordion.Collapse>
-                                                    </Card>
+                                                <Accordion activeKey={activeKey}>
+                                                    <Accordion.Collapse eventKey="1" className={styles.ingredientContainer}>
+                                                        <div>
+                                                            <Form.Group>
+                                                                내 재료&nbsp;&nbsp;&nbsp;
+                                                                {makeIngredientList()}
+                                                            </Form.Group>
+                                                        </div>
+                                                    </Accordion.Collapse>
                                                 </Accordion>
                                             </Card.Body>
                                         </Accordion.Collapse>
@@ -478,7 +447,6 @@ const AiSearch = () => {
                                 </Accordion>
                             </div>
                             {/*레시피 옵션 종료점*/}
-
 
                             {/*레시피 검색 결과 시작점*/}
                             <div className={styles.recipeContainer}>
@@ -493,8 +461,7 @@ const AiSearch = () => {
                         }}>
                             <div className={styles.loader}>
                                 <div className={styles.character}></div>
-                                {/* <img src={char} className={styles.character}></img> */}
-                                
+
                             </div>
                             <div className={styles.loading}>
                                 <h2 className={styles.text}>Loading...</h2>
