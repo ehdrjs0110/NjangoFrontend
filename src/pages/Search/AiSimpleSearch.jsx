@@ -22,12 +22,8 @@ import {containToken} from "../../Store/tokenSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {axiosInstance, axiosInstance2} from "../../middleware/customAxios";
 
-
-
 const AiSimpleSearch = () => {
     const navigate = useNavigate();
-
-
     // 선택한 재료
     const [selectedIngredientList, setSelectedIngredientList] = useState([]);
     // 레시피 답변
@@ -44,17 +40,13 @@ const AiSimpleSearch = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const modalBackground = useRef();
 
-
     // refresh token 가져오기
     const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
-
-
 
     // redux에서 가져오기
     let accessToken = useSelector(state => state.token.value);
     let  userId = useSelector(state=> state.userEmail.value);
     const dispatch = useDispatch();
-
 
     //inven에서 가져온 값
     const state = useLocation();
@@ -105,32 +97,26 @@ const AiSimpleSearch = () => {
     }, [accessToken]);
 
     async function tokenHandler() {
-
-
         const isExpired = expired();
+
         if(isExpired){
-
             let refreshToken = cookies.refreshToken;
-            try {
 
-                // getNewToken 함수 호출 (비동기 함수이므로 await 사용)
+            try {
                 const result = await getNewToken(refreshToken);
                 refreshToken = result.newRefreshToken;
 
-                // refresh token cookie에 재설정
                 setCookie(
                     'refreshToken',
                     refreshToken,
                     {
                         path:'/',
                         maxAge: 7 * 24 * 60 * 60, // 7일
-                        // expires:new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000)
                     }
                 )
 
                 // Redux access token 재설정
                 dispatch(containToken(result.newToken));
-
             } catch (error) {
                 console.log(error);
                 navigate('/Sign');
@@ -138,8 +124,6 @@ const AiSimpleSearch = () => {
         }
 
     }
-
-
 
     // 레시피 갯수 입력받기
     const recipeHandler = (event) => {
@@ -168,10 +152,6 @@ const AiSimpleSearch = () => {
         return null; // 기본값을 반환
     };
 
-
-
-
-
     // Logic = 선택한 재료 정리, selectedIngredientList에 반영
     const selectIngredient = (ingredient) => {
         setSelectedIngredientList(preState => {
@@ -183,28 +163,16 @@ const AiSimpleSearch = () => {
         });
     }
 
-    // UI = Check 된 리스트 보여주기
-    const makeCheckedList = () => {
-        const checkedList = selectedIngredientList.map((ingredient, index) =>
-            <Col key={index}>{ingredient}</Col>
-        )
-        return checkedList;
-    }
-
-
-
     // prompt 요청
     async function aiSearchRequest () {
         setModalOpen(true);
         console.log("selectedMyIngredientList" + selectedIngredientList);
-        // console.log();
         console.log(recipeCount);
 
         if(recipeCount == null || Number(recipeCount) <= 0 )
         {
             setRecipeCount("1");
         }
-
 
         console.log("요청 중");
 
@@ -219,17 +187,11 @@ const AiSimpleSearch = () => {
             await tokenHandler();
             searchResponse = await axiosInstance2.post(`api/v1/chat-gpt/simple/${userId}`,requestBody);
 
-
-
-
         } catch (e) {
             console.error(e);
         }
 
         let response = searchResponse.data;
-
-        // console.log(recipeCount);
-
         let jsonString = JSON.stringify(response);
 
         console.log("최종 응답");
@@ -246,9 +208,7 @@ const AiSimpleSearch = () => {
         setModalOpen(false);
     }
 
-
     // 레시피 상세 보기로 값 넘겨주가
-
     const startDetailAiSearch = (recipe) =>
     {
         var today = new Date(); //현재시간 가져오기
@@ -304,12 +264,8 @@ const AiSimpleSearch = () => {
             ));
         }
 
-
         return null;
-
     }
-
-
 
     return(
         <div>
@@ -319,6 +275,7 @@ const AiSimpleSearch = () => {
                     <Col style={{paddingLeft: 0, paddingRight: 0}} md={{span: 10, offset: 1}}
                          className={aiSimpleCss.aiSearchMainCol}>
                         <h2 className={aiSimpleCss.header}>가진 재료로 요리하기</h2>
+
                         {/* 내 재료 시작점 */}
                         <Form.Group className={aiSimpleCss.foodTypeGroup}>
                             <Form.Label className={aiSimpleCss.foodTypeLabel}>내 재료</Form.Label>
@@ -355,7 +312,6 @@ const AiSimpleSearch = () => {
                         <div className={aiSimpleCss.aiSearchListContainer}>
                             {recipeResponce()}
                         </div>
-
                     </Col>
                 </Row>
                 {
