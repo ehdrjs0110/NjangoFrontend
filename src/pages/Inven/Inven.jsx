@@ -277,11 +277,10 @@ function Inven() {
               <Col md={{ span: 10, offset: 1 }} className={styles.controller}>
                 <Row className={styles.controllerRow}>
                   <Col className={styles.controlform}>
-                    <div className={`${styles.buttonGroup} ${styles.topGroup}`}>
-                      <button className={styles.button} onClick={cookmode}>요리 시작</button>
-                      <button className={styles.button} onClick={excelmode}>전문가 모드</button>
-                    </div>
+                    {/*<div className={`${styles.buttonGroup} ${styles.topGroup}`}>*/}
+                    {/*</div>*/}
                     <div className={`${styles.buttonGroup} ${styles.middleGroup}`}>
+                      <button className={styles.button} onClick={cookmode}>요리 시작</button>
                       <div className={`${styles.serch} ${styles.searchContainer}`}>
                         <input
                             type="text"
@@ -296,13 +295,14 @@ function Inven() {
                         />
                       </div>
                       <button className={styles.button} onClick={handleShowAddModal}>추가</button>
+                      <button className={styles.button} onClick={excelmode}>전문가 모드</button>
                     </div>
                   </Col>
                 </Row>
               </Col>
             </Row>
             <Row className={styles.contentRow}>
-              <Col md={{ span: 10, offset: 1 }} className={styles.content}>
+              <Col md={{span: 10, offset: 1}} className={styles.content}>
                 <h2>갖고있어요!</h2>
                 <div className={styles.item}>
                   <Row style={{ width: '100%', margin: '0 auto' }}>
