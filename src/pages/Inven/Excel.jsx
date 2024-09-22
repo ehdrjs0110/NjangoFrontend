@@ -361,7 +361,7 @@ function Excel() {
                                         <Button className={styles.btn} onClick={deleteData} variant="none">
                                             선택 삭제
                                         </Button>
-                                        {/*<Button className={styles.btn} onClick={normalmode} variant="none">일반 모드</Button>*/}
+                                        <Button onClick={normalmode} variant="danger">일반 모드</Button>
                                     </div>
                                     <DataGrid
                                         rows={filteredRows}

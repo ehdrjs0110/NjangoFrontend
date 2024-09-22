@@ -295,7 +295,7 @@ function Inven() {
                         />
                       </div>
                       <button className={styles.button} onClick={handleShowAddModal}>추가</button>
-                      <button className={styles.button} onClick={excelmode}>전문가 모드</button>
+                      <Button className={styles.button} onClick={excelmode} variant={"danger"}>전문가 모드</Button>
                     </div>
                   </Col>
                 </Row>
