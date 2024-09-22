@@ -260,11 +260,7 @@ function Excel() {
             <Container fluid className={styles.container}>
                 <Row className={styles.controllerRow}>
                     <Col md={{ span: 10, offset: 1 }} className={styles.controller}>
-                        <Row className={styles.controllerRow}>
-                            <Col className={styles.controlform}>
-                                <Button className={styles.btn} onClick={normalmode} variant="none">일반 모드</Button>
-                            </Col>
-                        </Row>
+                        <Button className={styles.btn} onClick={normalmode} variant="none">일반 모드</Button>
                     </Col>
                 </Row>
 
