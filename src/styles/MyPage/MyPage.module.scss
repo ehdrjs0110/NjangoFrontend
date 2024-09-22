@@ -42,7 +42,7 @@
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 1px solid #e5e5e5;
-    
+
     img {
       border-radius: 50%;
       width: 80px;
@@ -55,7 +55,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      
+
       p {
         margin: 0;
         font-size: 14px;
@@ -77,7 +77,7 @@
     width: 100%;
     padding: 20px 0;
     border-bottom: 1px solid #e5e5e5;
-    
+
     &:last-child {
       border-bottom: none; // 마지막 줄의 경계선 없애기
     }
@@ -105,7 +105,7 @@
   margin-left: 77%;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  
+
   &:hover {
     background-color: #dd934e;
   }

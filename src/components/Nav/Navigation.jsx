@@ -57,9 +57,9 @@ function Navigation() {
       // useremail
       reduxEmail = decoded.sub;
       // nickname
-      reduxNickname = decoded.nickname;
+      reduxNickname = decoded.sub;
       // kakao
-      isKakao = decoded.kakao;
+      isKakao = decoded.sub;
       dispatch(containEmail(reduxEmail));
       dispatch(containNickName(reduxNickname));
       dispatch(containIsKaKao(isKakao));
