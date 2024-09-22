@@ -278,7 +278,6 @@ const AiSimpleSearch = () => {
 
                         {/* 내 재료 시작점 */}
                         <Form.Group className={aiSimpleCss.foodTypeGroup}>
-                            <Form.Label className={aiSimpleCss.foodTypeLabel}>내 재료</Form.Label>
                             <div className={aiSimpleCss.checkboxContainer}>
                                 {makeMyIngredientList()}
                             </div>

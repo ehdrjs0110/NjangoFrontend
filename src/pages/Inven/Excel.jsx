@@ -258,11 +258,11 @@ function Excel() {
         <>
             <Navigation />
             <Container fluid className={styles.container}>
-                <Row className={styles.controllerRow}>
-                    <Col md={{ span: 10, offset: 1 }} className={styles.controller}>
-                        <Button className={styles.btn} onClick={normalmode} variant="none">일반 모드</Button>
-                    </Col>
-                </Row>
+                {/*<Row className={styles.controllerRow}>*/}
+                {/*    <Col md={{ span: 10, offset: 1 }} className={styles.controller}>*/}
+                {/*        <Button className={styles.btn} onClick={normalmode} variant="none">일반 모드</Button>*/}
+                {/*    </Col>*/}
+                {/*</Row>*/}
 
                 <Row className={styles.addContentRow}>
                     <Col md={{ span: 10, offset: 1 }} className={styles.addContent}>
@@ -361,6 +361,7 @@ function Excel() {
                                         <Button className={styles.btn} onClick={deleteData} variant="none">
                                             선택 삭제
                                         </Button>
+                                        {/*<Button className={styles.btn} onClick={normalmode} variant="none">일반 모드</Button>*/}
                                     </div>
                                     <DataGrid
                                         rows={filteredRows}
