@@ -56,7 +56,9 @@ function Inven() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+
     const fetchData = async () => {
+      console.log("inven 데이터받기")
       const params = { userId: userId };
       try {
         console.log(params);

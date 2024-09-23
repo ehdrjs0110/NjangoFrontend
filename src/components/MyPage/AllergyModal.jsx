@@ -45,13 +45,15 @@ const AllergyModal = (props) => {
             return acc;
         }, {});
         setSelectedCategories(initialSelection);
-        setIsChange(true);
     }, [isChange]);
 
     async function fecthData()  {
+        console.log("알레르기 데이터 요청")
         await axiosInstance.get(`filter/${userId}`).then((r)=> {
+            console.log(r.data)
             setFilterData(r.data);
         }).catch((e) => console.error());
+        setIsChange(true);
     }
 
 

@@ -163,8 +163,8 @@ const MyPagec = () => {
                                         <div className={myPageStyle.profile}>
                                             <img src={imgPath} alt="User profile" />
                                             <div className={myPageStyle.info}>
-                                            <p className={myPageStyle.name}>{infoData ? infoData.nickname : 'Loading...'}</p>
-                                            <p>{infoData ? infoData.id : 'Loading...'}</p>
+                                                <p className={myPageStyle.name}>{infoData ? infoData.nickname : 'Loading...'}</p>
+                                                <p>{infoData ? infoData.id : 'Loading...'}</p>
                                             </div>
                                         </div>
 
@@ -186,7 +186,7 @@ const MyPagec = () => {
                                             onHide={() => {
                                                 setModalShow(false);
                                                 fetchDate();
-                                                }
+                                            }
                                             }
                                         />
                                     </Card.Body>
