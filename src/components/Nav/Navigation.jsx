@@ -159,9 +159,9 @@ function Navigation({invenMode}) {
               <Nav.Link onClick={goToCommunity}>커뮤니티</Nav.Link>
               <Nav.Link onClick={goToGallery}>갤러리</Nav.Link>
             </Nav>
-            <Nav>
+            <Nav className={styles.navRight}>
               {invenMode >= 0 && <Button className={styles.modeBtn} onClick={invenMode === 0 ? excelmode : invenmode} variant={"danger"}>{invenMode === 0 ? "전문가 모드" : "일반 모드"}</Button>}
-              <NavDropdown className={styles.navdropdown}>
+              <NavDropdown className={styles.navdropdown} style={(invenMode >= 0) ? {left: "0"} : {left: "8rem"}}>
                 <NavDropdown.Item onClick={goToMy}>내 정보</NavDropdown.Item>
                 {/*<NavDropdown.Item href="#action4">구매내역</NavDropdown.Item>*/}
                 <NavDropdown.Divider />
