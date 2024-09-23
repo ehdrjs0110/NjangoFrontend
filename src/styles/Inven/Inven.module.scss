@@ -107,12 +107,12 @@
 
             .button{
                 color: white;
-                background: #0d6efd;
+                background: $p-color;
             }
 
             .button:hover{
-                color: whitesmoke;
-                background: #0a4eb2;
+                color: white;
+                background: #f5913b;
                 transition: background 0.3s ease, color 0.3s ease;
             }
         }
