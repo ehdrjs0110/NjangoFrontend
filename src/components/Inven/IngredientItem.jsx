@@ -35,7 +35,7 @@ const IngredientItem = ({ item, index, isIngred, selectIngred, updateUnit, delet
                             onClick={async (e) => {
                                 e.stopPropagation();
                                 await updateUnit(item.ingredientname, {target: {value: (item.status.size > 0 ? 0 : 1)}});
-                                setChange(prev => !prev);
+                                setChange(prev => (prev + 1));
                             }}>{message}</Button>
                     <Button className={styles.delBtn} onClick={async (e) => {
                         e.stopPropagation();

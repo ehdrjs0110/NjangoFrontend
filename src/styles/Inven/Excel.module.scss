@@ -15,11 +15,13 @@
         height: 12%;
         margin-bottom: 10px;
     }
-
-    .contentRow{
-        height: 75%;
-    }
     
+}
+
+.contentRow{
+    height: auto; /* 자식 요소들의 높이에 맞게 조정 */
+    display: flex; /* flex 사용 시 */
+    flex-direction: column; /* 수직으로 정렬 */
 }
 
 .controller {
@@ -69,7 +71,7 @@
     }
 
     .excel {
-        height: 100%;
+        height: auto;
         width: 100%;
         padding: 20px 20px;
     }
