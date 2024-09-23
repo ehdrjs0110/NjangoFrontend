@@ -280,7 +280,6 @@ function Inven() {
                     {/*<div className={`${styles.buttonGroup} ${styles.topGroup}`}>*/}
                     {/*</div>*/}
                     <div className={`${styles.buttonGroup} ${styles.middleGroup}`}>
-                      <button className={styles.button} onClick={cookmode}>요리 시작</button>
                       <div className={`${styles.serch} ${styles.searchContainer}`}>
                         <input
                             type="text"
@@ -295,6 +294,7 @@ function Inven() {
                         />
                       </div>
                       {/*<button className={styles.button} onClick={handleShowAddModal}>추가</button>*/}
+                      <button className={styles.button} onClick={cookmode}>요리 시작</button>
                       <Button className={styles.button} onClick={excelmode} variant={"danger"}>전문가 모드</Button>
                     </div>
                   </Col>
