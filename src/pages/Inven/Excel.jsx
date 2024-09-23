@@ -29,6 +29,7 @@ import { arrayNestedArray, makeFlatArray } from "../../services/arrayChecker";
 import { getRegExp, engToKor } from 'korean-regexp';
 import Table from "react-bootstrap/Table";
 import {Modal} from "react-bootstrap";
+import { ToastContainer, toast } from 'react-toastify';
 
 function Excel() {
     const navigate = useNavigate();
@@ -182,6 +183,7 @@ function Excel() {
             await tokenHandler();
             await axiosInstance.patch(`inven/manage/add/${userId}`, data);
             setChange(!isChange);
+            toast("추가 완료!", { type: "success", autoClose: 2000 });
         } catch (err) {
             console.log("Error message:", err);
         }
@@ -455,6 +457,8 @@ function Excel() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            <ToastContainer />
         </>
     );
 }
