@@ -351,7 +351,17 @@ const Store = () => {
 
     //
     const [selectedRows, setSelectedRows] = useState([]);
-    const filteredRows = isRows.filter(row => searchRegExp.test(row.ingredientname));
+    const filteredRows = [
+        {
+            id: 'new',
+            ingredientname: '클릭하여 추가',
+            size: '',
+            unit: '',
+            dateofuse: '',
+            lastget: ''
+        },
+        ...isRows.filter(row => searchRegExp.test(row.ingredientname))
+    ];
     const columns = [
         { field: "ingredientname", headerName: "재료명", width: 150 },
         { field: "size", headerName: "재료 양", type: "number", width: 130, editable: true },
@@ -368,6 +378,13 @@ const Store = () => {
         { field: "memo", headerName: "기타", width: 600, editable: true },
     ];
 
+    // 빈 줄을 클릭했을 때 모달을 열도록 설정
+    const handleRowClick = (params) => {
+        console.log(params);
+        if (params.id === '클릭하여 추가') {
+            handleShowAddModal();
+        }
+    };
     return (
         <>
             <Navigation></Navigation>
@@ -485,14 +502,15 @@ const Store = () => {
                                                 <Button className={styles.btn} onClick={deleteExcelData} variant="none">
                                                     선택 삭제
                                                 </Button>
-                                                <Button className={styles.addBtn} variant="none" onClick={handleShowAddModal}>
+                                                {/*<Button className={styles.addBtn} variant="none" onClick={handleShowAddModal}>
                                                     추가
-                                                </Button>
+                                                </Button>*/}
                                             </div>
                                             <DataGrid
                                                 rows={filteredRows}
                                                 columns={columns}
                                                 getRowId={(row) => row.ingredientname}
+                                                onRowClick={handleRowClick} // 빈 줄 클릭 이벤트
                                                 processRowUpdate={handleProcessRowUpdate}
                                                 checkboxSelection
                                                 disableRowSelectionOnClick
