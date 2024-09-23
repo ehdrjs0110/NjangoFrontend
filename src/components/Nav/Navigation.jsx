@@ -15,7 +15,7 @@ import cart from '../../assets/Nav/cart.png'
 // auth관련
 import {useCookies} from "react-cookie";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {jwtDecode} from "jwt-decode";
 import {containEmail} from "../../Store/userEmailSlice";
 import {containNickName} from "../../Store/userNickName";
@@ -25,7 +25,7 @@ import {containToken} from "../../Store/tokenSlice";
 
 
 
-function Navigation() {
+function Navigation({invenMode}) {
   const navigate = useNavigate();
 
   // auth 관련
@@ -138,6 +138,13 @@ function Navigation() {
     navigate('/Gallery');
   }
 
+  const excelmode = () => {
+    navigate('/Excel');
+  }
+
+  const invenmode = () => {
+    navigate('/Inven');
+  };
 
   return (
       <div className={styles.navContainer}>
@@ -153,7 +160,8 @@ function Navigation() {
               <Nav.Link onClick={goToGallery}>갤러리</Nav.Link>
             </Nav>
             <Nav>
-              <NavDropdown title={reduxNickname || "Profile"} id="navbarScrollingDropdown">
+              {invenMode >= 0 && <Button className={styles.modeBtn} onClick={invenMode === 0 ? excelmode : invenmode} variant={"danger"}>{invenMode === 0 ? "전문가 모드" : "일반 모드"}</Button>}
+              <NavDropdown className={styles.navdropdown}>
                 <NavDropdown.Item onClick={goToMy}>내 정보</NavDropdown.Item>
                 <NavDropdown.Item href="#action4">구매내역</NavDropdown.Item>
                 <NavDropdown.Divider />

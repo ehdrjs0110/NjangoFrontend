@@ -37,3 +37,27 @@
         font-size: 18px;
     }
 }
+
+.modeBtn{
+    height: 40px;
+    width: 7rem;
+    margin-right: 1rem;
+}
+
+.navdropdown{
+    >a:first-of-type{
+        background-image: url("../../../../public/image/profile-removebg-preview.png");
+        background-size: cover;
+        height: 40px;
+        width: 40px;
+        padding: 0 !important;
+        transform: scale(1.5);
+        &::after{
+            display: none;
+        }
+    }
+    >div{
+        //top: 110% !important;
+        left: calc(-10rem + 40px) !important;
+    }
+}
