@@ -163,7 +163,7 @@ function Navigation({invenMode}) {
               {invenMode >= 0 && <Button className={styles.modeBtn} onClick={invenMode === 0 ? excelmode : invenmode} variant={"danger"}>{invenMode === 0 ? "전문가 모드" : "일반 모드"}</Button>}
               <NavDropdown className={styles.navdropdown}>
                 <NavDropdown.Item onClick={goToMy}>내 정보</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">구매내역</NavDropdown.Item>
+                {/*<NavDropdown.Item href="#action4">구매내역</NavDropdown.Item>*/}
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={logout}>로그아웃</NavDropdown.Item>
               </NavDropdown>
