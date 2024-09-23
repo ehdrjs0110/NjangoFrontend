@@ -104,6 +104,17 @@
                 justify-content: center;
                 margin-top: 20px; /* 중간 그룹의 위쪽 간격 조정 */
             }
+
+            .button{
+                color: white;
+                background: #0d6efd;
+            }
+
+            .button:hover{
+                color: whitesmoke;
+                background: #0a4eb2;
+                transition: background 0.3s ease, color 0.3s ease;
+            }
         }
     }
 }
