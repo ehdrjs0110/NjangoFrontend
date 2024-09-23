@@ -270,7 +270,7 @@ function Inven() {
 
   return (
       <>
-        <Navigation></Navigation>
+        <Navigation invenMode={0}></Navigation>
         <Container fluid className={styles.container}>
           <div className={styles.main}>
             <Row className={styles.controllerRow}>
@@ -295,7 +295,7 @@ function Inven() {
                       </div>
                       {/*<button className={styles.button} onClick={handleShowAddModal}>추가</button>*/}
                       <button className={styles.button} onClick={cookmode}>요리 시작</button>
-                      <Button className={styles.button} onClick={excelmode} variant={"danger"}>전문가 모드</Button>
+                      {/*<Button className={styles.button} onClick={excelmode} variant={"danger"}>전문가 모드</Button>*/}
                     </div>
                   </Col>
                 </Row>

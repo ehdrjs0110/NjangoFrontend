@@ -256,7 +256,7 @@ function Excel() {
 
     return (
         <>
-            <Navigation />
+            <Navigation invenMode={1}/>
             <Container fluid className={styles.container}>
                 {/*<Row className={styles.controllerRow}>*/}
                 {/*    <Col md={{ span: 10, offset: 1 }} className={styles.controller}>*/}
@@ -361,7 +361,7 @@ function Excel() {
                                         <Button className={styles.btn} onClick={deleteData} variant="none">
                                             선택 삭제
                                         </Button>
-                                        <Button onClick={normalmode} variant="danger">일반 모드</Button>
+                                        {/*<Button onClick={normalmode} variant="danger">일반 모드</Button>*/}
                                     </div>
                                     <DataGrid
                                         rows={filteredRows}
