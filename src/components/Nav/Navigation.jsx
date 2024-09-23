@@ -153,9 +153,6 @@ function Navigation() {
               <Nav.Link onClick={goToGallery}>갤러리</Nav.Link>
             </Nav>
             <Nav>
-              <a className={styles.shop}>
-                <img src={cart} className={styles.cart} alt='' />
-              </a>
               <NavDropdown title={reduxNickname || "Profile"} id="navbarScrollingDropdown">
                 <NavDropdown.Item onClick={goToMy}>내 정보</NavDropdown.Item>
                 <NavDropdown.Item href="#action4">구매내역</NavDropdown.Item>
