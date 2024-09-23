@@ -29,4 +29,11 @@
     display: flex;
     justify-content: center; /* 가운데 정렬 */
     width: 100%;
+
+    a{
+        font-weight: bold;
+        margin-right: 1rem;
+        margin-left: 1rem;
+        font-size: 18px;
+    }
 }
