@@ -233,6 +233,14 @@ const AiSearch = () => {
         });
     }
 
+    const setChangeTrueFalse = (etc) => {
+        if (etc === "알레르기 반영"){
+            setRequestAllergy(!requestAllergy)
+        }
+
+    }
+
+
     // prompt 요청
     async function aiSearchRequest () {
         setModalOpen(true);
