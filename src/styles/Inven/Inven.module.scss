@@ -258,6 +258,15 @@
         }
     }
 
+    .addIngredient {
+        cursor: pointer;
+        transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.3s ease, font-size 0.3s ease; // 호버 시 애니메이션
+
+        &:hover {
+            filter: brightness(0.9);
+        }
+    }
+
     .select {
         border-radius: 15px;
         border: 3px solid $p-color;
