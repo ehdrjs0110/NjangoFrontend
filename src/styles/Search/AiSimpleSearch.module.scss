@@ -1,62 +1,89 @@
 @import '../index.scss';
 
+* {
+  margin: 0 ;
+  padding: 0;
+}
+
 .aiSimpleSearchContiner{
   height: 100%;
+  background-color: $bg-color;
 
   .aiSimpleSearchContinerRow{
     background-color: $bg-color;
+    min-height: 90vh;
 
     .aiSearchMainCol {
-      height: 100%;
+      padding: 1.5rem !important;
+      margin: 0 auto;
+      width: 60%;
+      min-width: 800px;
       background-color: #FFFFFF;
-      //box-sizing: border-box;
+      border-radius: 2rem;
+      min-height: 85vh;
+      margin-bottom: 1rem;
+
+      .header{
+        font-weight: 800;
+        padding-bottom: 10px;
+      }
     }
   }
 }
 
 // 내 재료 선택 영역
-.myIngredientContainer{
-  padding: 0;
+.foodTypeGroup {
+  border: 1px solid $p-color;
+  padding : 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: row; // 체크박스를 라벨의 오른쪽에 배치
 
-  .title{
-    font-size: 1.5rem;
+  > label {
+    width: 6rem;
+    text-align: center;
+    justify-content: center; // 텍스트 좌우 가운데 정렬
   }
 
-  .myIngredientCard {
-    width: 100%;
+  .foodTypeLabel {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4A4A4A;
+    display: flex;
+    align-items: center;
+  }
+
+  .checkboxContainer {
+    display: flex; // 가로로 배치
+    flex-wrap: wrap; // 체크박스가 넘치면 다음 줄로 배치
   }
 
   .check{
+    margin-bottom: 0.25rem;
+    margin-top: 0.25rem;
+
     input[type="checkbox"] {
-      /* Hide the default checkbox */
       display: none;
     }
 
-    /* Container for checkbox and label */
     label {
-      display: flex; /* Use flexbox for alignment */
-      align-items: center; /* Center vertically */
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border: 1px solid $p-color; // 외곽선 색상
+      border-radius: 0.5rem;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+
+      &:hover {
+        background-color: lighten($p-color, 20%); // 호버 시 밝은 색상
+        border-color: lighten($p-color, 10%);
+      }
     }
 
-    input[type="checkbox"] + label::before {
-      /* Style the custom checkbox */
-      content: "";
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      margin-right: 8px;
-      //border: 1px solid $accent-color;/* Use your primary color */
-      border: 1px solid $p-color;/* Use your primary color */
-
-      background-color: transparent;
-      border-radius: 3px;
-    }
-
-    input[type="checkbox"]:checked + label::before {
-      /* Change the background color when the checkbox is checked */
-      //background-color: $accent-color; /* Use your primary color */
-      background-color: $p-color; /* Use your primary color */
-      //border: 1px solid $p-color;/* Use your primary color */
+    input[type="checkbox"]:checked + label {
+      background-color: $p-color; // 선택된 상태의 배경색
+      color: white; // 글자색 흰색으로
     }
   }
 }
@@ -82,8 +109,7 @@
 
 // 레시피 검색 개수 설정 영역
 .aiSearchNumberContainer{
-  width: 30%;
-  //text-align: center;
+  width: 15rem;
   margin-top: 2vh;
   margin-bottom: 2vh;
 
@@ -92,8 +118,19 @@
   }
 
   .aiSearchButton{
+    padding: 0.5rem 1rem;
+    border: 1px solid $p-color;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
     background-color: $p-color;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
 
+    &:hover {
+      background-color: darken($p-color, 20%);
+      border: 1px solid $p-color;
+    }
   }
 }
 
@@ -102,43 +139,44 @@
 
   .recipeCard
   {
-    border: solid 2px $accent-color;
     margin-bottom: 2vh;
+    border: $accent-color 2px solid;
+    color: $p-font-color;
 
-    .hearder
-    {
+    .cardHeader{
       background-color: #FFFFFF;
+      color: black;
+      border-bottom: $accent-color 2px solid;
+      font-weight: 600;
     }
 
     // 레시피 제목 부분
     .recipeTitleCol
     {
-      //text-align: center;
-      font-size: 1.5rem;
-      //color: $p-font-color;
+      padding-left: 1rem !important;
+      font-size: 1.8rem;
     }
 
     // 레시피 상세보기 버튼 부분
     .recipeDetailSearchCol
     {
       text-align: right;
-      //text-align: center;
 
       .recipeDetailSearchButton
       {
-        width: 20%;
-        //background-color: $p-color;
-        border: solid 3px $p-color;
-        color: black;
-        font-weight: 2rm;
+        width: 30%;
+        border: 3px solid $p-color;
+        color: $p-color;
+        font-size: 1.2rem;
+        background-color: #FFFFFF;
+        font-weight: 800;
       }
 
       .recipeDetailSearchButton:hover
       {
+        font-size: 1.2rem;
         background-color: $p-color;
-        border: solid 3px $p-color;
-        color: black;
-        font-weight: 2rm;
+        color: #FFFFFF;
       }
     }
 
