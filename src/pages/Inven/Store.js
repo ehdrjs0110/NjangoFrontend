@@ -396,7 +396,7 @@ const Store = () => {
                                             <>
                                                 <button className={invenStyles.button} onClick={() => navigate('/AiSimpleSearch', { state: isIngred })}>요리 시작</button>
                                                 <button className={invenStyles.button} onClick={() => setInvenMode("expert")}>
-                                                    전문가 모드
+                                                    상세 보기
                                                 </button>
                                             </>
                                         ) : (
