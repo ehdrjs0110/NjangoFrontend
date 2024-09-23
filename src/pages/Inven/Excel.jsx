@@ -28,6 +28,7 @@ import { axiosInstance } from "../../middleware/customAxios";
 import { arrayNestedArray, makeFlatArray } from "../../services/arrayChecker";
 import { getRegExp, engToKor } from 'korean-regexp';
 import Table from "react-bootstrap/Table";
+import {Modal} from "react-bootstrap";
 
 function Excel() {
     const navigate = useNavigate();
@@ -46,6 +47,8 @@ function Excel() {
         ingredientname: "",
         status: {
             size: 0,
+            dateofuse: Date.now(),
+            lastget: Date.now()
         },
     });
 
@@ -69,6 +72,10 @@ function Excel() {
     const accessToken = useSelector(state => state.token.value);
     const userId = useSelector(state => state.userEmail.value);
     const dispatch = useDispatch();
+
+    const [showAddModal, setShowAddModal] = useState(false);
+    const handleShowAddModal = () => setShowAddModal(true);
+    const handleCloseAddModal = () => setShowAddModal(false);
 
     // 테이블 컬럼 정의
     const columns = [
@@ -169,6 +176,8 @@ function Excel() {
             return;
         }
 
+        console.log(data);
+
         try {
             await tokenHandler();
             await axiosInstance.patch(`inven/manage/add/${userId}`, data);
@@ -180,8 +189,10 @@ function Excel() {
         setNewData({
             ingredientname: "",
             status: {
-                size: isNewData.status.size,
+                size: 0,
                 unit: "g",
+                dateofuse: new Date().toISOString().split('T')[0], // Default to today's date
+                lastget: new Date().toISOString().split('T')[0], // Default to today's date
             },
         });
     };
@@ -264,7 +275,7 @@ function Excel() {
                 {/*    </Col>*/}
                 {/*</Row>*/}
 
-                <Row className={styles.addContentRow}>
+                {/*<Row className={styles.addContentRow}>
                     <Col md={{ span: 10, offset: 1 }} className={styles.addContent}>
                         <table className={styles.addline}>
                             <thead>
@@ -329,11 +340,8 @@ function Excel() {
                             </tr>
                             </tbody>
                         </table>
-                        <Button className={styles.addBtn} variant="none" onClick={addData}>
-                            추가
-                        </Button>
                     </Col>
-                </Row>
+                </Row>*/}
 
                 <Row className={styles.contentRow}>
                 <Col md={{span: 10, offset: 1}} className={styles.content}>
@@ -361,6 +369,9 @@ function Excel() {
                                         <Button className={styles.btn} onClick={deleteData} variant="none">
                                             선택 삭제
                                         </Button>
+                                        <Button className={styles.addBtn} variant="none" onClick={handleShowAddModal}>
+                                            추가
+                                        </Button>
                                         {/*<Button onClick={normalmode} variant="danger">일반 모드</Button>*/}
                                     </div>
                                     <DataGrid
@@ -382,6 +393,68 @@ function Excel() {
                     </Col>
                 </Row>
             </Container>
+
+            <Modal show={showAddModal} onHide={handleCloseAddModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>재료 추가</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={async (e) => {
+                        e.preventDefault();
+                        await addData();
+                    }}>
+                            <Form.Label>재료명</Form.Label>
+                            <Form.Control
+                                type="text"
+                                id="ingredientname"
+                                name="ingredientname"
+                                value={isNewData.ingredientname}
+                                onChange={setIngredName}
+                            />
+                            <Form.Label>사이즈</Form.Label>
+                            <Form.Control
+                                type="number"
+                                id="size"
+                                onChange={setInsertData}
+                                value={isNewData.status.size}
+                                placeholder="0"
+                            />
+                            <Form.Label>단위</Form.Label>
+                            <Form.Select
+                                id="unit"
+                                onChange={setInsertData}
+                                defaultValue={isNewData.status.unit}
+                            >
+                                <option value="g">g</option>
+                                <option value="개">개</option>
+                                <option value="ml">ml</option>
+                                <option value="통">통</option>
+                            </Form.Select>
+                            <Form.Label>사용기한</Form.Label>
+                            <Form.Control
+                                type="date"
+                                id="dateofuse"
+                                value={isNewData.status.dateofuse}
+                                onChange={setInsertData}
+                            />
+                            <Form.Label>마지막 구입 날짜</Form.Label>
+                            <Form.Control
+                                type="date"
+                                id="lastget"
+                                value={isNewData.status.lastget}
+                                onChange={setInsertData}
+                            />
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseAddModal}>
+                        닫기
+                    </Button>
+                    <Button variant="primary" onClick={addData}>
+                        추가
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 }
