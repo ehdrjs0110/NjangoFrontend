@@ -1,0 +1,43 @@
+@import "../index.scss";
+
+.AllergyBody{
+  padding: 16px !important;
+}
+
+.title{
+  font-size: 30px;
+  font-weight: 550;
+  text-align: center;
+}
+
+.CategoryName{
+  font-size: 20px;
+  font-weight: 400;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.CategorySubWrapper{
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 10px;
+}
+
+.SaveBtn{
+  padding: 10px 20px;
+  border-radius: 6px;
+  background-color: $p-color;
+  color: $white-color;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #dd934e;
+  }
+}
+
+.footer{
+  padding: 0 16px !important;
+  margin-bottom: 20px;
+}

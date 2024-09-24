@@ -38,7 +38,7 @@ const MyPagec = () => {
     const dispatch = useDispatch();
     let newAccessToken;
 
-    const [filterModalShow, setFilterModalShow] = useState(false);
+    // const [filterModalShow, setFilterModalShow] = useState(false);
 
 
     useEffect(() => {
@@ -156,7 +156,7 @@ const MyPagec = () => {
                 <Container fluid  className={myPageStyle.MyPageContainer} >
                     <div className={myPageStyle.ContainerRow} >
                         <Col className={myPageStyle.LayoutWrapper}>
-                            <Sidebar setFilterModalShow={setFilterModalShow} />
+                            <Sidebar />
                             <Col md={8} className={myPageStyle.MyPageCardContainCol}>
                                 <Card className={`text-center ${myPageStyle.MyPageCard}`} >
                                     <Card.Body className={myPageStyle.MyPageCardBody}>
@@ -187,22 +187,18 @@ const MyPagec = () => {
                                                 setModalShow(false);
                                                 fetchDate();
                                             }
-                                            }
+                                        }
                                         />
                                     </Card.Body>
+                                </Card>
+                                <Card className={myPageStyle.AllergyCard} >
+                                    <AllergyModal/>
                                 </Card>
                             </Col>
                         </Col>
                     </div>
                 </Container>
             </div>
-            <AllergyModal
-                show={filterModalShow}
-                onHide={() => {
-                    setFilterModalShow(false);
-                }
-                }
-            />
         </>
     );
 }

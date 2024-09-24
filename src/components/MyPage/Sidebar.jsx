@@ -23,7 +23,7 @@ const Sidebar = ({setFilterModalShow}) => {
         <li onClick={goMyPage}>개인 정보</li>
         <li onClick={goHistory}>레시피 기록</li>
         <li onClick={goLike}>Like🖤</li>
-        <li onClick={() => setFilterModalShow(true)}>필터 설정</li>
+        {/* <li onClick={() => setFilterModalShow(true)}>필터 설정</li> */}
       </ul>
     </div>
   );

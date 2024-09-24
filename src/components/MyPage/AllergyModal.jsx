@@ -7,6 +7,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {axiosInstance} from "../../middleware/customAxios";
 
+import styles from "../../styles/MyPage/AllergyModal.module.scss";
+
 
 const AllergyModal = (props) => {
     const [selectedCategories, setSelectedCategories] = useState({});
@@ -158,30 +160,27 @@ const AllergyModal = (props) => {
 
 
     return (
-        <Modal
+        <div
             {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
         >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    알레르기 설정
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+            <div className={styles.title}>
+                알레르기 설정
+            </div>
+            <Modal.Body className={styles.AllergyBody}>
                 <Form>
                     {categories.map(category => (
-                        <div key={category.name} style={{ marginBottom: '1rem' }}>
+                        <div key={category.name} style={{ marginBottom: '1rem' }} className={styles.CategoryNameWrapper}>
                             <Form.Check
+                                className={styles.CategoryName}
                                 type="checkbox"
                                 label={category.name}
                                 checked={Object.keys(selectedCategories[category.name] || {}).length > 0}
                                 onChange={e => handleCategoryChange(category.name, e.target.checked)}
                             />
-                            <div style={{ marginLeft: '1rem' }}>
+                            <div style={{ marginLeft: '1rem' }} className={styles.CategorySubWrapper}>
                                 {category.subcategories.map(sub => (
                                     <Form.Check
+                                        className={styles.CategorySub}
                                         key={sub}
                                         type="checkbox"
                                         label={sub}
@@ -194,11 +193,11 @@ const AllergyModal = (props) => {
                     ))}
                 </Form>
             </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={updateFilter}>저장</Button>
-                <Button onClick={props.onHide}>닫기</Button>
+            <Modal.Footer className={styles.footer}>
+                <button className={styles.SaveBtn} onClick={updateFilter}>저장</button>
+                {/* <Button onClick={props.onHide}>닫기</Button> */}
             </Modal.Footer>
-        </Modal>
+        </div>
     );
 };
 
