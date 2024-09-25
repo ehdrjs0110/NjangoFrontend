@@ -1,0 +1,54 @@
+@import '../index.scss';
+
+
+
+  .iconButton
+  {
+    border: 1px solid black;
+    background-color: #FFFFFF;
+    color: #000;
+    width: 10%;
+  }
+
+  .iconButton:hover
+  {
+    background-color: $accent-color;
+    .icon{
+      color: #FFFFFF;
+    }
+  }
+
+  .iconButtonClicked
+  {
+    border: 1px solid black;
+    background-color: #F75690;
+    width: 10%;
+    .icon{
+      color: #FFFFFF;
+    }
+  }
+
+  .iconButtonClicked:hover
+  {
+    background-color: #fff;
+    .icon{
+      color: #F75690;
+    }
+  }
+
+  .icon
+  {
+    //font-size: 1.5rem;
+    color: $accent-color;
+  }
+
+
+
+
+.imgSection{
+
+    img{
+        width: 100%;
+        height: 100%;
+    }
+}

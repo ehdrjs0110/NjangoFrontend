@@ -1,19 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import Table from "react-bootstrap/Table";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import UpdateModel from '../../components/RecipeShare/SelectRecipe';
-
-import Card from 'react-bootstrap/Card';
-
 import Navigation from '../../components/Nav/Navigation'
 
 import styles from '../../styles/History/HistoryList.module.scss';
-import axios from "axios";
 import {useNavigate} from "react-router-dom";
 // auth 관련 --
 import {useCookies} from "react-cookie";
@@ -23,7 +17,6 @@ import {useDispatch, useSelector} from "react-redux";
 //--
 
 import {axiosInstance} from "../../middleware/customAxios";
-import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
 
 const RecipeShareList = () => {
     
