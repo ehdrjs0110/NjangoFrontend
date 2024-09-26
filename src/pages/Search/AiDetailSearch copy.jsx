@@ -158,46 +158,14 @@ const AiDetaileSearch = () => {
     // 재료 리스트 ui
 
     function makeIngredient () {
-        const entries = Object.entries(ingredientObject);
-        const half = Math.ceil(entries.length / 2);
-        const leftSide = entries.slice(0, half);
-        const rightSide = entries.slice(half);
 
         console.log(ingredientObject)
-        // return Object.entries(ingredientObject).map(([key, value], index) => (
-        //     <Row key={index} xs={2} md={2} lg={2}>
-        //         <Col  className={styles.listText}>{key}</Col>
-        //         <Col  className={styles.listText} >{value}</Col>
-        //     </Row>
-        // ));
-        return (
-            <Row>
-                <Col xs={6} md={6} lg={6} className={styles.listColumn}>
-                    {leftSide.map(([key, value], index) => (
-                        <Row key={index} className={styles.listRow}>
-                            <Col xs={6} className={styles.listText}>
-                                {key}
-                            </Col>
-                            <Col xs={6} className={styles.listText}>
-                                {value}
-                            </Col>
-                        </Row>
-                    ))}
-                </Col>
-                <Col xs={6} md={6} lg={6} className={styles.listColumn}>
-                    {rightSide.map(([key, value], index) => (
-                        <Row key={index} className={styles.listRow}>
-                            <Col xs={6} className={styles.listText}>
-                                {key}
-                            </Col>
-                            <Col xs={6} className={styles.listText}>
-                                {value}
-                            </Col>
-                        </Row>
-                    ))}
-                </Col>
+        return Object.entries(ingredientObject).map(([key, value], index) => (
+            <Row key={index} xs={2} md={2} lg={2}>
+                <Col  className={styles.listText}>{key}</Col>
+                <Col  className={styles.listText} >{value}</Col>
             </Row>
-        );
+        ));
     }
 
     function makeLeve ()
@@ -380,7 +348,7 @@ const AiDetaileSearch = () => {
                         <Col className={styles.numberCol}>
                             <div>
                                 <Card className={styles.index}>
-                                    {index+1}
+                                    {index}
                                 </Card>
                             </div>
 
@@ -408,7 +376,7 @@ const AiDetaileSearch = () => {
             <Navigation />
             <div>
                 <Container fluid style={{padding:0,height:"100%"}} className={styles.AiDetaileSearchContainer}>
-                    <div className={styles.AiDetaileSearchRow} style={{ paddingLeft:0, paddingRight:0}}>
+                    <Row className={styles.AiDetaileSearchRow} style={{ paddingLeft:0, paddingRight:0}}>
                         <Col className={styles.col} style={{paddingLeft: 0, paddingRight: 0 }} md={{ span: 10, offset: 1 }}>
                             <Col md={{ span:  8, offset: 2 }} >
                                 <Card className={styles.contentContainer} >
@@ -515,7 +483,7 @@ const AiDetaileSearch = () => {
                                 </Card>
                             </Col>
                         </Col>
-                    </div>
+                    </Row>
 
                     {
                         modalOpen &&

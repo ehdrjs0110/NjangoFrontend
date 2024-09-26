@@ -122,6 +122,10 @@ const AllergyModal = (props) => {
         });
     };
 
+    const isAllSubcategoriesChecked = (category) => {
+        const subcategories = categories.find(c => c.name === category)?.subcategories || [];
+        return subcategories.every(sub => selectedCategories[category]?.[sub]);
+    };
 
     async function tokenHandler() {
         const isExpired = expired();
@@ -169,25 +173,36 @@ const AllergyModal = (props) => {
             <Modal.Body className={styles.AllergyBody}>
                 <Form>
                     {categories.map(category => (
-                        <div key={category.name} style={{ marginBottom: '1rem' }} className={styles.CategoryNameWrapper}>
-                            <Form.Check
+                        <div key={category.name} style={{ marginBottom: '1rem' }} className={styles.CategoryWrapper}>
+                            <div
                                 className={styles.CategoryName}
-                                type="checkbox"
-                                label={category.name}
-                                checked={Object.keys(selectedCategories[category.name] || {}).length > 0}
-                                onChange={e => handleCategoryChange(category.name, e.target.checked)}
-                            />
-                            <div style={{ marginLeft: '1rem' }} className={styles.CategorySubWrapper}>
+                                // type="checkbox"
+                                // label={category.name}
+                                // checked={Object.keys(selectedCategories[category.name] || {}).length > 0}
+                                // onChange={e => handleCategoryChange(category.name, e.target.checked)}
+                            >
+                                {category.name}
+                            </div>
+                            <div className={styles.CategorySubWrapper}>
                                 {category.subcategories.map(sub => (
                                     <Form.Check
                                         className={styles.CategorySub}
                                         key={sub}
                                         type="checkbox"
                                         label={sub}
+                                        id={`subcategory-${sub}`}
                                         checked={!!selectedCategories[category.name]?.[sub]}
                                         onChange={e => handleSubcategoryChange(category.name, sub, e.target.checked)}
                                     />
                                 ))}
+                                <Form.Check
+                                    className={styles.CategorySub}
+                                    type='checkbox'
+                                    id={`select-all-${category.name}`}
+                                    label="All"
+                                    checked={isAllSubcategoriesChecked(category.name)} // 모든 서브카테고리가 체크되었을 때만 체크 상태
+                                    onChange={e => handleCategoryChange(category.name, e.target.checked)}
+                                />
                             </div>
                         </div>
                     ))}

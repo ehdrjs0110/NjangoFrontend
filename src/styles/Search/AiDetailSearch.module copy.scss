@@ -6,13 +6,16 @@
 {
   height: 100%;
 
+
   .AiDetaileSearchRow
   {
     background-color: $bg-color;
     height: 100%;
 
+
     .col
     {
+      background-color: #FFFFFF;
 
       .contentContainer
       {
@@ -53,14 +56,6 @@
           //{
           //  text-align: right;
           //}
-
-          .listRow{
-            border-bottom: 1px solid #e5e5e5;
-            width: 90%;
-            margin: 0 auto;
-            margin-top: 10px;
-            padding-bottom: 10px;
-          }
 
           .ingredientList
           {
