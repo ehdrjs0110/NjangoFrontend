@@ -1,7 +1,7 @@
 @import '../index.scss';
 
 
-
+.likeBtn{
   .iconButton
   {
     border: 1px solid black;
@@ -41,6 +41,8 @@
     //font-size: 1.5rem;
     color: $accent-color;
   }
+}
+  
 
 
 

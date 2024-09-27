@@ -22,8 +22,15 @@ const GalleryDetail = ({ show, onHide, galleryId, onDeleteComplete, onLikeToggle
     let userId = useSelector(state => state.userEmail.value);
 
     const [isData, setData] = useState(null);
+    const [recipeShareId, setRecipeShareId] = useState('');
     const [isChange, setChange] = useState(false);
-    const [isLike, setIsLike] = useState();
+    const [isLike, setLike] = useState();
+    const [isUserId, setUserId] = useState();
+    const [isGalleryId, setGalleryId] = useState();
+    const [isNickname, setNickname] = useState();
+    const [isCreateAt, setCreateAt] = useState();
+    const [isLikeCount, setLikeCount] = useState();
+    const [isPhoto, setPhoto] = useState();
     
     useEffect(() => {
 
@@ -36,6 +43,13 @@ const GalleryDetail = ({ show, onHide, galleryId, onDeleteComplete, onLikeToggle
                 if(storedData) {
                     console.log(storedData);
                     setData(storedData);
+                    setRecipeShareId(storedData.recipeShareId);
+                    setUserId(storedData.userId);
+                    setPhoto(storedData.photo);
+                    setCreateAt(storedData.createAt);
+                    setLikeCount(storedData.likeCount);
+                    setNickname(storedData.nickname);
+                    setGalleryId(storedData.galleryId);
                 }
             }catch(err){
                 console.log("err message : " + err);                
@@ -50,9 +64,9 @@ const GalleryDetail = ({ show, onHide, galleryId, onDeleteComplete, onLikeToggle
                     const storedData = res.data; 
                     console.log(storedData);       
                     if(storedData) {                        
-                        setIsLike(true);
+                        setLike(true);
                     }else {
-                        setIsLike(false);
+                        setLike(false);
                     }
                 }                
             }catch(err){
@@ -105,7 +119,7 @@ const GalleryDetail = ({ show, onHide, galleryId, onDeleteComplete, onLikeToggle
             
             // 현재 좋아요 상태를 반전
             const newLikeStatus = !isLike;
-            setIsLike(newLikeStatus);  // local 상태 업데이트
+            setLike(newLikeStatus);  // local 상태 업데이트
             
             // 부모에게 상태 전달 (상태 변경 후)
             onLikeToggle(galleryId, newLikeStatus);
@@ -124,18 +138,26 @@ const GalleryDetail = ({ show, onHide, galleryId, onDeleteComplete, onLikeToggle
                 await tokenHandler();
                 await axiosInstance.delete(`gallery/${galleryId}`);
                 alert("삭제되었습니다.");
-                onDeleteComplete();
-                onHide();
+                onDeleteComplete(galleryId);
+                handleClose(); // 모달 닫기 및 상태 초기화
             }catch(err){
                 console.log("err message : " + err);                
             }
         }
     };
 
+    // 모달 닫을 때 상태 초기화
+    const handleClose = () => {
+        setData(null);
+        setRecipeShareId('');
+        setLike(false);
+        onHide(); // 모달 닫기
+    };
+
     if(isData!=null) { return (
         <Modal
             show={show} 
-            onHide={onHide}
+            onHide={handleClose}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
@@ -144,28 +166,28 @@ const GalleryDetail = ({ show, onHide, galleryId, onDeleteComplete, onLikeToggle
                 <Modal.Title id="contained-modal-title-vcenter">
                     
                 </Modal.Title>
-                <Form.Label>{isData.nickname}</Form.Label>
-                <Form.Label>{isData.createAt}</Form.Label>
+                <Form.Label>{isNickname}</Form.Label>
+                <Form.Label>{isCreateAt}</Form.Label>
             </Modal.Header>
             <Modal.Body>
             <Form.Group controlId="formFile" className="mb-3">
                 <div className={styles.likeBtn}>
-                    <Button className={isLike?styles.iconButtonClicked:styles.iconButton} onClick={handleHeart}>
+                    <Button className={isLike?styles.iconButtonClicked:styles.iconButton} variant="outline-secondary" onClick={handleHeart}>
                         <FontAwesomeIcon className={styles.icon} icon={faHeart} />
-                        {' ' + isData.likeCount}
+                        {' ' + isLikeCount}
                     </Button>
                 </div>
-                {isData.recipeShareId !=null && (
-                    <Button onClick={navigate('/RecipeShareDetail', { state: isData.recipeShareId })}>레시피 보러가기</Button>
+                {recipeShareId !=null && (
+                    <Button onClick={() => navigate('/RecipeShareDetail', { state: { recipeShareId } })}>레시피 보러가기</Button>
                 )}
                 <div className={styles.imgSection}>
-                    <img src={`${process.env.PUBLIC_URL}/image/${isData.photo}`} alt={isData.galleryId} />
+                    <img src={`${process.env.PUBLIC_URL}/image/${isPhoto}`} alt={isGalleryId} />
                 </div>
                 
             </Form.Group>
             </Modal.Body>
             <Modal.Footer>
-                {userId==isData.userId && (
+                {userId==isUserId && (
                     <Button onClick={deleteGallery}>삭제</Button>
                 )}
             </Modal.Footer>

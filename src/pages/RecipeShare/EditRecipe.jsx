@@ -203,13 +203,14 @@ const EditRecipe = () => {
         
         try{
             await tokenHandler();
-            await axiosInstanceFormData.post(`recipeShare/${userId}`, formData);
-            
+            const storedData = await axiosInstanceFormData.post(`recipeShare/${userId}`, formData);
+            const recipeShareId = storedData.data;
+
             if(selectedFile!=null){
                 if(window.confirm("사진을 갤러리에도 포스팅 하겠습니까?")){
                     const galleryform = new FormData();
                     galleryform.append('file', selectedFile);
-                    //galleryform.append('recipeShareId', );
+                    galleryform.append('recipeShareId', recipeShareId);
                     try{
                         await tokenHandler();
                         await axiosInstanceFormData.post(`gallery/${userId}`, galleryform);

@@ -18,6 +18,7 @@ import {expired, getNewToken} from "../../services/auth2";
 import {containToken} from "../../Store/tokenSlice";
 import {useDispatch, useSelector} from "react-redux";
 //--
+import {useSingleAndDoubleClick} from "../../hooks/Gallery/useSingleAndDoubleClick";
 
 import GalleryDetail from './GalleryDetail';
 
@@ -48,28 +49,14 @@ const Photo = ({ isChangeUpload }) => {
     const loader = useRef(null);
     const scrollTopButton = useRef(null);
 
-    // const ex = () => {
-    //     console.log("어떤 이미지가 변경 요청이 들어왔ㅇ어 고쳐줘, 카운트 값도 다시 알려줘");
-    //     // true, false 
-    //     // 
-    // }
-
     useEffect(() => {
 
-        const fetchData = async () => {
-            try{
-                await tokenHandler();
-                const res = await axiosInstance.get("gallery");
-                const storedData = res.data;
+        const reloadImages = () => {
+            window.location.reload();
+        };
     
-                if(storedData) {
-                    
-                    console.log(storedData);
-                    setImages(storedData);
-                }
-            }catch(err){
-                console.log("err message : " + err);                
-            }
+        if (isChangeUpload) {
+            reloadImages(); // isChangeUpload가 true일 때만 실행하여 리스트 초기화 후 데이터 다시 불러옴
         }
 
         const fetchLike = async () => {
@@ -100,7 +87,6 @@ const Photo = ({ isChangeUpload }) => {
             }
         }
           
-        fetchData();
         fetchLike();
     
         }, [isChangeUpload, isChange, userId]);
@@ -157,17 +143,26 @@ const Photo = ({ isChangeUpload }) => {
 
 
     // 이미지 데이터 로드 함수
-    // const loadMoreImages = () => {
-    //     setIsLoading(true);
-    //     setTimeout(() => {
-    //         const moreImages = [
-    //             { id: images.length + 1, src: img1, alt: `img${images.length + 1}` },
-    //             { id: images.length + 2, src: img2, alt: `img${images.length + 2}` },
-    //         ];
-    //         setImages(prevImages => [...prevImages, ...moreImages]);
-    //         setIsLoading(false);
-    //     }, 1000);
-    // };
+    const loadMoreImages = () => {
+        setIsLoading(true);
+        setTimeout(async () => {
+            
+            try{
+                await tokenHandler();
+                const res = await axiosInstance.get(`gallery/${page}`);
+                const moreImages = res.data.content;
+    
+                if(moreImages) {
+                    console.log(moreImages);
+                    setImages(prevImages => [...prevImages, ...moreImages]);
+                }
+            }catch(err){
+                console.log("err message : " + err);                
+            }
+
+            setIsLoading(false);
+        }, 1000);
+    };
 
     // IntersectionObserver 설정
     useEffect(() => {
@@ -175,7 +170,8 @@ const Photo = ({ isChangeUpload }) => {
             ([entry]) => {
                 if (entry.isIntersecting && !isLoading) {
                     setPage(prevPage => prevPage + 1);
-                    //loadMoreImages();
+                    loadMoreImages();
+                    console.log(page);
                 }
             },
             {
@@ -200,21 +196,31 @@ const Photo = ({ isChangeUpload }) => {
 
     const scrollToTop = () => {
         const scrollDuration = 500; // 애니메이션 기간 (ms)
-        const scrollStep = 50; // 스크롤 단계 (픽셀)
-        const scrollInterval = scrollDuration / (window.scrollY / scrollStep);
-        let scrollTop = window.scrollY;
-        
-        const scroll = () => {
-            if (scrollTop > 0) {
-                window.scrollBy(0, -scrollStep);
-                scrollTop -= scrollStep;
-                setTimeout(scroll, scrollInterval);
-            } else {
-                window.scrollTo(0, 0); // 정확한 위치로 설정
+        const start = window.scrollY; // 시작 위치
+        const startTime = performance.now(); // 애니메이션 시작 시간
+    
+        const scroll = (currentTime) => {
+            // 경과 시간을 계산
+            const elapsedTime = currentTime - startTime;
+            const progress = Math.min(elapsedTime / scrollDuration, 1); // 0에서 1로 변화
+    
+            // 현재 스크롤 위치 계산 (ease-out 효과)
+            const scrollTop = start * (1 - progress);
+            window.scrollTo(0, scrollTop); // 스크롤 이동
+    
+            if (progress < 1) {
+                requestAnimationFrame(scroll); // 애니메이션 계속
             }
         };
-        
-        scroll();
+    
+        requestAnimationFrame(scroll); // 애니메이션 시작
+    };
+
+    //Single And Double Click Event
+    const click = useSingleAndDoubleClick(() => setModalShow(true), () => handleDoubleClick(isOpenDetail), 300);
+
+    const handleImageDelete = (deletedGalleryId) => {
+        setImages(prevImages => prevImages.filter(img => img.galleryId !== deletedGalleryId));
     };
 
     return (
@@ -228,7 +234,7 @@ const Photo = ({ isChangeUpload }) => {
                             style={{cursor: 'pointer', color: isLike[img.galleryId] ? 'red' : 'white', stroke: 'black', strokeWidth: 30}}
                         />
                     </div>
-                    <img src={`${process.env.PUBLIC_URL}/image/${img.photo}`} alt={img.galleryId} onClick={() => {setOpenDetail(img.galleryId); setModalShow(true);}} onDoubleClick={() => handleDoubleClick(img.galleryId)} />
+                    <img src={`${process.env.PUBLIC_URL}/image/${img.photo}`} alt={img.galleryId} onClick={() => {setOpenDetail(img.galleryId); click() }} />
                 </div>
             ))}
             <div ref={loader} style={{ height: '20px', backgroundColor: 'transparent' }}>
@@ -244,9 +250,12 @@ const Photo = ({ isChangeUpload }) => {
             </button>
             <GalleryDetail
                 show={modalShow}
-                onHide={() => {setModalShow(false); setChange(!isChange);}}
+                onHide={() => {setModalShow(false); setChange(!isChange); setOpenDetail(null)}}
                 galleryId={isOpenDetail}
-                onDeleteComplete={() => setChange(prev => !prev)}
+                onDeleteComplete={(deletedGalleryId) => {
+                    handleImageDelete(deletedGalleryId); // 삭제된 이미지를 리스트에서 제거
+                    setChange(prev => !prev); // 필요하면 변경 상태도 갱신
+                }}
                 onLikeToggle={(updatedGalleryId, isLiked) => {
                     setIsLike(prevState => ({
                         ...prevState,
