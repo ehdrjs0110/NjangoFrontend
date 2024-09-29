@@ -23,6 +23,14 @@
   justify-content: center !important; // 버튼들을 가로로 중앙에 배치
   gap: 1rem; // 버튼들 간 간격 설정
 
+  .showRecipeDetailBtn{
+    background-color: $p-color !important;
+    border: 1px solid $p-color !important;
+    &:hover{
+      background-color: #fd881e !important;
+    }
+  }
+
   .deleteBtn{
     width: 10%;
   }
@@ -38,6 +46,7 @@
   {
     background-color: #F75690 !important;
     color: white !important;
+    border: 1px solid #F75690;
     .icon{
       color: #FFFFFF;
     }
@@ -48,6 +57,7 @@
     background-color: #F75690 !important;
     width: 10%;
     color: white !important;
+    border: 1px solid #F75690;
     .icon{
       color: #FFFFFF;
     }
@@ -56,6 +66,7 @@
   .iconButtonClicked:hover {
     background-color: #fff !important;
     color: #F75690 !important;
+    border: 1px solid black;
     .icon{
       color: #F75690 !important;
     }
