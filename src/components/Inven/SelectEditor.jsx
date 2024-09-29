@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select, MenuItem } from '@mui/material';
 
-const options = ["g", "개", "ml", "통"];
+const options = ["g", "kg", "개", "ml", "통"];
 
 function SelectEditor(props) {
     const { id, value, api } = props;

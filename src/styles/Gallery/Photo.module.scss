@@ -1,6 +1,6 @@
 .img-grid {
   display: grid; /* 그리드를 사용 */
-  grid-template-columns: repeat(3, minmax(150px, auto)); /* 컬럼 수 조정 */
+  grid-template-columns: repeat(3, 1fr); /* 컬럼 수 조정 */
   gap: 16px; /* 이미지 간격 */
   padding: 20px;
 }

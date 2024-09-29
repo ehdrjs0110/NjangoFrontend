@@ -201,16 +201,27 @@ const EditRecipe = () => {
             formData.append('file', selectedFile);
         }
         
-
-        // formData.forEach((value, key) => {
-        //     console.log("key : " + key + " value : " + value);
-        // });
-
         try{
             await tokenHandler();
-            const res = await axiosInstanceFormData.post(`recipeShare/${userId}`, formData);
-            //const storedRecipe = res.data;
+            const storedData = await axiosInstanceFormData.post(`recipeShare/${userId}`, formData);
+            const recipeShareId = storedData.data;
+
+            if(selectedFile!=null){
+                if(window.confirm("사진을 갤러리에도 포스팅 하겠습니까?")){
+                    const galleryform = new FormData();
+                    galleryform.append('file', selectedFile);
+                    galleryform.append('recipeShareId', recipeShareId);
+                    try{
+                        await tokenHandler();
+                        await axiosInstanceFormData.post(`gallery/${userId}`, galleryform);
+                    } catch(err){
+                        console.log("err message : " + err);
+                    }
+                }
+            }
+
             alert("저장 성공!");
+            navigate('/RecipeShareList');
 
         } catch(err){
             console.log("err message : " + err);
