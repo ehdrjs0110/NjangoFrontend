@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import Table from "react-bootstrap/Table";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -7,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import UpdateModel from '../../components/RecipeShare/SelectRecipe';
 import Navigation from '../../components/Nav/Navigation'
 
-import styles from '../../styles/History/HistoryList.module.scss';
+import styles from '../../styles/RecipeShare/RecipeShare.module.scss';
 import {useNavigate} from "react-router-dom";
 // auth 관련 --
 import {useCookies} from "react-cookie";
@@ -21,6 +22,7 @@ import {
     getRegExp,
     engToKor,
 } from 'korean-regexp';
+import InputGroup from "react-bootstrap/InputGroup";
 
 
 const RecipeShareList = () => {
@@ -102,28 +104,77 @@ const RecipeShareList = () => {
         }
     }
 
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+
+        // 연, 월, 일, 시, 분 추출
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1; // getMonth()는 0부터 시작하므로 +1
+        const day = date.getDate();
+        const hours = String(date.getHours()).padStart(2, '0'); // 24시간 형식, 두 자리로 맞춤
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+        // 현재 날짜와 비교
+        const isToday = now.getFullYear() === year &&
+            now.getMonth() === (month - 1) &&
+            now.getDate() === day;
+
+        // 오늘 날짜이면 시간만 반환 (24시간 형식)
+        if (isToday) {
+            return `${hours}:${minutes}`;
+        }
+
+        // 다른 날짜이면 MM/DD 형식으로 반환
+        const formattedMonth = String(month).padStart(2, '0'); // 두 자리로 맞춤
+        const formattedDay = String(day).padStart(2, '0');
+        return `${formattedMonth}/${formattedDay}`;
+    }
+
     // recipe UI
-    function ListResponce() {
+    function ListResponse() {
         if (isList.length > 0) {
             return isList.map((list, index) => (
-                <tbody key={index}>
-                <tr>
-                    <td>{list.recipeShareId}</td>
+                <tr key={index}>
+                    {/*<td>{list.recipeShareId}</td>*/}
                     <td onClick={() => goDetail(list.recipeShareId)}>{list.title}</td>
                     <td>{list.nickname}</td>
-                    <td>{list.createAt}</td>
+                    <td>{formatDate(list.createAt)}</td>
                     <td>{list.likeCount}</td>
                 </tr>
-                </tbody>
             ));
         }
         return null;
     }
 
+    // 페이지 입력으로 이동 기능 추가
+    const handlePageInput = (e) => {
+        const inputPage = parseInt(e.target.value, 10);
+        if (!isNaN(inputPage) && inputPage >= 1 && inputPage <= totalPages) {
+            handlePageChange(inputPage);
+        }
+    };
+
     // 페이지네이션 UI
     function Pagination() {
         const pages = [];
-        for (let i = 1; i <= totalPages; i++) {
+        const maxPagesToShow = 5; // 최대 표시할 페이지 수
+        const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
+
+        // 시작 페이지와 끝 페이지 계산
+        let startPage = Math.max(1, currentPage - halfMaxPagesToShow);
+        let endPage = Math.min(totalPages, currentPage + halfMaxPagesToShow);
+
+        // 페이지가 적을 때는 startPage와 endPage를 조정
+        if (endPage - startPage + 1 < maxPagesToShow) {
+            if (currentPage <= halfMaxPagesToShow) {
+                endPage = Math.min(totalPages, maxPagesToShow);
+            } else if (totalPages - currentPage < halfMaxPagesToShow) {
+                startPage = Math.max(1, totalPages - maxPagesToShow + 1);
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
             pages.push(
                 <Button
                     key={i}
@@ -134,9 +185,18 @@ const RecipeShareList = () => {
                 </Button>
             );
         }
+        pages.push(
+            <input
+                type="number"
+                min="1"
+                max={totalPages}
+                placeholder="..."
+                onChange={handlePageInput}
+            />
+        )
 
         return (
-            <div>
+            <div className={styles.pagination}>
                 <Button onClick={() => handlePageChange(1)} disabled={currentPage === 1}>
                     &lt;&lt;
                 </Button>
@@ -154,73 +214,64 @@ const RecipeShareList = () => {
         );
     }
 
-    // 페이지 입력으로 이동 기능 추가
-    const handlePageInput = (e) => {
-        const inputPage = parseInt(e.target.value, 10);
-        if (!isNaN(inputPage) && inputPage >= 1 && inputPage <= totalPages) {
-            handlePageChange(inputPage);
-        }
-    };
-
     return (
-        <>
+        <div className={styles.container}>
             <Navigation/>
-            <Container fluid style={{paddingLeft:0, paddingRight:0}}>
-                <div className={styles.aiSearchContainer}>
-                    <Row className={styles.aiSearchRow}>
-                        <Col style={{paddingLeft:0, paddingRight:0}} md={{ span: 10, offset: 1 }} className={styles.aiSearchCol}>
-                            <div className={styles.aiSearchOptionContainer}>
-                                커뮤니티
-                            </div>
+            <Container fluid>
+                <div className={styles.rowContainer}>
+                    <Row className={styles.row}>
+                        <Col className={styles.searchCol} md={{span: 10, offset: 1}}>
+                            <h2 className={styles.header}>커뮤니티</h2>
 
                             {/* 검색 필드 */}
-                            <input
-                                type="text"
-                                value={searchInput}
-                                onChange={handleInputChange}
-                                placeholder="검색어를 입력하세요"
-                            />
-                            <Button onClick={handleSearch}>검색</Button>
+                            <InputGroup className={styles.searchGroup}>
+                                <Form.Control
+                                    placeholder="검색어를 입력하세요"
+                                    aria-describedby="basic-addon2"
+                                    className={styles.form}
+                                    type="text"
+                                    value={searchInput}
+                                    onChange={handleInputChange}
+                                    onKeyPress={(event) => {
+                                        if (event.key === 'Enter') {
+                                            event.target.blur();
+                                            handleSearch();
+                                        }
+                                    }}
+                                />
+                                <Button variant="outline-secondary" className={styles.searchButton} onClick={handleSearch}>검색</Button>
 
-                            <Button onClick={() => setModalShow(true)}>레시피 공유하기</Button>
-                            <UpdateModel
-                                show={modalShow}
-                                onHide={() => setModalShow(false)}
-                            />
+                                <Button variant="outline-secondary" className={styles.searchButton} onClick={() => setModalShow(true)}>레시피 공유하기</Button>
+                                <UpdateModel
+                                    show={modalShow}
+                                    onHide={() => setModalShow(false)}
+                                />
+                            </InputGroup>
 
-                            <div className={styles.recipeContainer}>
-                                <Table striped bordered hover>
+                            <div className={styles.tableContainer}>
+                                <Table className={styles.table} striped bordered hover>
                                     <thead>
                                     <tr>
-                                        <th>번호</th>
+                                        {/*<th>번호</th>*/}
                                         <th>제목</th>
                                         <th>작성자</th>
                                         <th>작성일</th>
                                         <th>추천</th>
                                     </tr>
                                     </thead>
-                                    {ListResponce()}
+                                    <tbody>
+                                        {ListResponse()}
+                                    </tbody>
                                 </Table>
 
                                 {/* 페이지네이션 컴포넌트 */}
-                                <Pagination />
-
-                                {/* 페이지 입력 */}
-                                <div>
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        max={totalPages}
-                                        placeholder="페이지 번호"
-                                        onChange={handlePageInput}
-                                    />
-                                </div>
+                                <Pagination/>
                             </div>
                         </Col>
                     </Row>
                 </div>
             </Container>
-        </>
+        </div>
     );
 }
 
