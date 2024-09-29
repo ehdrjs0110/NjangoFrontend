@@ -198,24 +198,24 @@ const GalleryDetail = ({ show, onHide, galleryId, onDeleteComplete, onLikeToggle
             </Modal.Header>
             <Modal.Body>
                 <Form.Group controlId="formFile" className="mb-3">
-                    {recipeShareId != null && (
-                        <Button onClick={() => navigate('/RecipeShareDetail', {state: {recipeShareId}})}>레시피
-                            보러가기</Button>
-                    )}
                     <div className={styles.imgSection}>
                         <img src={`${process.env.PUBLIC_URL}/image/${isPhoto}`} alt={isGalleryId} />
                 </div>
             </Form.Group>
             </Modal.Body>
             <Modal.Footer className={styles.modalFooter}>
-                {userId==isUserId && (
-                    <Button onClick={deleteGallery} className={styles.deleteBtn}>삭제</Button>
+                {recipeShareId != null && (
+                    <Button className={styles.showRecipeDetailBtn} onClick={() => navigate('/RecipeShareDetail', {state: {recipeShareId}})}>레시피
+                        보러가기</Button>
                 )}
                 <Button className={isLike ? styles.iconButtonClicked : styles.iconButton}
                         variant="outline-secondary" onClick={handleHeart}>
                     <FontAwesomeIcon className={styles.icon} icon={faHeart}/>
                     {' ' + isLikeCount}
                 </Button>
+                {userId==isUserId && (
+                    <Button onClick={deleteGallery} className={styles.deleteBtn} variant='danger'>삭제</Button>
+                )}
             </Modal.Footer>
         </Modal>
     )}else {
