@@ -32,7 +32,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {axiosInstance} from "../../middleware/customAxios";
 import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
 
-import styles from '../../styles/Search/AiDetailSearch.module.scss';
+import styles from '../../styles/RecipeShare/RecipeShareDetail.module.scss';
 
 const RecipeShareDetail = () => {
     const navigate = useNavigate();
@@ -124,6 +124,20 @@ const RecipeShareDetail = () => {
         fetchCommentData();
 
     }, [recipeShareId, isChange]);
+
+    useEffect(() => {
+        // 모든 .card 요소와 .numberCol 요소를 가져옴
+        const cardElements = document.querySelectorAll(`.${styles.card}`);
+        const numberCol = document.querySelectorAll(`.${styles.numberCol}`);
+    
+        // 각 .card 요소의 높이를 기준으로 .numberCol의 높이를 설정
+        cardElements.forEach((card, index) => {
+            if (numberCol[index]) {
+                // .numberCol 높이를 .card 높이에 맞춤
+                numberCol[index].style.height = `${card.clientHeight}px`; 
+            }
+        });
+    }, [detailRecipe]);
 
     //라이크 눌렸는지 확인
     useEffect(() => {
@@ -282,9 +296,9 @@ const RecipeShareDetail = () => {
 
                 return (
                     <Card.Body key={index}>
-                        {comment.content}
-                        {comment.nickname}
                         {formattedDate}
+                        {comment.nickname}
+                        {comment.content}
                         {comment.userId === userId && (
                         <Button className={styles.delBtn} onClick={() => deleteComment(comment.commentId)} variant="danger">삭제</Button>
                         )}
@@ -295,6 +309,49 @@ const RecipeShareDetail = () => {
             return <Card.Body>아무런 댓글이 없습니다.</Card.Body>  // comment가 null일 경우
         }
     }
+
+    // 재료를 양쪽으로 나누는 함수
+    const makeIngredientColumns = () => {
+        if (ingredient) {
+            // ingredient 객체의 키-값 쌍을 배열로 변환
+            const entries = Object.entries(ingredient);
+            const half = Math.ceil(entries.length / 2); // 배열을 반으로 나눔
+            const leftSide = entries.slice(0, half); // 왼쪽 열의 재료
+            const rightSide = entries.slice(half); // 오른쪽 열의 재료
+
+            return (
+                <Row>
+                    {/* 왼쪽 열 */}
+                    <Col xs={6} md={6} lg={6} className={styles.listColumn}>
+                        {leftSide.map(([key, value], index) => (
+                            <Row key={index} className={styles.listRow}>
+                                <Col xs={6} className={styles.listText}>
+                                    {key} {/* 재료명 */}
+                                </Col>
+                                <Col xs={6} className={styles.listText}>
+                                    {value} {/* 재료 양 */}
+                                </Col>
+                            </Row>
+                        ))}
+                    </Col>
+                    {/* 오른쪽 열 */}
+                    <Col xs={6} md={6} lg={6} className={styles.listColumn}>
+                        {rightSide.map(([key, value], index) => (
+                            <Row key={index} className={styles.listRow}>
+                                <Col xs={6} className={styles.listText}>
+                                    {key}
+                                </Col>
+                                <Col xs={6} className={styles.listText}>
+                                    {value}
+                                </Col>
+                            </Row>
+                        ))}
+                    </Col>
+                </Row>
+            );
+        }
+        return null;
+    };
 
     // 레시피 자세히 보기 ui
     function makeDetailRecipe()
@@ -335,9 +392,9 @@ const RecipeShareDetail = () => {
             <Navigation />
             <div>
                 <Container fluid style={{padding:0,height:"100%"}} className={styles.AiDetaileSearchContainer}>
-                    <Row className={styles.AiDetaileSearchRow} style={{ paddingLeft:0, paddingRight:0}}>
+                    <div className={styles.AiDetaileSearchRow} style={{ paddingLeft:0, paddingRight:0}}>
                         <Col className={styles.col} style={{paddingLeft: 0, paddingRight: 0 }} md={{ span: 10, offset: 1 }}>
-                            <Col md={{ span:  8, offset: 2 }} >
+                            <Col md={{ span:  8, offset: 2 }} style={{paddingBottom: 50, paddingTop: 20}}>
                                 <Card className={styles.contentContainer} >
                                     <Card.Body>
                                         <Card.Title className={styles.upperHalfContain}>
@@ -414,7 +471,8 @@ const RecipeShareDetail = () => {
                                                 <Card.Body>
                                                     <Card.Title className={styles.ingredientTitle}>재료</Card.Title>
                                                     <div className={styles.ingredientList}>
-                                                        {formatIngredients(ingredient).replace(/\"/gi, "")}
+                                                        {/* {formatIngredients(ingredient).replace(/\"/gi, "")} */}
+                                                        {makeIngredientColumns()}
                                                     </div>
                                                 </Card.Body>
                                             </Card>
@@ -472,7 +530,7 @@ const RecipeShareDetail = () => {
                                 </Card>  
                             </Col>
                         </Col>
-                    </Row>
+                    </div>
                 </Container>
             </div>
         </>
