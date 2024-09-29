@@ -300,7 +300,19 @@ const AiDetaileSearch = () => {
 
     }
 
-
+    useEffect(() => {
+        // 모든 .card 요소와 .numberCol 요소를 가져옴
+        const cardElements = document.querySelectorAll(`.${styles.card}`);
+        const numberCol = document.querySelectorAll(`.${styles.numberCol}`);
+    
+        // 각 .card 요소의 높이를 기준으로 .numberCol의 높이를 설정
+        cardElements.forEach((card, index) => {
+            if (numberCol[index]) {
+                // .numberCol 높이를 .card 높이에 맞춤
+                numberCol[index].style.height = `${card.clientHeight}px`; 
+            }
+        });
+    }, [detailRecipe]);
 
 
     //요리종료
@@ -401,7 +413,7 @@ const AiDetaileSearch = () => {
         }
         return null;
     }
-
+    
 
     return (
         <>
@@ -410,7 +422,7 @@ const AiDetaileSearch = () => {
                 <Container fluid style={{padding:0,height:"100%"}} className={styles.AiDetaileSearchContainer}>
                     <div className={styles.AiDetaileSearchRow} style={{ paddingLeft:0, paddingRight:0}}>
                         <Col className={styles.col} style={{paddingLeft: 0, paddingRight: 0 }} md={{ span: 10, offset: 1 }}>
-                            <Col md={{ span:  8, offset: 2 }} >
+                            <Col md={{ span:  8, offset: 2 }} style={{paddingBottom: 50, paddingTop: 20}}>
                                 <Card className={styles.contentContainer} >
                                     <Card.Body>
                                         <Card.Title className={styles.upperHalfContain}>

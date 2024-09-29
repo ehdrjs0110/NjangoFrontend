@@ -8,6 +8,7 @@
   font-size: 30px;
   font-weight: 550;
   text-align: center;
+  color: #4b4b4b;
 }
 
 .CategoryWrapper{
@@ -21,11 +22,18 @@
   padding-bottom: 0.5rem;
 }
 
+.CategoryIcon {
+  width: 24px;  // 아이콘 너비 조절
+  height: 24px;  // 아이콘 높이 조절
+  margin-right: 6px;  // 이미지와 텍스트 사이의 간격 조절
+  vertical-align: middle;  // 텍스트와 이미지의 수직 정렬 맞추기
+}
+
 .CategorySubWrapper{
   display: flex;
   flex-wrap: wrap; 
   gap: 12px;
-  margin-top: 0.5rem;
+  margin-top: 0.3rem;
   
   input[type="checkbox"]{
     border-radius: 50px;

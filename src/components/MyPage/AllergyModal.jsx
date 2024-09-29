@@ -8,6 +8,11 @@ import {useNavigate} from "react-router-dom";
 import {axiosInstance} from "../../middleware/customAxios";
 
 import styles from "../../styles/MyPage/AllergyModal.module.scss";
+import shellfish from "../../assets/MyPageImg/shellfish.png";
+import fish from "../../assets/MyPageImg/fish.png";
+import nuts from "../../assets/MyPageImg/nuts.png";
+import fruits from "../../assets/MyPageImg/fruits.png";
+import dairy_products from "../../assets/MyPageImg/dairy_products.png";
 
 
 const AllergyModal = (props) => {
@@ -60,11 +65,11 @@ const AllergyModal = (props) => {
 
 
     const categories = [
-        { name: "갑각류", subcategories: ["새우", "게", "랍스터"] },
-        { name: "어패류", subcategories: ["오징어", "조개", "홍합"] },
-        { name: "견과류", subcategories: ["아몬드", "호두", "캐슈넛"] },
-        { name: "과일", subcategories: ["사과", "바나나", "귤"] },
-        { name: "유제품", subcategories: ["우유", "치즈", "요거트"] },
+        { name: "갑각류", subcategories: ["새우", "게", "랍스터"], icon: shellfish },
+        { name: "어패류", subcategories: ["오징어", "조개", "홍합"], icon: fish },
+        { name: "견과류", subcategories: ["아몬드", "호두", "캐슈넛"], icon: nuts },
+        { name: "과일", subcategories: ["사과", "바나나", "귤"], icon: fruits },
+        { name: "유제품", subcategories: ["우유", "치즈", "요거트"], icon: dairy_products },
         // 추가적인 카테고리
     ];
 
@@ -181,9 +186,18 @@ const AllergyModal = (props) => {
                                 // checked={Object.keys(selectedCategories[category.name] || {}).length > 0}
                                 // onChange={e => handleCategoryChange(category.name, e.target.checked)}
                             >
+                                <img src={category.icon} alt={`${category.name} 아이콘`} className={styles.CategoryIcon} />
                                 {category.name}
                             </div>
                             <div className={styles.CategorySubWrapper}>
+                                <Form.Check
+                                    className={styles.CategorySub}
+                                    type='checkbox'
+                                    id={`select-all-${category.name}`}
+                                    label="All"
+                                    checked={isAllSubcategoriesChecked(category.name)} // 모든 서브카테고리가 체크되었을 때만 체크 상태
+                                    onChange={e => handleCategoryChange(category.name, e.target.checked)}
+                                />
                                 {category.subcategories.map(sub => (
                                     <Form.Check
                                         className={styles.CategorySub}
@@ -195,14 +209,6 @@ const AllergyModal = (props) => {
                                         onChange={e => handleSubcategoryChange(category.name, sub, e.target.checked)}
                                     />
                                 ))}
-                                <Form.Check
-                                    className={styles.CategorySub}
-                                    type='checkbox'
-                                    id={`select-all-${category.name}`}
-                                    label="All"
-                                    checked={isAllSubcategoriesChecked(category.name)} // 모든 서브카테고리가 체크되었을 때만 체크 상태
-                                    onChange={e => handleCategoryChange(category.name, e.target.checked)}
-                                />
                             </div>
                         </div>
                     ))}
