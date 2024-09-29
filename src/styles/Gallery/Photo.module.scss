@@ -1,17 +1,33 @@
+@import '../index.scss';
+
 .img-grid {
   display: grid; /* 그리드를 사용 */
   grid-template-columns: repeat(3, 1fr); /* 컬럼 수 조정 */
-  gap: 16px; /* 이미지 간격 */
-  padding: 20px;
+  gap: 2rem; /* 이미지 간격 */
+  //padding: 20px;
+  margin: 0 auto;
 }
 
 .img-item {
+  background-color: #fefefe;
   position: relative;
   overflow: hidden; /* 이미지를 잘라내어 화면에 맞게 */
   border-radius: 8px; /* 모서리 둥글게 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
   width: 100%;
   height: 400px;
+  transition: box-shadow 0.3s ease, filter 0.3s ease; /* 부드러운 그림자 효과 추가 */
+  z-index: 1;
+
+  &:hover{
+    cursor: pointer;
+    box-shadow: 0 40px 60px rgba(0, 0, 0, 0.2);
+    filter: brightness(0.8); // 전체적으로 어두워지는 효과
+
+    .heartBox{
+      display: block;
+    }
+  }
   
   img {
     width: 100%; /* 이미지 크기를 그리드 셀에 맞춤 */
@@ -22,10 +38,11 @@
 }
 
 .heartBox {
+  display: none;
   position: absolute;
   top: 10px;
   right: 10px;
-  z-index: 1;
+  z-index: 999;
   padding: 5px;
 }
 
@@ -50,4 +67,59 @@
   &:hover {
       background-color: rgba(0, 0, 0, 0.7);
   }
+}
+
+.spinnerContainer{
+  margin-top: 20px;
+  width: 100%;
+  height: 100px;
+  background-color: transparent;
+  display: flex; /* 플렉스 컨테이너로 변환 */
+  justify-content: center; /* 가로 가운데 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
+
+  //.spinner {
+  //  border: 6px solid rgba(0, 0, 0, 0.1); /* 테두리 두께와 색상 수정 */
+  //  border-top: 6px solid black; /* 진한 파란색으로 스타일 변경 */
+  //  border-radius: 50%;
+  //  width: 48px; /* 크기 증가 */
+  //  height: 48px;
+  //  animation: spin 1s linear infinite; /* 회전 애니메이션 */
+  //}
+  //
+  //@keyframes spin {
+  //  0% { transform: rotate(0deg); }
+  //  100% { transform: rotate(360deg); }
+  //}
+
+  .spinner {
+    display: flex;
+    justify-content: space-between;
+    width: 80px; /* 도트 간의 간격 */
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    background-color: black; /* 도트 색상 */
+    border-radius: 50%; /* 원형 도트 */
+    animation: bounce 1.4s infinite ease-in-out both; /* 펄스 애니메이션 */
+  }
+
+  .dot:nth-child(1) {
+    animation-delay: -0.32s; /* 첫 번째 도트의 지연 */
+  }
+
+  .dot:nth-child(2) {
+    animation-delay: -0.16s; /* 두 번째 도트의 지연 */
+  }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); } /* 처음과 끝에는 작게 */
+    40% { transform: scale(1); } /* 중간에 크게 */
+  }
+}
+
+.none{
+    display: none !important;
 }

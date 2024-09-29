@@ -23,25 +23,31 @@ const Gallery = () => {
     const [modalShow, setModalShow] = useState(false);
     const [isChange, setChange] = useState(false);
 
+    const handleModalShow = () => {
+        setModalShow(true);
+    }
+
     return (
-        <>
-            <Navigation />
+        <div className={styles.galleryContainer}>
+            <Navigation/>
             <Row className={styles.controllerRow}>
-                <Col md={{ span: 10, offset: 1 }} className={styles.controller}>
+                <Col md={{span: 10, offset: 1}} className={styles.controller}>
                     <div className={styles.btnGroup}>
-                        <Button size="lg" onClick={() => setModalShow(true)}>
-                            <FontAwesomeIcon icon={faPlus} />
-                        </Button>
                         <UpdateModel
                             show={modalShow}
-                            onHide={() => {setModalShow(false)}}
+                            onHide={() => {
+                                setModalShow(false)
+                            }}
                             onUploadComplete={() => setChange(prev => !prev)} // 파일 업로드 완료 시 상태 변경
                         />
                     </div>
                 </Col>
             </Row>
-            <Photo isChangeUpload={isChange}/>
-        </>
+            <div className={styles.photoContainer}>
+                {/*<h2>갤러리</h2>*/}
+                <Photo handleModalShow={handleModalShow} isChangeUpload={isChange}/>
+            </div>
+        </div>
     );
 }
 

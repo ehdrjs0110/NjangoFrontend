@@ -1,10 +1,34 @@
 @import '../index.scss';
 
+.title{
+  display: flex;
+  justify-content: center; // 첫 번째 label은 왼쪽, 두 번째는 오른쪽 끝으로 배치
+  font-weight: 600;
+  width: 90%;
+  margin: 0 auto;
+}
 
-.likeBtn{
+.imgSection{
+  text-align: center; // 부모 요소에 중앙 정렬 적용
+  img{
+    width: 90%;
+    height: auto;
+    display: block; // 이미지 요소를 블록 요소로 변경
+    margin: 0 auto;
+  }
+}
+
+.modalFooter{
+  display: flex !important;
+  justify-content: center !important; // 버튼들을 가로로 중앙에 배치
+  gap: 1rem; // 버튼들 간 간격 설정
+
+  .deleteBtn{
+    width: 10%;
+  }
+
   .iconButton
   {
-    border: 1px solid black;
     background-color: #FFFFFF;
     color: #000;
     width: 10%;
@@ -12,27 +36,28 @@
 
   .iconButton:hover
   {
-    background-color: $accent-color;
+    background-color: #F75690 !important;
+    color: white !important;
     .icon{
       color: #FFFFFF;
     }
   }
 
-  .iconButtonClicked
-  {
-    border: 1px solid black;
-    background-color: #F75690;
+  .iconButtonClicked {
+    //border: 1px solid black;
+    background-color: #F75690 !important;
     width: 10%;
+    color: white !important;
     .icon{
       color: #FFFFFF;
     }
   }
 
-  .iconButtonClicked:hover
-  {
-    background-color: #fff;
+  .iconButtonClicked:hover {
+    background-color: #fff !important;
+    color: #F75690 !important;
     .icon{
-      color: #F75690;
+      color: #F75690 !important;
     }
   }
 
@@ -41,16 +66,5 @@
     //font-size: 1.5rem;
     color: $accent-color;
   }
-}
-  
 
-
-
-
-.imgSection{
-
-    img{
-        width: 100%;
-        height: 100%;
-    }
 }

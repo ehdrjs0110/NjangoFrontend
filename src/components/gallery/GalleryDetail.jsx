@@ -154,6 +154,33 @@ const GalleryDetail = ({ show, onHide, galleryId, onDeleteComplete, onLikeToggle
         onHide(); // 모달 닫기
     };
 
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+
+        // 연, 월, 일, 시, 분 추출
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1; // getMonth()는 0부터 시작하므로 +1
+        const day = date.getDate();
+        const hours = String(date.getHours()).padStart(2, '0'); // 24시간 형식, 두 자리로 맞춤
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+        // 현재 날짜와 비교
+        const isToday = now.getFullYear() === year &&
+            now.getMonth() === (month - 1) &&
+            now.getDate() === day;
+
+        // 오늘 날짜이면 시간만 반환 (24시간 형식)
+        if (isToday) {
+            return `${hours}:${minutes}`;
+        }
+
+        // 다른 날짜이면 MM/DD 형식으로 반환
+        const formattedMonth = String(month).padStart(2, '0'); // 두 자리로 맞춤
+        const formattedDay = String(day).padStart(2, '0');
+        return `${formattedMonth}/${formattedDay}`;
+    }
+
     if(isData!=null) { return (
         <Modal
             show={show} 
@@ -164,32 +191,31 @@ const GalleryDetail = ({ show, onHide, galleryId, onDeleteComplete, onLikeToggle
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    
                 </Modal.Title>
-                <Form.Label>{isNickname}</Form.Label>
-                <Form.Label>{isCreateAt}</Form.Label>
+                <div className={styles.title}>
+                    <Form.Label>{isNickname} - {formatDate(isCreateAt)}</Form.Label>
+                </div>
             </Modal.Header>
             <Modal.Body>
-            <Form.Group controlId="formFile" className="mb-3">
-                <div className={styles.likeBtn}>
-                    <Button className={isLike?styles.iconButtonClicked:styles.iconButton} variant="outline-secondary" onClick={handleHeart}>
-                        <FontAwesomeIcon className={styles.icon} icon={faHeart} />
-                        {' ' + isLikeCount}
-                    </Button>
+                <Form.Group controlId="formFile" className="mb-3">
+                    {recipeShareId != null && (
+                        <Button onClick={() => navigate('/RecipeShareDetail', {state: {recipeShareId}})}>레시피
+                            보러가기</Button>
+                    )}
+                    <div className={styles.imgSection}>
+                        <img src={`${process.env.PUBLIC_URL}/image/${isPhoto}`} alt={isGalleryId} />
                 </div>
-                {recipeShareId !=null && (
-                    <Button onClick={() => navigate('/RecipeShareDetail', { state: { recipeShareId } })}>레시피 보러가기</Button>
-                )}
-                <div className={styles.imgSection}>
-                    <img src={`${process.env.PUBLIC_URL}/image/${isPhoto}`} alt={isGalleryId} />
-                </div>
-                
             </Form.Group>
             </Modal.Body>
-            <Modal.Footer>
+            <Modal.Footer className={styles.modalFooter}>
                 {userId==isUserId && (
-                    <Button onClick={deleteGallery}>삭제</Button>
+                    <Button onClick={deleteGallery} className={styles.deleteBtn}>삭제</Button>
                 )}
+                <Button className={isLike ? styles.iconButtonClicked : styles.iconButton}
+                        variant="outline-secondary" onClick={handleHeart}>
+                    <FontAwesomeIcon className={styles.icon} icon={faHeart}/>
+                    {' ' + isLikeCount}
+                </Button>
             </Modal.Footer>
         </Modal>
     )}else {

@@ -25,7 +25,7 @@ import GalleryDetail from './GalleryDetail';
 import styles from '../../styles/Gallery/Photo.module.scss';
 
 
-const Photo = ({ isChangeUpload }) => {
+const Photo = ({ handleModalShow, isChangeUpload }) => {
 
     const navigate = useNavigate();
 
@@ -48,9 +48,9 @@ const Photo = ({ isChangeUpload }) => {
     const [isLoading, setIsLoading] = useState(false);
     const loader = useRef(null);
     const scrollTopButton = useRef(null);
+    const [isLast, setIsLast] = useState(false);
 
     useEffect(() => {
-
         const reloadImages = () => {
             window.location.reload();
         };
@@ -151,6 +151,7 @@ const Photo = ({ isChangeUpload }) => {
                 await tokenHandler();
                 const res = await axiosInstance.get(`gallery/${page}`);
                 const moreImages = res.data.content;
+                setIsLast(res.data.last);
     
                 if(moreImages) {
                     console.log(moreImages);
@@ -168,7 +169,7 @@ const Photo = ({ isChangeUpload }) => {
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting && !isLoading) {
+                if (entry.isIntersecting && !isLoading && !isLast) {
                     setPage(prevPage => prevPage + 1);
                     loadMoreImages();
                     console.log(page);
@@ -224,46 +225,72 @@ const Photo = ({ isChangeUpload }) => {
     };
 
     return (
-        <div className={styles['img-grid']}>
-            {images.map((img) => (
-                <div key={img.galleryId} className={styles['img-item']}>
-                    <div className={styles.heartBox}>
-                        <FontAwesomeIcon
-                            icon={heartIcon}
-                            onClick={() => handleHeart(img.galleryId)}
-                            style={{cursor: 'pointer', color: isLike[img.galleryId] ? 'red' : 'white', stroke: 'black', strokeWidth: 30}}
-                        />
-                    </div>
-                    <img src={`${process.env.PUBLIC_URL}/image/${img.photo}`} alt={img.galleryId} onClick={() => {setOpenDetail(img.galleryId); click() }} />
+        <>
+            <div className={styles['img-grid']}>
+                <div key={'add-photo'} className={styles['img-item']}>
+                    <img src={`/image/add-item.png`} onClick={() => {
+                        handleModalShow();
+                    }}/>
                 </div>
-            ))}
-            <div ref={loader} style={{ height: '20px', backgroundColor: 'transparent' }}>
-                {isLoading && <p>Loading more images...</p>}
+                {images.map((img) => (
+                    <div key={img.galleryId} className={styles['img-item']}>
+                        <div className={styles.heartBox}>
+                            <FontAwesomeIcon
+                                icon={heartIcon}
+                                onClick={() => handleHeart(img.galleryId)}
+                                style={{
+                                    cursor: 'pointer',
+                                    color: isLike[img.galleryId] ? 'red' : 'white',
+                                    stroke: 'black',
+                                    strokeWidth: 30
+                                }}
+                            />
+                        </div>
+                        <img src={`${process.env.PUBLIC_URL}/image/${img.photo}`} alt={img.galleryId} onClick={() => {
+                            setOpenDetail(img.galleryId);
+                            click()
+                        }}/>
+                    </div>
+                ))}
+                <button
+                    ref={scrollTopButton}
+                    className={styles.scrollTopButton}
+                    onClick={scrollToTop}
+                    aria-label="Scroll to top"
+                >
+                    <FontAwesomeIcon icon={arrowUpIcon}/>
+                </button>
+                <GalleryDetail
+                    show={modalShow}
+                    onHide={() => {
+                        setModalShow(false);
+                        setChange(!isChange);
+                        setOpenDetail(null)
+                    }}
+                    galleryId={isOpenDetail}
+                    onDeleteComplete={(deletedGalleryId) => {
+                        handleImageDelete(deletedGalleryId); // 삭제된 이미지를 리스트에서 제거
+                        setChange(prev => !prev); // 필요하면 변경 상태도 갱신
+                    }}
+                    onLikeToggle={(updatedGalleryId, isLiked) => {
+                        setIsLike(prevState => ({
+                            ...prevState,
+                            [updatedGalleryId]: isLiked
+                        }));
+                    }}
+                />
             </div>
-            <button
-                ref={scrollTopButton}
-                className={styles.scrollTopButton}
-                onClick={scrollToTop}
-                aria-label="Scroll to top"
-            >
-                <FontAwesomeIcon icon={arrowUpIcon} />
-            </button>
-            <GalleryDetail
-                show={modalShow}
-                onHide={() => {setModalShow(false); setChange(!isChange); setOpenDetail(null)}}
-                galleryId={isOpenDetail}
-                onDeleteComplete={(deletedGalleryId) => {
-                    handleImageDelete(deletedGalleryId); // 삭제된 이미지를 리스트에서 제거
-                    setChange(prev => !prev); // 필요하면 변경 상태도 갱신
-                }}
-                onLikeToggle={(updatedGalleryId, isLiked) => {
-                    setIsLike(prevState => ({
-                        ...prevState,
-                        [updatedGalleryId]: isLiked
-                    }));
-                }}
-            />
-        </div>
+            <div ref={loader} className={`${styles.spinnerContainer} ${isLast ? styles.none : ""}`}>
+                {isLoading && (
+                    // <div className={styles.spinner}></div> // 로딩 스피너 적용
+                    <div className={styles.spinner}>
+                        <div className={styles.dot}></div>
+                        <div className={styles.dot}></div>
+                        <div className={styles.dot}></div>
+                    </div>
+                )}
+            </div>
+        </>
     );
 }
 

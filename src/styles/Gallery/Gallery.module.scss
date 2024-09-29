@@ -1,12 +1,30 @@
 @import '../index.scss';
+.galleryContainer{
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    background-color: $bg-color;
 
-.controllerRow{
-    .controller{
-        .btnGroup{
-            margin: 10px;
-            height: 10%;
-            float: right;
+    .controllerRow{
+        .controller{
+            .btnGroup{
+                margin: 10px;
+                height: 10%;
+                float: right;
 
+            }
+        }
+    }
+
+    .photoContainer{
+        width: 60%;
+        margin: 0 auto;
+        padding: 20px;
+
+        h2{
+            font-weight: 800;
+            padding-bottom: 10px;
+            padding-left: 1rem;
         }
     }
 }
