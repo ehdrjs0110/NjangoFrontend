@@ -15,7 +15,6 @@
 
     .col
     {
-      background-color: #FFFFFF;
 
       .contentContainer
       {
@@ -52,10 +51,14 @@
             color: $accent-color;
           }
 
-          //.ingredientRightCol
-          //{
-          //  text-align: right;
-          //}
+          .listRow{
+            border-bottom: 1px solid #e5e5e5;
+            width: 83%;
+            margin: 0 auto;
+            margin-top: 10px;
+            padding-bottom: 10px;
+            font-weight: 550;
+          }
 
           .ingredientList
           {
@@ -201,8 +204,10 @@
 {
   .numberCol
   {
-    padding: 0;
-    height: 100%;
+    display: flex;         
+    align-items: center;    
+    justify-content: center;
+    padding: 0 !important;
 
     .index
     {
@@ -219,8 +224,8 @@
   .recipeCol
   {
     border-left: 5px solid $accent-color;
-
     margin-bottom: 1.5vh;
+    
     .card
     {
       padding-left: 1.5vh;

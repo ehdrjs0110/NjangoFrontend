@@ -1,101 +1,127 @@
 @import '../index.scss';
 
-
-.aiSearchContainer
-{
-  background-color: $bg-color;
-
-  .aiSearchRow
-  {
-    margin-left: 0;
-    margin-right: 0;
-
-
-    .aiSearchCol
-    {
-      background-color: #FFFFFF;
-    }
-
-
-  }
+* {
+  margin: 0 ;
+  padding: 0;
 }
 
-.aiSearchOptionContainer
-{
-  margin-top: 5vh;
-  margin-bottom: 5vh;
+.aiSearchAllContainer {
+  height: 100%;
+  background-color: $bg-color;
 
+  .aiSearchContainer {
+    background-color: $bg-color;
+    // min-height: 90vh;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2% 0;
 
-  .containCard{
-    border: 2px solid $p-color;
+    .aiSearchRow {
+      min-height: 100vh;
 
+      .aiSearchCol {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem !important;
+        // margin: 0 auto;
+        margin-left: 20px;
+        width: 60%;
+        min-width: 800px;
+        background-color: #FFFFFF;
+        border-radius: 8px;
+        min-height: 85vh;
+        margin-bottom: 1rem;
+        border: 1px solid var(--bs-border-color-translucent);
 
-    .aiSearchOptionHeader
-    {
-
-      background-color: #FFFFFF;
-      //color: $p-font-color;
-      padding: 0;
-      //margin: 0;
-
-
-      .button{
-        background-color: $p-color;
-        width: 100%;
-        color: #FFFFFF;
-        border: 0;
-        font-size: 1.5rem;
-
+        .header{
+          font-weight: 800;
+          padding-bottom: 10px;
+          color: black;
+        }
       }
 
+      .aiSearchInputGroup {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        .form {
+          flex: 1;
+          padding: 0.5rem;
+          border: 1px solid $p-color;
+          border-radius: 4px 0 0 4px;
+          font-size: 1rem;
+
+          &:focus{
+            border: none;
+          }
+        }
+
+        .aiSearchButton {
+          padding: 0.5rem 1rem;
+          border: 1px solid $p-color;
+          border-left: none;
+          border-radius: 0 4px 4px 0;
+          background-color: $p-color;
+          color: #fff;
+          font-size: 1rem;
+          cursor: pointer;
+
+          &:hover {
+            background-color: darken($p-color, 10%);
+          }
+        }
+      }
+
+      @media (max-width: 800px) {
+        .aiSearchCol {
+          width: 100%;
+          min-width: auto;
+        }
+      }
     }
   }
-
 }
 
 
 // 레시피 보여주기
 .recipeContainer
 {
-
   .recipeCard
   {
     margin-bottom: 2vh;
     border: $accent-color 2px solid;
-
     color: $p-font-color;
 
-    .header
-    {
+    .cardHeader {
       background-color: #FFFFFF;
-      //color: #FFFFFF;
+      color: black;
       border-bottom: $accent-color 2px solid;
-
+      font-weight: 600;
     }
 
     // 레시피 제목 부분
     .recipeTitleCol
     {
-      text-align: center;
+      padding-left: 1rem !important;
       font-size: 1.8rem;
-
     }
 
     // 레시피 상세보기 버튼 부분
     .recipeDetailSearchCol
     {
       text-align: right;
-      //text-align: center;
 
-
-
-      .recipeDetailSearchButton
-      {
+      .recipeDetailSearchButton {
         width: 30%;
         border: 3px solid $p-color;
         color: $p-color;
         font-size: 1.2rem;
         background-color: #FFFFFF;
+        font-weight: 800;
       }
 
       .recipeDetailSearchButton:hover
@@ -106,11 +132,10 @@
       }
     }
   }
-
-
 }
 
 .deleteBtn {
+  margin-top: 2rem;
   float: right;
 }
 
@@ -131,9 +156,6 @@
     display: flex;
     justify-content: flex-end;
   }
-
-
-
 
 }
 

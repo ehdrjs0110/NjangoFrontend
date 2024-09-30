@@ -33,14 +33,13 @@ const AiSearch = () => {
     const [recipe, setRecipe] = useState(null);
     const [searchValue, setSearchValue] = useState("");
     const [selectedKindOfFood, setSelectedKindOfFood] = useState([]);
+    // 알러지 정보를 요청하는 상태를 관리하는 변수
+    // 'requestAllergy'가 true면 알러지 정보 요청, false면 요청하지 않음
+    const [requestAllergy, setRequestAllergy] = useState(false);
     const navigate = useNavigate();
-
     const [selectedMyIngredientList, setSelectedMyIngredientList] = useState([]);
-    // const [allergyFood, setAllergyFood] = useState([])
-
     //사용자 재료
     const [isIngredients, setIngredients] = useState([]);
-
     // auth 관련 --
     const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
     // const { handleTokenRefresh } = useSetNewAuth();
@@ -131,8 +130,7 @@ const AiSearch = () => {
             </button>
         );
     }
-    // 테스트 데이터
-    let allergyFood = ["새우,오징어"];
+
 
     //  재료선택
     function makeIngredientList() {
@@ -228,11 +226,20 @@ const AiSearch = () => {
                         className={styles.check}
                         id={`inline-checkbox-${index}`}
                         label={etc}
+                        onChange={() => setChangeTrueFalse(etc)}
                     />
                 );
             }
         });
     }
+
+    const setChangeTrueFalse = (etc) => {
+        if (etc === "알레르기 반영"){
+            setRequestAllergy(!requestAllergy)
+        }
+
+    }
+
 
     // prompt 요청
     async function aiSearchRequest () {
@@ -241,14 +248,13 @@ const AiSearch = () => {
         console.log("selectedKindOfFood: " + selectedKindOfFood );
         console.log("accesstoken" + accessToken);
         console.log("searchValue" + searchValue);
-        console.log("allergyFood" + allergyFood);
         console.log("selectedMyIngredientList" + selectedMyIngredientList);
 
-        const searchWordBody = {"userId" : userId, "searchWord" : searchValue};
+        const searchWordBody = {"userId" : userId, "searchWord" : searchValue, "requestAllergy" : requestAllergy};
 
         console.log("요청 중");
         const requestBody = {"userContent" : `${selectedKindOfFood} 종류의 ${searchValue} 레시피를 5개를 알려주는데 재료는 자세하게 알려주고 만드는 과정에 ` +
-                `대해서는 130글자 내로 간략하게 알려줘 ${allergyFood}는 들어가면 안돼 ${selectedMyIngredientList}가 있어 형태는 title,ingredients,process으로 알려줘 그리고 재료는 리스트 형태는 싫고 객체 형태로 재료, 양의 쌍으로 알려줘` +
+                `대해서는 130글자 내로 간략하게 알려줘  ${selectedMyIngredientList}가 있어 형태는 title,ingredients,process으로 알려줘 그리고 재료는 리스트 형태는 싫고 객체 형태로 재료, 양의 쌍으로 알려줘` +
                 "그리고 json 객체로 {0:[요리 1], 1: [요리2], 2: [요리3}, 3:[요리], 4:[요리]} 형태로만 참고로 키는 무조건 숫자여야해 보내줘"};
         let searchResponse;
         const requestBundle = {"promptEntity" : requestBody, "requestWordEntity" : searchWordBody};

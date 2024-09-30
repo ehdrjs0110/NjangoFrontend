@@ -158,14 +158,46 @@ const AiDetaileSearch = () => {
     // 재료 리스트 ui
 
     function makeIngredient () {
+        const entries = Object.entries(ingredientObject);
+        const half = Math.ceil(entries.length / 2);
+        const leftSide = entries.slice(0, half);
+        const rightSide = entries.slice(half);
 
         console.log(ingredientObject)
-        return Object.entries(ingredientObject).map(([key, value], index) => (
-            <Row key={index} xs={2} md={2} lg={2}>
-                <Col  className={styles.listText}>{key}</Col>
-                <Col  className={styles.listText} >{value}</Col>
+        // return Object.entries(ingredientObject).map(([key, value], index) => (
+        //     <Row key={index} xs={2} md={2} lg={2}>
+        //         <Col  className={styles.listText}>{key}</Col>
+        //         <Col  className={styles.listText} >{value}</Col>
+        //     </Row>
+        // ));
+        return (
+            <Row>
+                <Col xs={6} md={6} lg={6} className={styles.listColumn}>
+                    {leftSide.map(([key, value], index) => (
+                        <Row key={index} className={styles.listRow}>
+                            <Col xs={6} className={styles.listText}>
+                                {key}
+                            </Col>
+                            <Col xs={6} className={styles.listText}>
+                                {value}
+                            </Col>
+                        </Row>
+                    ))}
+                </Col>
+                <Col xs={6} md={6} lg={6} className={styles.listColumn}>
+                    {rightSide.map(([key, value], index) => (
+                        <Row key={index} className={styles.listRow}>
+                            <Col xs={6} className={styles.listText}>
+                                {key}
+                            </Col>
+                            <Col xs={6} className={styles.listText}>
+                                {value}
+                            </Col>
+                        </Row>
+                    ))}
+                </Col>
             </Row>
-        ));
+        );
     }
 
     function makeLeve ()
@@ -268,7 +300,19 @@ const AiDetaileSearch = () => {
 
     }
 
-
+    useEffect(() => {
+        // 모든 .card 요소와 .numberCol 요소를 가져옴
+        const cardElements = document.querySelectorAll(`.${styles.card}`);
+        const numberCol = document.querySelectorAll(`.${styles.numberCol}`);
+    
+        // 각 .card 요소의 높이를 기준으로 .numberCol의 높이를 설정
+        cardElements.forEach((card, index) => {
+            if (numberCol[index]) {
+                // .numberCol 높이를 .card 높이에 맞춤
+                numberCol[index].style.height = `${card.clientHeight}px`; 
+            }
+        });
+    }, [detailRecipe]);
 
 
     //요리종료
@@ -348,7 +392,7 @@ const AiDetaileSearch = () => {
                         <Col className={styles.numberCol}>
                             <div>
                                 <Card className={styles.index}>
-                                    {index}
+                                    {index+1}
                                 </Card>
                             </div>
 
@@ -369,16 +413,16 @@ const AiDetaileSearch = () => {
         }
         return null;
     }
-
+    
 
     return (
         <>
             <Navigation />
             <div>
                 <Container fluid style={{padding:0,height:"100%"}} className={styles.AiDetaileSearchContainer}>
-                    <Row className={styles.AiDetaileSearchRow} style={{ paddingLeft:0, paddingRight:0}}>
+                    <div className={styles.AiDetaileSearchRow} style={{ paddingLeft:0, paddingRight:0}}>
                         <Col className={styles.col} style={{paddingLeft: 0, paddingRight: 0 }} md={{ span: 10, offset: 1 }}>
-                            <Col md={{ span:  8, offset: 2 }} >
+                            <Col md={{ span:  8, offset: 2 }} style={{paddingBottom: 50, paddingTop: 20}}>
                                 <Card className={styles.contentContainer} >
                                     <Card.Body>
                                         <Card.Title className={styles.upperHalfContain}>
@@ -483,7 +527,7 @@ const AiDetaileSearch = () => {
                                 </Card>
                             </Col>
                         </Col>
-                    </Row>
+                    </div>
 
                     {
                         modalOpen &&

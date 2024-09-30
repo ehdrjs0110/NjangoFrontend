@@ -38,7 +38,7 @@ const MyPagec = () => {
     const dispatch = useDispatch();
     let newAccessToken;
 
-    const [filterModalShow, setFilterModalShow] = useState(false);
+    // const [filterModalShow, setFilterModalShow] = useState(false);
 
 
     useEffect(() => {
@@ -156,15 +156,15 @@ const MyPagec = () => {
                 <Container fluid  className={myPageStyle.MyPageContainer} >
                     <div className={myPageStyle.ContainerRow} >
                         <Col className={myPageStyle.LayoutWrapper}>
-                            <Sidebar setFilterModalShow={setFilterModalShow} />
+                            <Sidebar />
                             <Col md={8} className={myPageStyle.MyPageCardContainCol}>
                                 <Card className={`text-center ${myPageStyle.MyPageCard}`} >
                                     <Card.Body className={myPageStyle.MyPageCardBody}>
                                         <div className={myPageStyle.profile}>
                                             <img src={imgPath} alt="User profile" />
                                             <div className={myPageStyle.info}>
-                                            <p className={myPageStyle.name}>{infoData ? infoData.nickname : 'Loading...'}</p>
-                                            <p>{infoData ? infoData.id : 'Loading...'}</p>
+                                                <p className={myPageStyle.name}>{infoData ? infoData.nickname : 'Loading...'}</p>
+                                                <p>{infoData ? infoData.id : 'Loading...'}</p>
                                             </div>
                                         </div>
 
@@ -186,23 +186,19 @@ const MyPagec = () => {
                                             onHide={() => {
                                                 setModalShow(false);
                                                 fetchDate();
-                                                }
                                             }
+                                        }
                                         />
                                     </Card.Body>
+                                </Card>
+                                <Card className={myPageStyle.AllergyCard} >
+                                    <AllergyModal/>
                                 </Card>
                             </Col>
                         </Col>
                     </div>
                 </Container>
             </div>
-            <AllergyModal
-                show={filterModalShow}
-                onHide={() => {
-                    setFilterModalShow(false);
-                }
-                }
-            />
         </>
     );
 }

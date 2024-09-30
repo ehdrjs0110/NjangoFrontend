@@ -34,7 +34,7 @@ import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
 
 import styles from '../../styles/Like/LikeDetail.module.scss';
 
-const AiDetaileSearch = () => {
+const LikeDetail = () => {
     const navigate = useNavigate();
     const location = useLocation(); // 현재 위치 객체를 가져옴
     const { recipe } = location.state || {}; // 전달된 상태에서 recipe 추출, 없을 경우 빈 객체로 대체
@@ -81,6 +81,20 @@ const AiDetaileSearch = () => {
     
     fetchData();
     }, [recipe]);
+
+    useEffect(() => {
+        // 모든 .card 요소와 .numberCol 요소를 가져옴
+        const cardElements = document.querySelectorAll(`.${styles.card}`);
+        const numberCol = document.querySelectorAll(`.${styles.numberCol}`);
+    
+        // 각 .card 요소의 높이를 기준으로 .numberCol의 높이를 설정
+        cardElements.forEach((card, index) => {
+            if (numberCol[index]) {
+                // .numberCol 높이를 .card 높이에 맞춤
+                numberCol[index].style.height = `${card.clientHeight}px`; 
+            }
+        });
+    }, [detailRecipe]);
 
     async function tokenHandler() {
 
@@ -144,11 +158,47 @@ const AiDetaileSearch = () => {
         }
     }
 
-    // ingredients 객체를 문자열로 변환하여 사람이 읽기 쉽게 포맷팅하는 함수
-    const formatIngredients = (ingredients) => {
-        return Object.entries(ingredients)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(', ');
+    // 재료를 두 열로 나누는 함수
+    const makeIngredientColumns = () => {
+        if (recipe.ingredients) {
+            // recipe.ingredients 객체의 키-값 쌍을 배열로 변환
+            const entries = Object.entries(recipe.ingredients);
+            const half = Math.ceil(entries.length / 2); // 배열을 반으로 나눔
+            const leftSide = entries.slice(0, half); // 왼쪽 열의 재료
+            const rightSide = entries.slice(half); // 오른쪽 열의 재료
+
+            return (
+                <Row>
+                    {/* 왼쪽 열 */}
+                    <Col xs={6} md={6} lg={6} className={styles.listColumn}>
+                        {leftSide.map(([key, value], index) => (
+                            <Row key={index} className={styles.listRow}>
+                                <Col xs={6} className={styles.listText}>
+                                    {key} {/* 재료명 */}
+                                </Col>
+                                <Col xs={6} className={styles.listText}>
+                                    {value} {/* 재료 양 */}
+                                </Col>
+                            </Row>
+                        ))}
+                    </Col>
+                    {/* 오른쪽 열 */}
+                    <Col xs={6} md={6} lg={6} className={styles.listColumn}>
+                        {rightSide.map(([key, value], index) => (
+                            <Row key={index} className={styles.listRow}>
+                                <Col xs={6} className={styles.listText}>
+                                    {key}
+                                </Col>
+                                <Col xs={6} className={styles.listText}>
+                                    {value}
+                                </Col>
+                            </Row>
+                        ))}
+                    </Col>
+                </Row>
+            );
+        }
+        return null;
     };
 
     // 레시피 자세히 보기 ui
@@ -192,7 +242,7 @@ const AiDetaileSearch = () => {
                 <Container fluid style={{padding:0,height:"100%"}} className={styles.AiDetaileSearchContainer}>
                     <Row className={styles.AiDetaileSearchRow} style={{ paddingLeft:0, paddingRight:0}}>
                         <Col className={styles.col} style={{paddingLeft: 0, paddingRight: 0 }} md={{ span: 10, offset: 1 }}>
-                            <Col md={{ span:  8, offset: 2 }} >
+                            <Col md={{ span:  8, offset: 2 }} style={{paddingBottom: 50, paddingTop: 20}}>
                                 <Card className={styles.contentContainer} >
                                     <Card.Body>
                                         <Card.Title className={styles.upperHalfContain}>
@@ -267,7 +317,7 @@ const AiDetaileSearch = () => {
                                                 <Card.Body>
                                                     <Card.Title className={styles.ingredientTitle}>재료</Card.Title>
                                                     <div className={styles.ingredientList}>
-                                                        {formatIngredients(recipe.ingredients).replace(/\"/gi, "")}
+                                                        {makeIngredientColumns()}
                                                     </div>
                                                 </Card.Body>
                                             </Card>
@@ -301,4 +351,4 @@ const AiDetaileSearch = () => {
     );
 }
 
-export default AiDetaileSearch;
+export default LikeDetail;

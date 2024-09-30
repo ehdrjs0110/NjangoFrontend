@@ -56,7 +56,9 @@ function Inven() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+
     const fetchData = async () => {
+      console.log("inven 데이터받기")
       const params = { userId: userId };
       try {
         console.log(params);
@@ -303,7 +305,7 @@ function Inven() {
             </Row>
             <Row className={styles.contentRow}>
               <Col md={{span: 10, offset: 1}} className={styles.content}>
-                <h2>갖고있어요!</h2>
+                <h2>내 재료</h2>
                 <div className={styles.item}>
                   <Row style={{ width: '100%', margin: '0 auto' }}>
                     <IngredientItem
@@ -329,7 +331,7 @@ function Inven() {
                   </Row>
                 </div>
                 <hr />
-                <h2>사주세요ㅠㅠ</h2>
+                <h2>미보유</h2>
                 <div className={styles.item}>
                   <Row style={{ width: '100%', margin: '0 auto' }}>
                     {filteredItemsWithoutSize.map((item, index) => (
