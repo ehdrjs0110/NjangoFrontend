@@ -56,6 +56,8 @@ const AiSearch = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const modalBackground = useRef();
 
+    const [expirationFlag, setExpirationFlag] = useState(false);
+
     useEffect(() => {
         // console.log("accesstoken" + accessToken);
 
@@ -135,17 +137,21 @@ const AiSearch = () => {
     //  재료선택
     function makeIngredientList() {
         if (isIngredients && Array.isArray(isIngredients)) {
-            const IngredientList = isIngredients.map((item,index) =>
-
-                <Form.Check
-                    inline
-                    type="checkbox"
-                    name="group3"
-                    id={item.ingredientname}
-                    className={styles.check}
-                    label={item.ingredientname}
-                    onChange={myIngredientHandler}
-                />)
+            const IngredientList = isIngredients.map((item, index) => {
+                const isDisabled = item.dateofuse && new Date(item.dateofuse) < new Date();
+                return (
+                    <Form.Check
+                        inline
+                        type="checkbox"
+                        name="group3"
+                        id={item.ingredientname}
+                        className={styles.check}
+                        label={item.ingredientname}
+                        onChange={myIngredientHandler}
+                        disabled={isDisabled}
+                    />
+                );
+            });
             return IngredientList;
         }
         return null;
@@ -162,7 +168,6 @@ const AiSearch = () => {
                 return [...prevState, food];
             }
         })
-        console.log(selectedKindOfFood);
         console.log(selectedKindOfFood);
     }
     // option - 종류
@@ -219,27 +224,68 @@ const AiSearch = () => {
             }
             else{
                 return (
-                    <Form.Check
-                        inline
-                        type="checkbox"
-                        name="group2"
-                        className={styles.check}
-                        id={`inline-checkbox-${index}`}
-                        label={etc}
-                        onChange={() => setChangeTrueFalse(etc)}
-                    />
+                    etc === "소비 기한 우선 사용" ? (
+                        activeKey === "1" && (
+                            <Form.Check
+                                inline
+                                type="checkbox"
+                                name="group2"
+                                className={styles.check}
+                                id={`inline-checkbox-${index}`}
+                                label={etc}
+                                onChange={() => setChangeTrueFalse(etc)}
+                            />
+                        )
+                    ) : (
+                        <Form.Check
+                            inline
+                            type="checkbox"
+                            name="group2"
+                            className={styles.check}
+                            id={`inline-checkbox-${index}`}
+                            label={etc}
+                            onChange={() => setChangeTrueFalse(etc)}
+                        />
+                    )
                 );
             }
         });
     }
-
     const setChangeTrueFalse = (etc) => {
         if (etc === "알레르기 반영"){
             setRequestAllergy(!requestAllergy)
+        }else if (etc === "소비 기한 우선 사용") {
+            const today = new Date();
+            if (!expirationFlag) {
+                const fiveDaysLater = new Date(today);
+                fiveDaysLater.setDate(today.getDate() + 5);
+
+                const nearExpirationIngredients = isIngredients
+                    .filter(item => {
+                        const dateOfUse = new Date(item.dateofuse);
+                        return dateOfUse >= today && dateOfUse <= fiveDaysLater;
+                    })
+                    .map(item => item.ingredientname);
+
+                setSelectedMyIngredientList(prevState => [
+                    ...prevState,
+                    ...nearExpirationIngredients
+                ]);
+            }else{
+                const expiredIngredients = isIngredients
+                    .filter(item => {
+                        const dateOfUse = new Date(item.dateofuse);
+                        return dateOfUse < today;
+                    })
+                    .map(item => item.ingredientname);
+
+                setSelectedMyIngredientList(prevState =>
+                    prevState.filter(item => !expiredIngredients.includes(item))
+                );
+            }
+            setExpirationFlag(!expirationFlag);
         }
-
     }
-
 
     // prompt 요청
     async function aiSearchRequest () {
@@ -359,8 +405,6 @@ const AiSearch = () => {
         const {value} = event.target;
         setSearchValue(value);
     }
-
-
     // 레시피 상세 보기로 값 넘겨주가
 
     const startDetailAiSearch = (recipe) => {
