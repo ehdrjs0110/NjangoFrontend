@@ -137,8 +137,10 @@ const AiSearch = () => {
     //  재료선택
     function makeIngredientList() {
         if (isIngredients && Array.isArray(isIngredients)) {
-            const IngredientList = isIngredients.map((item, index) => {
+            return isIngredients.map((item, index) => {
                 const isDisabled = item.dateofuse && new Date(item.dateofuse) < new Date();
+                const isChecked = selectedMyIngredientList.includes(item.ingredientname); // 체크 상태
+
                 return (
                     <Form.Check
                         inline
@@ -148,11 +150,11 @@ const AiSearch = () => {
                         className={styles.check}
                         label={item.ingredientname}
                         onChange={myIngredientHandler}
+                        checked={isChecked}  // 체크 상태 반영
                         disabled={isDisabled}
                     />
                 );
             });
-            return IngredientList;
         }
         return null;
     }
@@ -256,31 +258,24 @@ const AiSearch = () => {
             setRequestAllergy(!requestAllergy)
         }else if (etc === "소비 기한 우선 사용") {
             const today = new Date();
+            const fiveDaysLater = new Date(today);
+            fiveDaysLater.setDate(today.getDate() + 5);
+
+            const nearExpirationIngredients = isIngredients
+                .filter(item => {
+                    const dateOfUse = new Date(item.dateofuse);
+                    return dateOfUse >= today && dateOfUse <= fiveDaysLater;
+                })
+                .map(item => item.ingredientname);
             if (!expirationFlag) {
-                const fiveDaysLater = new Date(today);
-                fiveDaysLater.setDate(today.getDate() + 5);
-
-                const nearExpirationIngredients = isIngredients
-                    .filter(item => {
-                        const dateOfUse = new Date(item.dateofuse);
-                        return dateOfUse >= today && dateOfUse <= fiveDaysLater;
-                    })
-                    .map(item => item.ingredientname);
-
                 setSelectedMyIngredientList(prevState => [
                     ...prevState,
                     ...nearExpirationIngredients
                 ]);
             }else{
-                const expiredIngredients = isIngredients
-                    .filter(item => {
-                        const dateOfUse = new Date(item.dateofuse);
-                        return dateOfUse < today;
-                    })
-                    .map(item => item.ingredientname);
-
+                // 소비 기한 임박한 재료 제거
                 setSelectedMyIngredientList(prevState =>
-                    prevState.filter(item => !expiredIngredients.includes(item))
+                    prevState.filter(item => !nearExpirationIngredients.includes(item))
                 );
             }
             setExpirationFlag(!expirationFlag);
