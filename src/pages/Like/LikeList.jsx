@@ -189,8 +189,8 @@ const LikeList = () => {
                     <Card.Body>
                         <Card.Text>
                             <strong>재료:</strong> {formatIngredients(recipe.ingredients)}
-                            <span className={styles.deleteBtn}>
-                                <Button onClick={() => deleteRecipe(recipe.likeId)}>삭제</Button>
+                            <span className={styles.deleteBtnSpan}>
+                                <Button className={styles.deleteBtn} onClick={() => deleteRecipe(recipe.likeId)} variant="danger">삭제</Button>
                             </span>
                         </Card.Text>
                     </Card.Body>
