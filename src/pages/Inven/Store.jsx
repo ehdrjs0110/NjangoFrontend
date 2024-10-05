@@ -436,7 +436,7 @@ const Store = () => {
                     {invenMode === "normal" ? (
                         <Row className={invenStyles.contentRow}>
                             <Col md={{span: 10, offset: 1}} className={invenStyles.content}>
-                                <h2>갖고있어요!</h2>
+                                <h2>내 재료</h2>
                                 <div className={invenStyles.item}>
                                     <Row style={{ width: '100%', margin: '0 auto' }}>
                                         <IngredientItem
@@ -462,7 +462,7 @@ const Store = () => {
                                     </Row>
                                 </div>
                                 <hr />
-                                <h2>사주세요ㅠㅠ</h2>
+                                <h2>미보유</h2>
                                 <div className={invenStyles.item}>
                                     <Row style={{ width: '100%', margin: '0 auto' }}>
                                         {filteredItemsWithoutSize.map((item, index) => (

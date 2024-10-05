@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import {kakaoLogout} from "../../services/logout";
 
 import styles from '../../styles/Components/Nav/Navigation.module.scss';
-import logo from '../../assets/Logo/logo.png';
+import logo from '../../assets/Logo/navLogo.png';
 
 import cart from '../../assets/Nav/cart.png'
 

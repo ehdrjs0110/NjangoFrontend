@@ -40,6 +40,8 @@ const AiSearch = () => {
     const [selectedMyIngredientList, setSelectedMyIngredientList] = useState([]);
     //사용자 재료
     const [isIngredients, setIngredients] = useState([]);
+    const filteredItemsWithSize = isIngredients.filter(item => item.size > 0);
+    const filteredItemsWithoutSize = isIngredients.filter(item => item.size === 0);
     // auth 관련 --
     const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
     // const { handleTokenRefresh } = useSetNewAuth();
@@ -134,8 +136,27 @@ const AiSearch = () => {
 
     //  재료선택
     function makeIngredientList() {
-        if (isIngredients && Array.isArray(isIngredients)) {
-            const IngredientList = isIngredients.map((item,index) =>
+        if (filteredItemsWithSize && Array.isArray(filteredItemsWithSize)) {
+            const IngredientList = filteredItemsWithSize.map((item,index) =>
+
+                <Form.Check
+                    inline
+                    type="checkbox"
+                    name="group3"
+                    id={item.ingredientname}
+                    className={styles.check}
+                    label={item.ingredientname}
+                    onChange={myIngredientHandler}
+                />)
+            return IngredientList;
+        }
+        return null;
+    }
+
+    //  재료선택
+    function makeIngredientOutList() {
+        if (filteredItemsWithoutSize && Array.isArray(filteredItemsWithoutSize)) {
+            const IngredientList = filteredItemsWithoutSize.map((item,index) =>
 
                 <Form.Check
                     inline

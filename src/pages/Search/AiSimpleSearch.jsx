@@ -31,10 +31,10 @@ const AiSimpleSearch = () => {
     // 레시피 갯수
     const [recipeCount, setRecipeCount] = useState("5");
     // const [myIngredientList, setMyIngredientList] = useState(null);
-    //페이지 변화
-    const [isChange, setChange] = useState(false);
     //사용자 재료
     const [isIngredients, setIngredients] = useState([]);
+    const filteredItemsWithSize = isIngredients.filter(item => item.size > 0);
+    const filteredItemsWithoutSize = isIngredients.filter(item => item.size === 0);
 
     //modal 창 띄우기
     const [modalOpen, setModalOpen] = useState(false);
@@ -133,8 +133,29 @@ const AiSimpleSearch = () => {
 
     // UI = 냉장고 속 재료 보여주기
     const makeMyIngredientList = () => {
-        if (isIngredients && Array.isArray(isIngredients)) {
-            const checkList = isIngredients.map((item, index) =>
+        if (filteredItemsWithSize && Array.isArray(filteredItemsWithSize)) {
+            const checkList = filteredItemsWithSize.map((item, index) =>
+                <Form.Check
+                    key={index}
+                    inline
+                    type="checkbox"
+                    name="group1"
+                    id={`inline-checkbox-${index}`}
+                    className={aiSimpleCss.check}
+                    label={item.ingredientname}
+                    onChange={() => selectIngredient(item.ingredientname)}
+                    checked={selectedIngredientList.includes(item.ingredientname)}
+                />
+            );
+            return checkList;
+        }
+        return null; // 기본값을 반환
+    };
+
+    // UI = 냉장고 속 재료 보여주기
+    const makeMyIngredientOutList = () => {
+        if (filteredItemsWithoutSize && Array.isArray(filteredItemsWithoutSize)) {
+            const checkList = filteredItemsWithoutSize.map((item, index) =>
                 <Form.Check
                     key={index}
                     inline
