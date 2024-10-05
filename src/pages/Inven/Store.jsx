@@ -214,6 +214,8 @@ const Store = () => {
             try {
                 await tokenHandler();
                 const res = await axiosInstance.get("inven/manage", { params });
+                console.log('get data')
+                console.log(res.data);
                 setData(res.data);
                 if(invenMode === 'expert') formatData(res.data);
             } catch (err) {
