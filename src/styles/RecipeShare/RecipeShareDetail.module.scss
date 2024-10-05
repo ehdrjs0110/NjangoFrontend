@@ -187,6 +187,23 @@
   {
     width: 100%;
     border: $accent-color 2px solid;
+
+    img{
+      max-width: 100%;
+    }
+
+    .comment{
+      float: right;
+    }
+
+    .delBtn{
+      margin-left: 15px;
+    }
+
+    .registration{
+      margin-top: 10px;
+      float: right;
+    }
   }
 
 }
