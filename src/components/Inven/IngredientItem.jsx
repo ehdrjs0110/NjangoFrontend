@@ -63,7 +63,7 @@ const IngredientItem = ({ item, index, isIngred, selectIngred, updateUnit, delet
                     }}>
                         <FontAwesomeIcon icon={faInfoCircle}/>
                     </Button>
-                    {!checkExpiredDate(item.status.dateofuse) && (
+                    {item.status.size > 0 && !checkExpiredDate(item.status.dateofuse) && (
                         <OverlayTrigger placement="top" overlay={tooltip}>
                             <FontAwesomeIcon icon={faExclamationTriangle} className={styles.expired} />
                         </OverlayTrigger>
