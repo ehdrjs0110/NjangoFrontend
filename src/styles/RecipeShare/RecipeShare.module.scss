@@ -28,6 +28,14 @@
           align-items: center;
           margin-bottom: 1rem;
 
+          .select {
+            border: 1px solid $p-color;
+            padding: 0.5rem;
+            height: 42px; // .form and .searchButton height
+            min-width: 130px;
+            text-align: center;
+          }
+
           .form {
             flex: 1;
             padding: 0.5rem;
