@@ -30,7 +30,7 @@ const RecipeShareList = () => {
     const [isList, setList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [pageSize, setPageSize] = useState(25);
+    const [pageSize, setPageSize] = useState(7);
     const [keyword, setKeyword] = useState("");
     const [searchInput, setSearchInput] = useState(""); // 검색어 상태
     const [isChange, setChange] = useState(false);
@@ -184,7 +184,7 @@ const RecipeShareList = () => {
                 <Button
                     key={i}
                     onClick={() => handlePageChange(i)}
-                    className={i === currentPage ? 'active' : ''}
+                    className={i === currentPage ? styles.active : ''}
                 >
                     {i}
                 </Button>
