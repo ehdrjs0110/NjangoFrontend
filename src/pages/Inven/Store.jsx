@@ -26,7 +26,6 @@ import SelectEditor from '../../components/Inven/SelectEditor';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import '../../styles/Bootstrap/Bootstrap.scss';
 
-//TODO status 바뀔 때 마다 데이터 다시 받아와야함.
 const Store = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -100,13 +99,14 @@ const Store = () => {
             try {
                 await tokenHandler();
                 await axiosInstance.delete("inven/manage", { params });
-                alert("삭제 되었습니다.");
+                toast("삭제되었습니다.", { type: "success", autoClose: 2000 });
                 setChange(isChange + 1);
             } catch (err) {
-                console.log("err message : " + err);
+                console.log("Error:", err);
+                toast("삭제에 실패했습니다.", { type: "error", autoClose: 2000 });
             }
         } else {
-            alert("취소 되었습니다.");
+            toast("취소되었습니다.", { type: "info", autoClose: 2000 });
         }
     };
     const updateUnit = async (ingredientname, e) => {
@@ -125,6 +125,7 @@ const Store = () => {
             toast("처리 완료!", { type: "success", autoClose: 2000 });
         } catch (err) {
             console.log("Error updating size: ", err);
+            toast("업데이트에 실패했습니다.", { type: "error", autoClose: 2000 });
         }
     };
 
@@ -214,6 +215,8 @@ const Store = () => {
             try {
                 await tokenHandler();
                 const res = await axiosInstance.get("inven/manage", { params });
+                console.log('get data')
+                console.log(res.data);
                 setData(res.data);
                 if(invenMode === 'expert') formatData(res.data);
             } catch (err) {
@@ -232,13 +235,13 @@ const Store = () => {
             data.status.lastget = null;
         }else{
             if (!data.status || !data.status.size) {
-                alert("재료의 양을 입력해주세요.");
+                toast("재료명을 입력해주세요.", { type: "warning", autoClose: 2000 });
                 return;
             }
         }
 
         if (!data || !data.ingredientname) {
-            alert("재료명을 입력해주세요.");
+            toast("재료의 양을 입력해주세요.", { type: "warning", autoClose: 2000 });
             return;
         }
 
@@ -275,6 +278,7 @@ const Store = () => {
                 }
             } else {
                 console.log("err message : " + err);
+                toast("추가에 실패했습니다.", { type: "error", autoClose: 2000 });
             }
         }
     };
@@ -308,13 +312,14 @@ const Store = () => {
             try {
                 await tokenHandler();
                 await axiosInstance.patch(`inven/manage/update/${userId}`, data);
-                alert("수정되었습니다.");
+                toast("수정되었습니다.", { type: "success", autoClose: 2000 });
                 setChange(!isChange);
             } catch (err) {
                 console.log("Error message:", err);
+                toast("수정에 실패했습니다.", {type: "error", autoClose: 2000});
             }
         } else {
-            alert("취소되었습니다.");
+            toast("취소되었습니다.", {type: "info", autoClose: 2000});
         }
     };
     const deleteExcelData = async () => {
@@ -325,13 +330,14 @@ const Store = () => {
             try {
                 await tokenHandler();
                 await axiosInstance.delete(`inven/manage/deleteAll/${userId}?${params}`);
-                alert("삭제되었습니다.");
+                toast("삭제되었습니다.", { type: "success", autoClose: 2000 });
                 setChange(!isChange);
             } catch (err) {
                 console.log("Error message:", err);
+                toast("삭제에 실패했습니다.", { type: "error", autoClose: 2000 });
             }
         } else {
-            alert("취소되었습니다.");
+            toast("취소되었습니다.", { type: "info", autoClose: 2000 });
         }
     };
 
@@ -651,278 +657,3 @@ const Store = () => {
 }
 
 export default Store;
-
-
-
-/*<>
-    <Navigation></Navigation>
-
-    {invenMode === "normal" ? (
-        <Container fluid className={invenStyles.container}>
-            <div className={invenStyles.main}>
-                <Row className={invenStyles.controllerRow}>
-                    <Col md={{ span: 10, offset: 1 }} className={invenStyles.controller}>
-                        <Row className={invenStyles.controllerRow}>
-                            <Col className={invenStyles.controlform}>
-                                <div className={`${invenStyles.buttonGroup} ${invenStyles.middleGroup}`}>
-                                    <div className={`${invenStyles.serch} ${invenStyles.searchContainer}`}>
-                                        <input
-                                            type="text"
-                                            placeholder="재료검색"
-                                            className={invenStyles.searchInput}
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                        />
-                                        <FontAwesomeIcon
-                                            icon={faMagnifyingGlass}
-                                            className={invenStyles.searchIcon}
-                                        />
-                                    </div>
-                                    <button className={invenStyles.button} onClick={() => navigate('/AiSimpleSearch', { state: isIngred })}>요리 시작</button>
-                                    <Button className={invenStyles.button} onClick={() => setInvenMode("expert")}>전문가 모드</Button>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
-                <Row className={invenStyles.contentRow}>
-                    <Col md={{span: 10, offset: 1}} className={invenStyles.content}>
-                        <h2>갖고있어요!</h2>
-                        <div className={invenStyles.item}>
-                            <Row style={{ width: '100%', margin: '0 auto' }}>
-                                <IngredientItem
-                                    key={-1}
-                                    item={{ingredientname: "추가"}}
-                                    handleShow={handleShowAddModal}
-                                    message={"추가"}
-                                />
-                                {filteredItemsWithSize.map((item, index) => (
-                                    <IngredientItem
-                                        key={index}
-                                        item={item}
-                                        index={index}
-                                        isIngred={isIngred}
-                                        selectIngred={selectIngred}
-                                        updateUnit={updateUnit}
-                                        deleteData={deleteData}
-                                        handleShow={handleShowInfoModal}
-                                        setChange={setChange}
-                                        message={"없음"}
-                                    />
-                                ))}
-                            </Row>
-                        </div>
-                        <hr />
-                        <h2>사주세요ㅠㅠ</h2>
-                        <div className={invenStyles.item}>
-                            <Row style={{ width: '100%', margin: '0 auto' }}>
-                                {filteredItemsWithoutSize.map((item, index) => (
-                                    <IngredientItem
-                                        key={index}
-                                        item={item}
-                                        index={index}
-                                        isIngred={isIngred}
-                                        selectIngred={selectIngred}
-                                        updateUnit={updateUnit}
-                                        deleteData={deleteData}
-                                        handleShow={handleShowInfoModal}
-                                        setChange={setChange}
-                                        message={"있음"}
-                                    />
-                                ))}
-                            </Row>
-                        </div>
-                    </Col>
-                </Row>
-            </div>
-        </Container>
-    ) :(
-        <Container fluid className={styles.container}>
-            <Row className={styles.contentRow}>
-                <Col md={{span: 10, offset: 1}} className={styles.content}>
-                    <Row className={styles.row}>
-                        <Col>
-                            <div className={styles.excel}>
-                                <div style={{
-                                    display: "flex",
-                                    flexWrap: "wrap",
-                                    alignItems: "center",
-                                    gap: "10px",
-                                    marginBottom: "10px"
-                                }}>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="재료검색"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        style={{flex: "1 1 30%", minWidth: "200px"}}
-                                    />
-                                    <Button className={styles.btn} onClick={() => {
-                                        const selectRow = selectedRows.map(item => item);
-                                        navigate('/AiSimpleSearch', { state: selectRow });
-                                    }} variant="none">나의 재료로 요리하기</Button>
-                                    <Button className={styles.btn} onClick={updateExcelData} variant="none">
-                                        일괄 저장
-                                    </Button>
-                                    <Button className={styles.btn} onClick={deleteExcelData} variant="none">
-                                        선택 삭제
-                                    </Button>
-                                    <Button className={styles.addBtn} variant="none" onClick={handleShowAddModal}>
-                                        추가
-                                    </Button>
-                                    <Button className={styles.button} onClick={() => setInvenMode("normal")}>일반 모드</Button>
-                                </div>
-                                <DataGrid
-                                    rows={filteredRows}
-                                    columns={columns}
-                                    getRowId={(row) => row.ingredientname}
-                                    processRowUpdate={handleProcessRowUpdate}
-                                    checkboxSelection
-                                    disableRowSelectionOnClick
-                                    disableColumnFilter
-                                    disableColumnSelector
-                                    disableDensitySelector
-                                    onRowSelectionModelChange={(newSelection) => handleSelectionModelChange(newSelection)}
-                                    selectionModel={selectedRows}
-                                />
-                            </div>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-        </Container>
-    )}
-
-    {/!*재료 상세 정보 모달*!/}
-    <Modal show={showInfoModal} onHide={handleCloseInfoModal}>
-        <Modal.Header closeButton>
-            <Modal.Title>상세 정보 수정</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <Form>
-                <Form.Group controlId="ingredientName">
-                    <Form.Label>재료명</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="ingredientname"
-                        value={ingredientInfoData.ingredientname}
-                        onChange={handleInfoChange}
-                    />
-                </Form.Group>
-                <Form.Group controlId="size">
-                    <Form.Label>양</Form.Label>
-                    <Form.Control
-                        type="number"
-                        name="size"
-                        min="0"
-                        value={ingredientInfoData.status.size}
-                        onChange={handleInfoChange}
-                    />
-                </Form.Group>
-                <Form.Group controlId="unit">
-                    <Form.Label>단위</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="unit"
-                        value={ingredientInfoData.status.unit}
-                        onChange={handleInfoChange}
-                    />
-                </Form.Group>
-            </Form>
-        </Modal.Body>
-        <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseInfoModal}>
-                닫기
-            </Button>
-            <Button variant="primary" onClick={handleInfoChangeSave}>
-                저장
-            </Button>
-        </Modal.Footer>
-    </Modal>
-
-    {/!*재료 추가 모달*!/}
-    <Modal show={showAddModal} onHide={handleCloseAddModal}>
-        <Modal.Header closeButton>
-            <Modal.Title>재료 추가</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <Form onSubmit={async (e) => {
-                e.preventDefault();
-                await handleAddData();
-            }}>
-                <Form.Label>재료명</Form.Label>
-                <Form.Control
-                    type="text"
-                    name="ingredientname"
-                    value={isNewData.ingredientname}
-                    onChange={setIsNewDataChange}
-                />
-                {invenMode === "expert" && (
-                    <>
-                        <Form.Label>사이즈</Form.Label>
-                        <Form.Control
-                            type="number"
-                            name="size"  // name 속성 추가
-                            onChange={setIsNewDataChange}
-                            value={isNewData.status.size}
-                            placeholder="0"
-                        />
-
-                        <Form.Label>단위</Form.Label>
-                        <Form.Select
-                            name="unit"  // name 속성 추가
-                            onChange={setIsNewDataChange}
-                            value={isNewData.status.unit}
-                        >
-                            <option value="g">g</option>
-                            <option value="개">개</option>
-                            <option value="ml">ml</option>
-                            <option value="통">통</option>
-                        </Form.Select>
-
-                        <Form.Label>사용기한</Form.Label>
-                        <Form.Control
-                            type="date"
-                            name="dateofuse"  // name 속성 추가
-                            value={isNewData.status.dateofuse}
-                            onChange={setIsNewDataChange}
-                        />
-
-                        <Form.Label>마지막 구입 날짜</Form.Label>
-                        <Form.Control
-                            type="date"
-                            name="lastget"  // name 속성 추가
-                            value={isNewData.status.lastget}
-                            onChange={setIsNewDataChange}
-                        />
-                    </>
-                )}
-            </Form>
-        </Modal.Body>
-        <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseAddModal}>
-                닫기
-            </Button>
-            <Button variant="primary" onClick={handleAddData}>
-                추가
-            </Button>
-        </Modal.Footer>
-    </Modal>
-
-    <ToastContainer />
-</>*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

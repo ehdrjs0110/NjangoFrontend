@@ -41,7 +41,7 @@ const AiSearch = () => {
     //사용자 재료
     const [isIngredients, setIngredients] = useState([]);
     const filteredItemsWithSize = isIngredients.filter(item => item.size > 0);
-    const filteredItemsWithoutSize = isIngredients.filter(item => item.size === 0);
+
     // auth 관련 --
     const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
     // const { handleTokenRefresh } = useSetNewAuth();
@@ -57,6 +57,8 @@ const AiSearch = () => {
     //modal 창 띄우기
     const [modalOpen, setModalOpen] = useState(false);
     const modalBackground = useRef();
+
+    const [expirationFlag, setExpirationFlag] = useState(false);
 
     useEffect(() => {
         // console.log("accesstoken" + accessToken);
@@ -137,37 +139,24 @@ const AiSearch = () => {
     //  재료선택
     function makeIngredientList() {
         if (filteredItemsWithSize && Array.isArray(filteredItemsWithSize)) {
-            const IngredientList = filteredItemsWithSize.map((item,index) =>
+            return filteredItemsWithSize.map((item, index) => {
+                const isDisabled = item.dateofuse && new Date(item.dateofuse) < new Date();
+                const isChecked = selectedMyIngredientList.includes(item.ingredientname); // 체크 상태
 
-                <Form.Check
-                    inline
-                    type="checkbox"
-                    name="group3"
-                    id={item.ingredientname}
-                    className={styles.check}
-                    label={item.ingredientname}
-                    onChange={myIngredientHandler}
-                />)
-            return IngredientList;
-        }
-        return null;
-    }
-
-    //  재료선택
-    function makeIngredientOutList() {
-        if (filteredItemsWithoutSize && Array.isArray(filteredItemsWithoutSize)) {
-            const IngredientList = filteredItemsWithoutSize.map((item,index) =>
-
-                <Form.Check
-                    inline
-                    type="checkbox"
-                    name="group3"
-                    id={item.ingredientname}
-                    className={styles.check}
-                    label={item.ingredientname}
-                    onChange={myIngredientHandler}
-                />)
-            return IngredientList;
+                return (
+                    <Form.Check
+                        inline
+                        type="checkbox"
+                        name="group3"
+                        id={item.ingredientname}
+                        className={styles.check}
+                        label={item.ingredientname}
+                        onChange={myIngredientHandler}
+                        checked={isChecked}  // 체크 상태 반영
+                        disabled={isDisabled}
+                    />
+                );
+            });
         }
         return null;
     }
@@ -183,7 +172,6 @@ const AiSearch = () => {
                 return [...prevState, food];
             }
         })
-        console.log(selectedKindOfFood);
         console.log(selectedKindOfFood);
     }
     // option - 종류
@@ -240,27 +228,61 @@ const AiSearch = () => {
             }
             else{
                 return (
-                    <Form.Check
-                        inline
-                        type="checkbox"
-                        name="group2"
-                        className={styles.check}
-                        id={`inline-checkbox-${index}`}
-                        label={etc}
-                        onChange={() => setChangeTrueFalse(etc)}
-                    />
+                    etc === "소비 기한 우선 사용" ? (
+                        activeKey === "1" && (
+                            <Form.Check
+                                inline
+                                type="checkbox"
+                                name="group2"
+                                className={styles.check}
+                                id={`inline-checkbox-${index}`}
+                                label={etc}
+                                onChange={() => setChangeTrueFalse(etc)}
+                            />
+                        )
+                    ) : (
+                        <Form.Check
+                            inline
+                            type="checkbox"
+                            name="group2"
+                            className={styles.check}
+                            id={`inline-checkbox-${index}`}
+                            label={etc}
+                            onChange={() => setChangeTrueFalse(etc)}
+                        />
+                    )
                 );
             }
         });
     }
-
     const setChangeTrueFalse = (etc) => {
         if (etc === "알레르기 반영"){
             setRequestAllergy(!requestAllergy)
+        }else if (etc === "소비 기한 우선 사용") {
+            const today = new Date();
+            const fiveDaysLater = new Date(today);
+            fiveDaysLater.setDate(today.getDate() + 5);
+
+            const nearExpirationIngredients = filteredItemsWithSize
+                .filter(item => {
+                    const dateOfUse = new Date(item.dateofuse);
+                    return dateOfUse >= today && dateOfUse <= fiveDaysLater;
+                })
+                .map(item => item.ingredientname);
+            if (!expirationFlag) {
+                setSelectedMyIngredientList(prevState => [
+                    ...prevState,
+                    ...nearExpirationIngredients
+                ]);
+            }else{
+                // 소비 기한 임박한 재료 제거
+                setSelectedMyIngredientList(prevState =>
+                    prevState.filter(item => !nearExpirationIngredients.includes(item))
+                );
+            }
+            setExpirationFlag(!expirationFlag);
         }
-
     }
-
 
     // prompt 요청
     async function aiSearchRequest () {
@@ -380,8 +402,6 @@ const AiSearch = () => {
         const {value} = event.target;
         setSearchValue(value);
     }
-
-
     // 레시피 상세 보기로 값 넘겨주가
 
     const startDetailAiSearch = (recipe) => {

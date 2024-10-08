@@ -23,6 +23,7 @@ import {
     engToKor,
 } from 'korean-regexp';
 import InputGroup from "react-bootstrap/InputGroup";
+import {MenuItem, Select} from "@mui/material";
 
 
 const RecipeShareList = () => {
@@ -34,6 +35,7 @@ const RecipeShareList = () => {
     const [searchInput, setSearchInput] = useState(""); // 검색어 상태
     const [isChange, setChange] = useState(false);
     const [modalShow, setModalShow] = useState(false);
+    const [sort, setSort] = useState("createAt");
     const navigate = useNavigate();
 
     const [cookies, setCookie] = useCookies(['refreshToken']);
@@ -42,20 +44,23 @@ const RecipeShareList = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchData(currentPage, pageSize, keyword);
-    }, [currentPage, pageSize, keyword, isChange]);
+        fetchData(currentPage, pageSize, keyword, sort);
+    }, [currentPage, pageSize, keyword, isChange, sort]);
 
-    const fetchData = async (page, size, keyword) => {
+    const fetchData = async (page, size, keyword, sort) => {
+        console.log('Fetching data with sort:', sort); // 추가된 로그
         try {
             await tokenHandler();
             const res = await axiosInstance.get(`recipeShare`, {
                 params: {
                     page: page,
                     size: size,
-                    keyword: keyword
+                    keyword: keyword,
+                    sort: sort
                 }
             });
             const storedRecipe = res.data.content;
+            console.log('Updated isList:', storedRecipe); // 추가된 로그
             setList(storedRecipe);
             setTotalPages(res.data.totalPages);
         } catch (err) {
@@ -225,6 +230,26 @@ const RecipeShareList = () => {
 
                             {/* 검색 필드 */}
                             <InputGroup className={styles.searchGroup}>
+                                <Select
+                                    className={styles.select}
+                                    name='sort'
+                                    value={sort}
+                                    onChange={(e) => setSort(e.target.value)}
+                                    displayEmpty
+                                    renderValue={(selected) => {
+                                        if (selected === "") {
+                                            return <em>정렬 기준 선택</em>;
+                                        }
+                                        return selected === "create_at" ? "작성일 순" : "추천 순";
+                                    }}
+                                >
+                                    <MenuItem value="" disabled>
+                                        <em>정렬 기준 선택</em>
+                                    </MenuItem>
+                                    <MenuItem value="create_at">작성일 순</MenuItem>
+                                    <MenuItem value="like_count">추천 순</MenuItem>
+                                </Select>
+
                                 <Form.Control
                                     placeholder="검색어를 입력하세요"
                                     aria-describedby="basic-addon2"
