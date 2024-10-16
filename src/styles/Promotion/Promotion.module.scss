@@ -1,4 +1,5 @@
 @import '../index.scss';
+@import url('https://fonts.googleapis.com/css?family=Mukta:700');
 
 .container{
     height: 100vh;
@@ -13,39 +14,124 @@
             height: 100%;
         }
     
-        .sidecol{                                
-            flex: 1;
-            padding: 0;
-            height: 100%;
-        }
-    
         .maincontent{
             height: 100%;
-            border: 1px solid black;
         }
-    
-        .sidecontent{
+
+        .logo {
             height: 100%;
-            border: 1px solid black;
-            display: flex;
-            flex-direction: column; /* 컬럼 방향으로 배치 */
-            justify-content: center; /* 가로 중앙 배치 */
-            align-items: center;
+            margin-left: 20px;
+        }
 
-            .start{
-                font-weight: bold;
-            }
+        .topvar {
+            background-color: #fff;
+            position: fixed;
+            top: 0px; /* 상단에서 10px 띄움 */
+            height: 60px;
+            z-index: 1;
 
-            .startbtn{
-                background-color: $p-color;
-                width: 150px;
-                margin-top: 10px;
-                font-size: 30px;
+            .startbtn {
+                position: absolute; /* 부모 요소 기준으로 배치 */
+                top: 50%; /* 세로 가운데 정렬 */
+                right: 10px; /* 오른쪽 끝에서 10px 띄움 */
+                transform: translateY(-50%); /* 가운데 정렬을 위해 상하 이동 */
             }
         }
-    }
 
+        
+    }
 }
+
+//버튼
+@mixin transition($property: all, $duration: 0.45s, $ease: cubic-bezier(0.65,0,.076,1)) {
+    transition: $property $duration $ease;
+}
+
+$white: #fff;
+$black: $p-color;
+
+button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+    &.startbtn {
+      width: 12rem;
+      height: auto;
+      .circle {
+        @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
+        position: relative;
+        display: block;
+        margin: 0;
+        width: 3rem;
+        height: 3rem;
+        background: $black;
+        border-radius: 1.625rem;
+        .icon {
+          @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          background: $white;
+          &.arrow {
+            @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
+            left: 0.625rem;
+            width: 1.125rem;
+            height: 0.125rem;
+            background: none;
+            &::before {
+              position: absolute;
+              content: '';
+              top: -0.25rem;
+              right: 0.0625rem;
+              width: 0.625rem;
+              height: 0.625rem;
+              border-top: 0.125rem solid $white;
+              border-right: 0.125rem solid $white;
+              transform: rotate(45deg);
+            }
+          }
+        }
+      }
+      .buttontext {
+        @include transition(all, 0.45s, cubic-bezier(0.65,0,.076,1));
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0.75rem 0;
+        margin: 0 0 0 1.85rem;
+        color: $black;
+        font-weight: 700;
+        line-height: 1.6;
+        text-align: center;
+        text-transform: uppercase;
+      }
+    }
+    &:hover {
+      .circle {
+        width: 100%;
+        .icon {
+          &.arrow {
+          background: $white;
+          transform: translate(1rem, 0);
+          }
+        }
+      }
+      .buttontext {
+        color: $white;
+      }
+    }
+  }
 
 
 //슬라이드
@@ -77,17 +163,20 @@
     }
 
     .panel {
+        color: white;
         position: absolute;  
         right: 5%; 
         bottom: 10%;
-        background-color: $bg-color;
+        background-color: rgba(75, 86, 105, 0.5);
         border-radius: 30px;
         width: 45%;
-        padding: 10px;
+        padding: 25px;
         font-weight: bold;
+        font-size: 20px;
     }
 
   }
+                
 
   //슬라이드 dot(컨트롤러)
   .slide_dots {
@@ -104,7 +193,7 @@
     width: 15px;
     height: 15px;
     margin: 15px 0;
-    background-color: $white-color;
+    background-color: $bg-color;
     border-radius: 50%;
     cursor: pointer;
   }

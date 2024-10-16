@@ -65,7 +65,7 @@ function App() {
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/Loading" element={<Loading />} />
           <Route path="/Main" element={<PrivateRoute component={<Main />} />} />
-          <Route path="/Promotion" element={<Promotion />} />
+          <Route path="/" element={<Promotion />} />
           <Route path="/Logout" element={<Logout/>}/>
           <Route path="/AiSearch" element={<PrivateRoute component={<AiSearch />}/>} />
           <Route path="/AiSimpleSearch" element={<PrivateRoute component={<AiSimpleSearch />} />} />
