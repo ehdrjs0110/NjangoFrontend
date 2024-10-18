@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AllergyModal from "../../components/MyPage/AllergyModal";
 
-
+import kakaoLogo from "../../assets/Logo/kakaologo.webp";
 
 const MyPagec = () => {
     const [infoData,setInfoData] = useState(null);
@@ -165,6 +165,8 @@ const MyPagec = () => {
                                             <div className={myPageStyle.info}>
                                                 <p className={myPageStyle.name}>{infoData ? infoData.nickname : 'Loading...'}</p>
                                                 <p>{infoData ? infoData.id : 'Loading...'}</p>
+
+                                                {infoData ? (infoData.kakao ? <img src={kakaoLogo} alt='' className={myPageStyle.kakao} />: null) : 'Loading...'}
                                             </div>
                                         </div>
 
@@ -186,8 +188,10 @@ const MyPagec = () => {
                                             onHide={() => {
                                                 setModalShow(false);
                                                 fetchDate();
-                                            }
-                                        }
+                                            }}
+                                            nickname={infoData?infoData.nickname:null}
+                                            phoneNumber={infoData?infoData.phoneNumber:null}
+                                            kakao={infoData?infoData.kakao:null}
                                         />
                                     </Card.Body>
                                 </Card>

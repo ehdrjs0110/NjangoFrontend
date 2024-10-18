@@ -23,6 +23,9 @@ const FindPw = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const modalBackground = useRef();
 
+    //이메일 전송 중 보이기
+    const [isSend, setSend] = useState(false);
+
     //이메일 인증 박스 보이기
     const [isHidden, setHidden] = useState(false);
 
@@ -49,8 +52,7 @@ const FindPw = () => {
 
   //이메일 디비 확인 및 전송
   const emailCheck = () => {
-    setRead(true);
-    setHidden(true);
+    setSend(true);
 
     console.log(isEmail);
     const data = {
@@ -61,12 +63,21 @@ const FindPw = () => {
     axios
       .post("http://localhost:8080/mail/send", data)
       .then((res) => {
-        alert("메일 보내기 성공");
+        setSend(false);
         console.log('메일 전송 성공:', res.data); // 성공 시 응답 출력
+        setRead(true);
+        setHidden(true);
       })
       .catch((err) => {
-        console.log("err message : " + err);
-        alert("메일 보내기 실패");
+        if (err.response && err.response.status === 400 && err.response.data === "kakao user") {
+          // 카카오 계정 회원일 때의 처리
+          alert("카카오 계정으로 로그인 해주세요.");
+          navigate('/SignIn');
+        } else {
+          console.log("err message : " + err);
+          setSend(false);
+          alert("메일 보내기 실패");
+        }
         setRead(false);
       });
   };
@@ -80,7 +91,7 @@ const FindPw = () => {
   
     //axios 파일 전송
     axios
-      .post("http://localhost:8080/verify/code", data)
+      .post("http://localhost:8080/mail/verify/code", data)
       .then((res) => {
           if(res.data === true){
             alert("코드 확인!");
@@ -107,22 +118,29 @@ const FindPw = () => {
     });
   };
 
-  const changePassword = () => {
+  const changePassword = async () => {
     if(isPassword.password != isPassword.re_password){
       console.table(isPassword);
       alert("입력하신 비밀번호가 다릅니다.");
     }else{
-      alert("비밀번호가 변경 되었습니다.");
+
+      const password = isPassword.password;
+      const userId = isEmail;
+      try {
+        const requestBody = { password };
+        const response = await axios.patch(`http://localhost:8080/user/find/findPw/${userId}`,requestBody)
+        if(response){
+          alert("비밀번호가 변경 되었습니다.");
+          navigate('/SignIn');
+        }else{
+          alert("비밀번호 변경에 실패했습니다.");
+        }
+      }catch (e) {
+          console.log(e);
+          alert("비밀번호 변경에 실패했습니다.");
+      }
     }
   }
-
-  const emailsign = () => {
-    navigate('/SignUp');
-  };
-
-  const signin = () => {
-    navigate('/SignIn');
-  };
 
   return (
     <Container fluid className={styles.container}>
@@ -133,6 +151,9 @@ const FindPw = () => {
             <Form.Group className={styles.group}>
               <Form.Control type="text" id='email' onChange={handleEmail} readOnly={isRead} placeholder="이메일" />
             </Form.Group>
+            <span style={{ display: isSend ? "block" : "none"}}>
+              <p className={styles.send}>메일 전송 중</p>
+            </span>
             <span style={{ display: isHidden ? "none" : "block"}}>
               <Button type='button' className={styles.btn} onClick={emailCheck} variant="primary">확인</Button>
             </span>
