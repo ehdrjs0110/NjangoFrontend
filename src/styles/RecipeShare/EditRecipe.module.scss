@@ -6,10 +6,12 @@
 {
   height: 100%;
 
+
   .AiDetaileSearchRow
   {
     background-color: $bg-color;
     height: 100%;
+
 
     .col
     {
@@ -120,23 +122,6 @@
       }
     }
 
-    .iconButtonClicked
-    {
-      background-color: #F75690;
-      width: 30%;
-      .icon{
-        color: #FFFFFF;
-      }
-    }
-
-    .iconButtonClicked:hover
-    {
-      background-color: #fff;
-      .icon{
-        color: #F75690;
-      }
-    }
-
     .icon
     {
       //font-size: 1.5rem;
@@ -188,22 +173,8 @@
     width: 100%;
     border: $accent-color 2px solid;
 
-    img{
-      max-width: 100%;
-    }
 
-    .comment{
-      float: right;
-    }
 
-    .delBtn{
-      margin-left: 15px;
-    }
-
-    .registration{
-      margin-top: 10px;
-      float: right;
-    }
   }
 
 }
@@ -237,18 +208,16 @@
     align-items: center;    
     justify-content: center;
     padding: 0 !important;
-    // height: 100% !important;
 
     .index
     {
-      // height: auto;
+      height: 100%;
       text-align: center;
+      //border: $accent-color 2px solid;
+      //background-color: $accent-color;
       color: $p-font-color;
       border: none;
-      font-size: 2.3rem;
-      // position: relative;
-      // top: 50%;
-      // transform: translateY(10%);
+      font-size: 2.5rem;
     }
   }
 

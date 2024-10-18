@@ -317,9 +317,9 @@ const RecipeShareDetail = () => {
 
                 return (
                     <Card.Body key={index}>
-                        {formattedDate}
-                        {comment.nickname}
                         {comment.content}
+                        <span className={styles.comment}>{comment.nickname}</span>
+                        <span className={styles.comment}>{formattedDate}</span>
                         {comment.userId === userId && (
                         <Button className={styles.delBtn} onClick={() => deleteComment(comment.commentId)} variant="danger">삭제</Button>
                         )}
@@ -553,7 +553,7 @@ const RecipeShareDetail = () => {
                                             <Card className={styles.recipeContainCard}>
                                                 <Card.Body>
                                                     <Form.Control type="text" onChange={commentSet} placeholder='타인의 권리를 침해하거나 명예를 훼손하는 댓글은 운영원칙 및 관련 법률에 제재를 받을 수 있습니다.' />
-                                                    <Button onClick={commentAdd}>등록</Button>
+                                                    <Button className={styles.registration} onClick={commentAdd}>등록</Button>
                                                 </Card.Body>
                                             </Card>
                                         </div>

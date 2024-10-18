@@ -68,6 +68,7 @@
           background-color: $p-color;
           color: #fff;
           font-size: 1rem;
+          font-weight: bold;
           cursor: pointer;
 
           &:hover {
@@ -134,9 +135,13 @@
   }
 }
 
-.deleteBtn {
+.deleteBtnSpan {
   margin-top: 2rem;
   float: right;
+
+  .deleteBtn{
+    font-weight: bold;
+  }
 }
 
 // 부트스트랩 기준 md: 중형 (Medium, ≥768px)

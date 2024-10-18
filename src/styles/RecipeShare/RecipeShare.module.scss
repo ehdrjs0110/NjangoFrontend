@@ -136,16 +136,9 @@
               border-radius: 4px;
               cursor: pointer;
 
-              &:hover {
-                background-color: lighten($p-color, 40%);
-                color: darken($p-color, 20%);
-              }
-
-              &.active {
-                background-color: $p-color;
-                color: #fff;
-                font-weight: bold;
-                cursor: default;
+              &:hover, &.active{
+                background-color: lighten($p-color, 40%) !important; 
+                color: darken($p-color, 20%) !important;
               }
 
               &:disabled {
