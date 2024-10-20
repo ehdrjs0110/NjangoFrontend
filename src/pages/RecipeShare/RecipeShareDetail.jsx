@@ -46,7 +46,7 @@ const RecipeShareDetail = () => {
     const [level,setLevel] = useState(0);
     const [time,setTime] = useState(0);
     const [serve,setServe] = useState(0);
-    const [content,setContent] = useState(null);
+    const [content,setContent] = useState();
     const [image,setImage] = useState(null);
     const [likecount, setLikecount] = useState(0);
     const [recipeId, setRecipeId] = useState(null);
@@ -269,6 +269,7 @@ const RecipeShareDetail = () => {
         try{
             await tokenHandler();
             await axiosInstance.post(`comment/add/${userId}/${recipeShareId}`, newComment);
+            setNewComment("");
             setChange(!isChange);
         }catch(err){
             console.log(err);
@@ -317,12 +318,12 @@ const RecipeShareDetail = () => {
 
                 return (
                     <Card.Body key={index}>
-                        {comment.content}
-                        <span className={styles.comment}>{comment.nickname}</span>
-                        <span className={styles.comment}>{formattedDate}</span>
+                        {comment.content.replace(/"/g, '')}
                         {comment.userId === userId && (
-                        <Button className={styles.delBtn} onClick={() => deleteComment(comment.commentId)} variant="danger">삭제</Button>
+                            <Button className={styles.delBtn} onClick={() => deleteComment(comment.commentId)} variant="danger">삭제</Button>
                         )}
+                        <span className={styles.comment}>{comment.nickname}</span>
+                        <span className={styles.date}>{formattedDate}</span>
                     </Card.Body>
                 );
             });
@@ -530,20 +531,24 @@ const RecipeShareDetail = () => {
                                 </Card>
                                 <Card className={styles.contentContainer} >
                                     <Card.Body>
-                                    <div className={styles.detailContainer}>
-                                            <Card className={styles.recipeContainCard}>
-                                                <Card.Body>
-                                                    <img src={`http://localhost:8080/uploads/${image}`} alt='' />
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
-                                        <div className={styles.detailContainer}>
-                                            <Card className={styles.recipeContainCard}>
-                                                <Card.Body>
-                                                    {content}
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
+                                        {image?
+                                            <div className={styles.detailContainer}>
+                                                <Card className={styles.recipeContainCard}>
+                                                    <Card.Body>
+                                                        <img src={`http://localhost:8080/uploads/${image}`} alt='' />
+                                                    </Card.Body>
+                                                </Card>    
+                                            </div>
+                                        : null}
+                                        {content!="null"?
+                                            <div className={styles.detailContainer}>
+                                                <Card className={styles.recipeContainCard}>
+                                                    <Card.Body>
+                                                        {content}
+                                                    </Card.Body>
+                                                </Card>
+                                            </div>
+                                        : null}
                                         <div className={styles.detailContainer}>
                                             <Card className={styles.recipeContainCard}>
                                                 {commentList()}
@@ -552,7 +557,7 @@ const RecipeShareDetail = () => {
                                         <div className={styles.detailContainer}>
                                             <Card className={styles.recipeContainCard}>
                                                 <Card.Body>
-                                                    <Form.Control type="text" onChange={commentSet} placeholder='타인의 권리를 침해하거나 명예를 훼손하는 댓글은 운영원칙 및 관련 법률에 제재를 받을 수 있습니다.' />
+                                                    <Form.Control type="text" onChange={commentSet} value={newComment} placeholder='타인의 권리를 침해하거나 명예를 훼손하는 댓글은 운영원칙 및 관련 법률에 제재를 받을 수 있습니다.' />
                                                     <Button className={styles.registration} onClick={commentAdd}>등록</Button>
                                                 </Card.Body>
                                             </Card>
