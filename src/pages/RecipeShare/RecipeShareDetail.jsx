@@ -533,7 +533,7 @@ const RecipeShareDetail = () => {
                                     <div className={styles.detailContainer}>
                                             <Card className={styles.recipeContainCard}>
                                                 <Card.Body>
-                                                    <img src={`${process.env.PUBLIC_URL}/image/${image}`} alt='' />
+                                                    <img src={`http://localhost:8080/uploads/${image}`} alt='' />
                                                 </Card.Body>
                                             </Card>
                                         </div>
