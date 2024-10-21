@@ -41,13 +41,14 @@ import PrivateRoute  from "./services/PrivateRoute";
 import Gallery from "./pages/Gallery/Gallery.jsx";
 import Sidebar from "./components/MyPage/Sidebar";
 
-
-
-// import index from '../src/styles/index.css'
-
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useDispatch, useSelector} from "react-redux";
+import Store from "./pages/Inven/Store";
+
+
+// import index from '../src/styles/rindex.css'
+
+
 
 function App() {
   console.log("this is app");
@@ -71,9 +72,9 @@ function App() {
           <Route path="/AiDetailSearch" element={<PrivateRoute component={<AiDetailSearch />} />} />
           <Route path="/FindId" element={<FindId />} />
           <Route path="/FindPw" element={<FindPw />} />
-          <Route path="/Inven" element={<PrivateRoute component={<Inven />}/>} />
+          <Route path="/Inven" element={<PrivateRoute component={<Store />}/>} />
           <Route path="/ManagementInven" element={<PrivateRoute component={<ManagementInven />}/>} />
-          <Route path="/Excel" element={<PrivateRoute component={<Excel />}/>} />
+          {/*<Route path="/Excel" element={<PrivateRoute component={<Excel />}/>} />*/}
           <Route path="/ProFile" element={<PrivateRoute component={<Profile/>} />} />
           <Route path="/MyPage" element={<PrivateRoute component={<MyPage/>}/>}/>
           {/*<Route path="/MyPage" element={<MyPage/>}/>*/}

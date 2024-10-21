@@ -56,9 +56,7 @@ function Inven() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-
     const fetchData = async () => {
-      console.log("inven 데이터받기")
       const params = { userId: userId };
       try {
         console.log(params);
@@ -272,17 +270,15 @@ function Inven() {
 
   return (
       <>
-        <Navigation></Navigation>
+        <Navigation invenMode={0}></Navigation>
         <Container fluid className={styles.container}>
           <div className={styles.main}>
             <Row className={styles.controllerRow}>
               <Col md={{ span: 10, offset: 1 }} className={styles.controller}>
                 <Row className={styles.controllerRow}>
                   <Col className={styles.controlform}>
-                    <div className={`${styles.buttonGroup} ${styles.topGroup}`}>
-                      <button className={styles.button} onClick={cookmode}>요리 시작</button>
-                      <button className={styles.button} onClick={excelmode}>전문가 모드</button>
-                    </div>
+                    {/*<div className={`${styles.buttonGroup} ${styles.topGroup}`}>*/}
+                    {/*</div>*/}
                     <div className={`${styles.buttonGroup} ${styles.middleGroup}`}>
                       <div className={`${styles.serch} ${styles.searchContainer}`}>
                         <input
@@ -297,17 +293,25 @@ function Inven() {
                             className={styles.searchIcon}
                         />
                       </div>
-                      <button className={styles.button} onClick={handleShowAddModal}>추가</button>
+                      {/*<button className={styles.button} onClick={handleShowAddModal}>추가</button>*/}
+                      <button className={styles.button} onClick={cookmode}>요리 시작</button>
+                      {/*<Button className={styles.button} onClick={excelmode} variant={"danger"}>전문가 모드</Button>*/}
                     </div>
                   </Col>
                 </Row>
               </Col>
             </Row>
             <Row className={styles.contentRow}>
-              <Col md={{ span: 10, offset: 1 }} className={styles.content}>
+              <Col md={{span: 10, offset: 1}} className={styles.content}>
                 <h2>갖고있어요!</h2>
                 <div className={styles.item}>
                   <Row style={{ width: '100%', margin: '0 auto' }}>
+                    <IngredientItem
+                        key={-1}
+                        item={{ingredientname: "추가"}}
+                        handleShow={handleShowAddModal}
+                        message={"추가"}
+                    />
                     {filteredItemsWithSize.map((item, index) => (
                         <IngredientItem
                             key={index}
@@ -348,6 +352,7 @@ function Inven() {
             </Row>
           </div>
         </Container>
+
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>상세 정보 수정</Modal.Title>
@@ -393,12 +398,16 @@ function Inven() {
             </Button>
           </Modal.Footer>
         </Modal>
+
         <Modal show={showAddModal} onHide={handleCloseAddModal}>
           <Modal.Header closeButton>
             <Modal.Title>재료 추가</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form onSubmit={async (e) => {
+              e.preventDefault();
+              await handleAddData();
+            }}>
               <Form.Group controlId="ingredientName">
                 <Form.Label>재료명</Form.Label>
                 <Form.Control
@@ -438,6 +447,7 @@ function Inven() {
             </Button>
           </Modal.Footer>
         </Modal>
+
         <ToastContainer />
       </>
   );

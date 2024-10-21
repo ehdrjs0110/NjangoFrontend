@@ -371,11 +371,6 @@ const AiDetaileSearch = () => {
     }
 
 
-
-
-
-
-
     return (
         <>
             <Navigation />

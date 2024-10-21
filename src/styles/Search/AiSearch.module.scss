@@ -1,81 +1,98 @@
 @import '../index.scss';
 
-.aiSearchContainer
-{
-  background-color: $bg-color;
-
-  .aiSearchRow
-  {
-    margin-left: 0;
-    margin-right: 0;
-    .aiSearchCol
-    {
-      margin-top: 1%;
-      background-color: #FFFFFF;
-    }
-  }
+* {
+  margin: 0 ;
+  padding: 0;
 }
 
-.aiSearchAllContainer{
+.aiSearchAllContainer {
   height: 100%;
   background-color: $bg-color;
-}
 
-.aiSearchInputGroup
-{
-  height: 60px;
+  .aiSearchContainer {
+    background-color: $bg-color;
+    min-height: 90vh;
 
-  .form
-  {
-    border: solid 1.5px $p-color;
-  }
+    .aiSearchRow {
+      min-height: 85vh;
 
-  // 검색버튼
-  .aiSearchButton
-  {
-    border: solid 2px $p-color;
-    color: $p-color;
-    font-size: 1.5rem;
-  }
-}
+      .aiSearchCol {
+        padding: 1.5rem !important;
+        margin: 0 auto;
+        width: 60%;
+        min-width: 800px;
+        background-color: #FFFFFF;
+        border-radius: 2rem;
+        min-height: 85vh;
+        margin-bottom: 1rem;
 
-// 내 재료
-.ingredientContainer
-{
-  margin-top: 2vh;
-  //border: solid 0.1px black;
-  //border-top: black 1px;
-  //boarder: 0;
-  border-radius: 4px;
-  //background-color: ;
+        .header{
+          font-weight: 800;
+          padding-bottom: 10px;
+        }
 
-  .card
-  {
-    color: $p-font-color;
-    border: 0;
+        .aiSearchInputGroup {
+          display: flex;
+          align-items: center;
+          margin-bottom: 1rem;
 
-    .title
-    {
-      font-size: 1.7rem;
+          .form {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid $p-color;
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+
+            &:focus{
+              border: none;
+            }
+          }
+
+          .aiSearchButton {
+            padding: 0.5rem 1rem;
+            border: 1px solid $p-color;
+            border-left: none;
+            border-radius: 0 4px 4px 0;
+            background-color: $p-color;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+
+            &:hover {
+              background-color: darken($p-color, 10%);
+            }
+          }
+        }
+      }
+
+      @media (max-width: 800px) {
+        .aiSearchCol {
+          width: 100%;
+          min-width: auto;
+        }
+      }
     }
   }
+}
+// 내 재료
+.ingredientContainer {
+  border-top: 1px solid $p-color;
+  margin-top: 1vh;
+  padding-top: 1vh;
 }
 
 
 // 옵션 토글 버튼
-.aiSearchOptionContainer
-{
+.aiSearchOptionContainer  {
   width: 100%;
   margin-top: 5vh;
   margin-bottom: 5vh;
   border-bottom: 1px $p-color solid; //이거
-  //opacity: 40%;
   transition: opacity 0.3s ease;
 
   &:hover {
     opacity:100%;
   }
-
 
   &.collapsed {
     opacity: 0.4;
@@ -83,41 +100,32 @@
       opacity:100%;
     }
   }
+
   &.expanded {
     opacity: 1;
 
+    & button:hover {
+      opacity:50%;
+    }
   }
 
-
-
   .containCard{
-    //border: 2px solid $p-color;
     border: 0;
 
     .aiSearchOptionHeader
     {
       border-bottom: 1px $p-color solid; // 이거
       background-color: #FFFFFF;
-      //color: $p-font-color;
       padding: 0;
-      //margin: 0;
 
       .button{
         background-color: #FFFFFF;
-        //position: st;
         color: black;
         border: 0;
         font-size: 2rem;
-        //@extend .englishFont;
-        //border-top-left-radius: 15px;
-        //border-top-right-radius: 15px;
-        //text-align: center;
-
-
       }
     }
   }
-
 }
 
 // 레시피 보여주기
@@ -127,38 +135,34 @@
   {
     margin-bottom: 2vh;
     border: $accent-color 2px solid;
-
     color: $p-font-color;
 
-    .hearder
-    {
+    .cardHeader {
       background-color: #FFFFFF;
-      //color: #FFFFFF;
+      color: black;
       border-bottom: $accent-color 2px solid;
-
+      font-weight: 600;
     }
 
     // 레시피 제목 부분
     .recipeTitleCol
     {
-      text-align: center;
+      padding-left: 1rem !important;
       font-size: 1.8rem;
-
     }
 
     // 레시피 상세보기 버튼 부분
     .recipeDetailSearchCol
     {
       text-align: right;
-      //text-align: center;
 
-      .recipeDetailSearchButton
-      {
+      .recipeDetailSearchButton {
         width: 30%;
         border: 3px solid $p-color;
         color: $p-color;
         font-size: 1.2rem;
         background-color: #FFFFFF;
+        font-weight: 800;
       }
 
       .recipeDetailSearchButton:hover
@@ -190,37 +194,55 @@
   }
 }
 
-.check{
-  input[type="checkbox"] {
-    /* Hide the default checkbox */
-    display: none;
+.foodTypeGroup {
+  margin-top: 0.5rem; // 그룹 간의 간격 추가
+  margin-bottom: 0.5rem; // 그룹 간의 간격 추가
+  display: flex;
+  flex-direction: row; // 체크박스를 라벨의 오른쪽에 배치
+
+  > label {
+    width: 6rem;
+    text-align: center;
+    justify-content: center; // 텍스트 좌우 가운데 정렬
   }
 
-  /* Container for checkbox and label */
-  label {
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Center vertically */
+  .foodTypeLabel {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4A4A4A;
+    display: flex;
+    align-items: center;
   }
 
-  input[type="checkbox"] + label::before {
-    /* Style the custom checkbox */
-    content: "";
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-right: 8px;
-    //border: 1px solid $accent-color;/* Use your primary color */
-    border: 1px solid $p-color;/* Use your primary color */
-
-    background-color: transparent;
-    border-radius: 3px;
+  .checkboxContainer {
+    display: flex; // 가로로 배치
+    flex-wrap: wrap; // 체크박스가 넘치면 다음 줄로 배치
   }
 
-  input[type="checkbox"]:checked + label::before {
-    /* Change the background color when the checkbox is checked */
-    //background-color: $accent-color; /* Use your primary color */
-    background-color: $p-color; /* Use your primary color */
-    //border: 1px solid $p-color;/* Use your primary color */
+  .check{
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border: 1px solid $p-color; // 외곽선 색상
+      border-radius: 0.5rem;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+
+      &:hover {
+        background-color: lighten($p-color, 20%); // 호버 시 밝은 색상
+        border-color: lighten($p-color, 10%);
+      }
+    }
+
+    input[type="checkbox"]:checked + label {
+      background-color: $p-color; // 선택된 상태의 배경색
+      color: white; // 글자색 흰색으로
+    }
   }
 }
 
@@ -234,6 +256,7 @@
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 1000; /* 모달이 최상단에 오도록 설정 */
 }
 
 .loader {
@@ -244,31 +267,32 @@
   left: 50%;
   transform: translate(-50%, -50%);
   animation: spin .6s linear infinite reverse;
+  z-index: 1001; /* 로더가 모달 배경보다 위에 오도록 설정 */
 
-    .character {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      height: 100%;
-      animation: spin 1s infinite ease-in-out;
-    }
+  .character {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+    animation: spin 1s infinite ease-in-out;
+  }
 
-    .character::after {
-      background-image: url('../../assets/Character/char.png');
-      background-size: cover;
-      position: absolute;
-      content: '';
-      width: 250px;
-      height: 250px;
-      top: 0;
-    }
+  .character::after {
+    background-image: url('../../assets/Character/char.png');
+    background-size: cover;
+    position: absolute;
+    content: '';
+    width: 250px;
+    height: 250px;
+    top: 0;
+  }
 }
 
 .loading {
   position: absolute;
-  z-index: 1;
-  
+  z-index: 1002; /* 로딩 텍스트가 모든 요소보다 위에 오도록 설정 */
+
   .text {
     font-size: 50px;
     font-weight: bold;

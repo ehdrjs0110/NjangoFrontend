@@ -9,7 +9,7 @@
     flex-direction: column;
 
     .main {
-        height: 100%;
+        height: auto;
 
         .controllerRow {
             height: 15%;
@@ -103,6 +103,17 @@
                 width: 80%; /* 중간 그룹이 너무 많은 공간을 차지하지 않도록 설정 */
                 justify-content: center;
                 margin-top: 20px; /* 중간 그룹의 위쪽 간격 조정 */
+            }
+
+            .button{
+                color: white;
+                background: $p-color;
+            }
+
+            .button:hover{
+                color: white;
+                background: #f5913b;
+                transition: background 0.3s ease, color 0.3s ease;
             }
         }
     }
@@ -255,6 +266,15 @@
             display: inline-block;
             width: 30%;
             text-align: right;
+        }
+    }
+
+    .addIngredient {
+        cursor: pointer;
+        transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.3s ease, font-size 0.3s ease; // 호버 시 애니메이션
+
+        &:hover {
+            filter: brightness(0.9);
         }
     }
 

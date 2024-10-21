@@ -17,7 +17,8 @@ import {
     faHourglassHalf,
     faMobile,
     faStar,
-    faUsers
+    faUsers,
+    faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import {useLocation} from "react-router-dom";
 import axios from "axios";
@@ -49,6 +50,8 @@ const RecipeShareDetail = () => {
     const [image,setImage] = useState(null);
     const [likecount, setLikecount] = useState(0);
     const [recipeId, setRecipeId] = useState(null);
+    //작성자 확인용 아이디
+    const [id, setId] = useState(null);
     //새 댓글
     const [newComment, setNewComment] = useState('');
     //댓글
@@ -94,6 +97,7 @@ const RecipeShareDetail = () => {
                     setContent(storedRecipe[0].content);
                     setImage(storedRecipe[0].imagePath);
                     setLikecount(storedRecipe[0].likeCount);
+                    setId(storedRecipe[0].id);
                 }
         
             }catch(err){
@@ -257,7 +261,7 @@ const RecipeShareDetail = () => {
         }
     };
 
-    //재료 삭제
+    //댓글 삭제
     const deleteComment = async (commentId) => {
 
         if(window.confirm(`정말 댓글을 삭제하시겠습니까?`)){
@@ -274,6 +278,23 @@ const RecipeShareDetail = () => {
         }  
     };
 
+    //게시글 삭제
+    const deletePost = async () => {
+        if(window.confirm(`정말 게시글을 삭제하시겠습니까?`)){
+            try{ 
+                await tokenHandler();
+                await axiosInstance.delete(`recipeShare/${recipeShareId}`);
+                alert("삭제 되었습니다.");
+                navigate('/recipeShareList');
+            }catch(err){
+                console.log("err message : " + err);
+            }
+        }else {
+            alert("취소 되었습니다.");
+        }  
+    };
+
+    //댓글
     function commentList() {
         if(comment != null && comment.length > 0){
             return comment.map((comment, index) => {
@@ -293,6 +314,17 @@ const RecipeShareDetail = () => {
             });
         }else {
             return <Card.Body>아무런 댓글이 없습니다.</Card.Body>  // comment가 null일 경우
+        }
+    }
+
+    //게시글 삭제
+    function postDelete(){
+        if(id === userId){
+            return (
+                <Button  className={styles.iconButton} onClick={deletePost}  variant="outline-secondary">
+                    <FontAwesomeIcon className={styles.icon} icon={faTrash} />
+                </Button>
+            );
         }
     }
 
@@ -354,9 +386,8 @@ const RecipeShareDetail = () => {
                                                     <Button  className={styles.iconButton}  variant="outline-secondary" >
                                                         <FontAwesomeIcon className={styles.icon} icon={faMobile} />
                                                     </Button>{' '}
-                                                    <Button  className={styles.iconButton}  variant="outline-secondary">
-                                                        <FontAwesomeIcon className={styles.icon} icon={faEllipsis} />
-                                                    </Button>{' '}
+                                                    {postDelete()}
+                                                    {' '}
                                                 </Col>
                                             </Row>
                                         </Card.Title>

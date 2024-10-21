@@ -4,6 +4,7 @@
     border-radius: 20px;
     height: 65px;
     width: 80px;
+    cursor: pointer;
 }
 
 .shop {
@@ -29,4 +30,42 @@
     display: flex;
     justify-content: center; /* 가운데 정렬 */
     width: 100%;
+
+    a{
+        font-weight: bold;
+        margin-right: 1rem;
+        margin-left: 1rem;
+        font-size: 18px;
+    }
+}
+
+.modeBtn{
+    height: 40px;
+    width: 7rem;
+    margin-right: 1rem;
+}
+
+.navRight{
+    display: flex;
+    align-items: end;
+    width: 20rem;
+}
+
+.navdropdown{
+    >a:first-of-type{
+        background-image: url("../../../../public/image/profile-removebg-preview.png");
+        background-size: cover;
+        height: 40px;
+        width: 40px;
+        padding: 0 !important;
+        transform: scale(1.5);
+
+        &::after{
+            display: none;
+        }
+    }
+    >div{
+        //top: 110% !important;
+        left: calc(-10rem + 40px) !important;
+    }
 }
