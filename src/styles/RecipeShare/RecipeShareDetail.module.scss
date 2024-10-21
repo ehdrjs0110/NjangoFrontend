@@ -1,0 +1,350 @@
+@import '../index.scss';
+
+
+
+.AiDetaileSearchContainer
+{
+  height: 100%;
+
+  .AiDetaileSearchRow
+  {
+    background-color: $bg-color;
+    height: 100%;
+
+    .col
+    {
+
+      .contentContainer
+      {
+        border: solid 2px $p-font-color;
+
+        .cookingClearButton
+        {
+          padding: 0;
+          width: 80%;
+          height: 100%;
+          border: solid 2px $p-color;
+          color: $p-color;
+          font-size: 1.5rem;
+
+          &:hover
+          {
+            background-color: $p-color;
+            color: #FFFFFF;
+            border: solid 2px $p-color;
+
+          }
+        }
+
+        // 재료
+        .ingredientContainer
+        {
+          width: 100%;
+          border: $p-color 2px solid;
+
+          .ingredientTitle
+          {
+            text-align: center;
+            font-size: 2rem;
+            color: $accent-color;
+          }
+
+          .listRow{
+            border-bottom: 1px solid #e5e5e5;
+            width: 83%;
+            margin: 0 auto;
+            margin-top: 10px;
+            padding-bottom: 10px;
+            font-weight: 550;
+          }
+
+          .ingredientList
+          {
+            color: $p-font-color;
+          }
+
+          .listText {
+            text-align: center;
+          }
+
+
+        }
+      }
+
+    }
+  }
+
+}
+
+
+// 상위에 있는 정보들
+
+.upperHalfContain{
+  margin-bottom: 3vh;
+
+  .titleCol
+  {
+    font-size: 2rem;
+    text-align: center;
+    color: $accent-color;
+
+
+    .bottomLine
+    {
+      width: 80%;
+      margin-left: 10%;
+      border-bottom: solid 1.5px $accent-color;
+      margin-bottom: 3vh;
+    }
+
+
+
+
+
+  }
+
+  .iconCol
+  {
+    text-align: right;
+    .iconButton
+    {
+      background-color: #FFFFFF;
+      width: 30%;
+    }
+
+    .iconButton:hover
+    {
+      background-color: $accent-color;
+      .icon{
+        color: #FFFFFF;
+      }
+    }
+
+    .iconButtonClicked
+    {
+      background-color: #F75690;
+      width: 30%;
+      .icon{
+        color: #FFFFFF;
+      }
+    }
+
+    .iconButtonClicked:hover
+    {
+      background-color: #fff;
+      .icon{
+        color: #F75690;
+      }
+    }
+
+    .icon
+    {
+      //font-size: 1.5rem;
+      color: $accent-color;
+    }
+
+
+
+  }
+
+
+
+}
+
+.iconRow
+{
+  .levelIcon
+  {
+    font-size: 0.8rem;
+    color: $p-color;
+  }
+
+  .icon
+  {
+    font-size: 1.5rem;
+    color: $p-color;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+// 레시피
+
+.detailContainer
+{
+
+  margin-top: 5vh;
+
+
+  .recipeContainCard
+  {
+    width: 100%;
+    border: $accent-color 2px solid;
+
+    img{
+      max-width: 100%;
+    }
+
+    .date{
+      font-size: 12px;
+      color: #888; /* 날짜 텍스트 색상 */
+      margin-top: 4px; /* 텍스트와 날짜 사이 여백 */
+      display: block; /* 날짜가 댓글 아래에 위치하도록 설정 */
+    }
+
+    .comment{
+      float: right;
+    }
+
+    .delBtn{
+      margin-left: 15px;
+      width: 55px;
+      height: 30px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      float: right;
+    }
+
+    .registration{
+      margin-top: 10px;
+      float: right;
+    }
+  }
+
+}
+
+.titleContianer{
+  .title{
+
+    text-align: center;
+    width: 100%;
+    font-size: 2.7rem;
+    color: $p-color;
+  }
+  .test
+  {
+    //text-align: center;
+    width: 80%;
+    margin-left: 10%;
+    border-bottom: 4px dotted $p-color;
+    margin-bottom: 3.5vh;
+
+  }
+}
+
+
+
+.detailRecipeCard
+{
+  .numberCol
+  {
+    display: flex;         
+    align-items: center;    
+    justify-content: center;
+    padding: 0 !important;
+    // height: 100% !important;
+
+    .index
+    {
+      // height: auto;
+      text-align: center;
+      color: $p-font-color;
+      border: none;
+      font-size: 2.3rem;
+      // position: relative;
+      // top: 50%;
+      // transform: translateY(10%);
+    }
+  }
+
+  .recipeCol
+  {
+    border-left: 5px solid $accent-color;
+    margin-bottom: 1.5vh;
+    
+    .card
+    {
+      padding-left: 1.5vh;
+      border: 0;
+      //padding: 0;
+      width: 100%;
+      .body
+      {
+        border: 0;
+        padding: 0;
+      }
+    }
+
+  }
+
+}
+
+.modal_container {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.loader {
+  width: 700px;
+  height: 700px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spin .6s linear infinite reverse;
+
+    .character {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 100%;
+      animation: spin 1s infinite ease-in-out;
+    }
+
+    .character::after {
+      background-image: url('../../assets/Character/char.png');
+      background-size: cover;
+      position: absolute;
+      content: '';
+      width: 250px;
+      height: 250px;
+      top: 0;
+    }
+}
+
+.loading {
+  position: absolute;
+  z-index: 1;
+  
+  .text {
+    font-size: 50px;
+    font-weight: bold;
+    color: #fff;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}

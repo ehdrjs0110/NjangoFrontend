@@ -8,7 +8,8 @@ import Col from 'react-bootstrap/Col';
 
 import Card from 'react-bootstrap/Card';
 
-import Navigation from '../../components/Nav/Navigation'
+import Navigation from '../../components/Nav/Navigation';
+import Sidebar from '../../components/MyPage/Sidebar';
 
 import styles from '../../styles/Like/LikeList.module.scss';
 import axios from "axios";
@@ -23,11 +24,20 @@ import {useDispatch, useSelector} from "react-redux";
 import {axiosInstance} from "../../middleware/customAxios";
 import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
 
+import {
+    getRegExp,
+    engToKor,
+  } from 'korean-regexp';
+
 const LikeList = () => {
     
     const [recipe, setRecipe] = useState(null);
     const [isChange, setChange] = useState(false);
     const navigate = useNavigate();
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const searchQueryInKorean = engToKor(searchQuery);
+    const searchRegExp = getRegExp(searchQueryInKorean, { initialSearch: true });
 
      // auth 관련 --
      const [cookies, setCookie, removeCookie] = useCookies(['refreshToken']);
@@ -121,8 +131,20 @@ const LikeList = () => {
         }else {
             alert("취소 되었습니다.");
         }
+    };
 
-        
+    // 초성 비교를 위한 문자열 변환 함수
+    const getInitials = (str) => {
+        const initialConsonants = [
+            'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ',
+            'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'
+        ];
+
+        return Array.from(str).map(char => {
+            const code = char.charCodeAt(0) - 44032;
+            if (code < 0 || code > 11171) return char; // 한글이 아니면 그대로 반환
+            return initialConsonants[Math.floor(code / 588)]; // 초성 반환
+        }).join('');
     };
     
     // recipe UI
@@ -130,9 +152,29 @@ const LikeList = () => {
     {
         if (recipe != null)
         {
-            return recipe.map((recipe, index) => (
+            // 검색어를 기준으로 필터링
+            const filteredRecipes = recipe.filter(recipe => {
+                const title = JSON.stringify(recipe.title).replace(/\"/gi, "");
+                const ingredientNames = Object.keys(recipe.ingredients);
+
+                // 초성 검색을 위한 변환
+                const searchInitials = getInitials(searchQuery);
+                const titleInitials = getInitials(title);
+                const ingredientInitials = ingredientNames.map(ingredient => getInitials(ingredient));
+
+                return (
+                    title.toLowerCase().includes(searchQuery.toLowerCase()) ||          // 제목에 검색어 포함
+                    titleInitials.includes(searchInitials) ||                           // 제목 초성 매칭
+                    ingredientNames.some(ingredient =>                                  // 재료명에 검색어 포함
+                        ingredient.toLowerCase().includes(searchQuery.toLowerCase())
+                    ) ||
+                    ingredientInitials.some(initial => initial.includes(searchInitials)) // 재료명 초성 매칭
+                );
+            });
+
+            return filteredRecipes.map((recipe, index) => (
                 <Card className={styles.recipeCard} key={index}>
-                    <Card.Header  className={styles.hearder}>
+                    <Card.Header  className={styles.header}>
                         <Row xs={1} md={2}>
                             <Col className={styles.recipeTitleCol}>
                                 {JSON.stringify(recipe.title).replace(/\"/gi, "")}
@@ -147,8 +189,8 @@ const LikeList = () => {
                     <Card.Body>
                         <Card.Text>
                             <strong>재료:</strong> {formatIngredients(recipe.ingredients)}
-                            <span className={styles.deleteBtn}>
-                                <Button onClick={() => deleteRecipe(recipe.likeId)}>삭제</Button>
+                            <span className={styles.deleteBtnSpan}>
+                                <Button className={styles.deleteBtn} onClick={() => deleteRecipe(recipe.likeId)} variant="danger">삭제</Button>
                             </span>
                         </Card.Text>
                     </Card.Body>
@@ -174,36 +216,48 @@ const LikeList = () => {
     };
 
     return (
-        <>
+        <div className={styles.aiSearchAllContainer}>
             <Navigation/>
-            <Container fluid style={{paddingLeft:0, paddingRight:0}}>
-            <div className={styles.aiSearchContainer}>
-                <Row  className={styles.aiSearchRow}>
-                    <Col  style={{paddingLeft:0, paddingRight:0}} md={{ span: 10, offset: 1 }} className={styles.aiSearchCol} >
-                       
+            <Container fluid>
+                <div className={styles.aiSearchContainer}>
+                    <Sidebar/>
+                    <Row  className={styles.aiSearchRow}>
+                        <Col md={{ span: 10 }} className={styles.aiSearchCol} >
+                        <InputGroup className={styles.aiSearchInputGroup}>
+                                <input
+                                    type='text'
+                                    placeholder="레시피 검색"
+                                    aria-label="Recipient's username"
+                                    aria-describedby="basic-addon2"
+                                    className={styles.form}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    onKeyPress={(e) => { if (e.key === 'Enter') setChange(!isChange); }}
+                                />
+                                <Button variant="outline-secondary" id="button-addon2" className={styles.aiSearchButton} onClick={() => setChange(!isChange)} >
+                                    검색
+                                </Button>
+                            </InputGroup>
 
-                        {/* Title 시작점*/}
-                        <div className={styles.aiSearchOptionContainer}>
-                            Like
-                        </div>
-                        {/* Title 종료점*/}
+                            {/* Title 시작점*/}
+                            {/* <div className={styles.aiSearchOptionContainer}>
+                                Like
+                            </div> */}
+                            {/* Title 종료점*/}
 
 
-                        {/*레시피 History 시작점*/}
-                        <div className={styles.recipeContainer}>
+                            {/*레시피 History 시작점*/}
+                            <div className={styles.recipeContainer}>
 
-                            {recipeResponce()}
-                        </div>
-                        {/*/!*레시피 History 종료점*!/*/}
+                                {recipeResponce()}
+                            </div>
+                            {/*/!*레시피 History 종료점*!/*/}
 
-
-
-                    </Col>
-                </Row>
-
-            </div>
-                </Container>
-        </>
+                        </Col>
+                    </Row>
+                </div>
+            </Container>
+        </div>
     );
 }
 

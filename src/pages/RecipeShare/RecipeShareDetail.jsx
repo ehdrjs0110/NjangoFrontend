@@ -33,7 +33,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {axiosInstance} from "../../middleware/customAxios";
 import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
 
-import styles from '../../styles/Search/AiDetailSearch.module.scss';
+import styles from '../../styles/RecipeShare/RecipeShareDetail.module.scss';
 
 const RecipeShareDetail = () => {
     const navigate = useNavigate();
@@ -46,7 +46,7 @@ const RecipeShareDetail = () => {
     const [level,setLevel] = useState(0);
     const [time,setTime] = useState(0);
     const [serve,setServe] = useState(0);
-    const [content,setContent] = useState(null);
+    const [content,setContent] = useState();
     const [image,setImage] = useState(null);
     const [likecount, setLikecount] = useState(0);
     const [recipeId, setRecipeId] = useState(null);
@@ -128,6 +128,20 @@ const RecipeShareDetail = () => {
         fetchCommentData();
 
     }, [recipeShareId, isChange]);
+
+    useEffect(() => {
+        // 모든 .card 요소와 .numberCol 요소를 가져옴
+        const cardElements = document.querySelectorAll(`.${styles.card}`);
+        const numberCol = document.querySelectorAll(`.${styles.numberCol}`);
+    
+        // 각 .card 요소의 높이를 기준으로 .numberCol의 높이를 설정
+        cardElements.forEach((card, index) => {
+            if (numberCol[index]) {
+                // .numberCol 높이를 .card 높이에 맞춤
+                numberCol[index].style.height = `${card.clientHeight}px`; 
+            }
+        });
+    }, [detailRecipe]);
 
     //라이크 눌렸는지 확인
     useEffect(() => {
@@ -255,6 +269,7 @@ const RecipeShareDetail = () => {
         try{
             await tokenHandler();
             await axiosInstance.post(`comment/add/${userId}/${recipeShareId}`, newComment);
+            setNewComment("");
             setChange(!isChange);
         }catch(err){
             console.log(err);
@@ -303,12 +318,12 @@ const RecipeShareDetail = () => {
 
                 return (
                     <Card.Body key={index}>
-                        {comment.content}
-                        {comment.nickname}
-                        {formattedDate}
+                        {comment.content.replace(/"/g, '')}
                         {comment.userId === userId && (
-                        <Button className={styles.delBtn} onClick={() => deleteComment(comment.commentId)} variant="danger">삭제</Button>
+                            <Button className={styles.delBtn} onClick={() => deleteComment(comment.commentId)} variant="danger">삭제</Button>
                         )}
+                        <span className={styles.comment}>{comment.nickname}</span>
+                        <span className={styles.date}>{formattedDate}</span>
                     </Card.Body>
                 );
             });
@@ -316,6 +331,49 @@ const RecipeShareDetail = () => {
             return <Card.Body>아무런 댓글이 없습니다.</Card.Body>  // comment가 null일 경우
         }
     }
+
+    // 재료를 양쪽으로 나누는 함수
+    const makeIngredientColumns = () => {
+        if (ingredient) {
+            // ingredient 객체의 키-값 쌍을 배열로 변환
+            const entries = Object.entries(ingredient);
+            const half = Math.ceil(entries.length / 2); // 배열을 반으로 나눔
+            const leftSide = entries.slice(0, half); // 왼쪽 열의 재료
+            const rightSide = entries.slice(half); // 오른쪽 열의 재료
+
+            return (
+                <Row>
+                    {/* 왼쪽 열 */}
+                    <Col xs={6} md={6} lg={6} className={styles.listColumn}>
+                        {leftSide.map(([key, value], index) => (
+                            <Row key={index} className={styles.listRow}>
+                                <Col xs={6} className={styles.listText}>
+                                    {key} {/* 재료명 */}
+                                </Col>
+                                <Col xs={6} className={styles.listText}>
+                                    {value} {/* 재료 양 */}
+                                </Col>
+                            </Row>
+                        ))}
+                    </Col>
+                    {/* 오른쪽 열 */}
+                    <Col xs={6} md={6} lg={6} className={styles.listColumn}>
+                        {rightSide.map(([key, value], index) => (
+                            <Row key={index} className={styles.listRow}>
+                                <Col xs={6} className={styles.listText}>
+                                    {key}
+                                </Col>
+                                <Col xs={6} className={styles.listText}>
+                                    {value}
+                                </Col>
+                            </Row>
+                        ))}
+                    </Col>
+                </Row>
+            );
+        }
+        return null;
+    };
 
     //게시글 삭제
     function postDelete(){
@@ -367,9 +425,9 @@ const RecipeShareDetail = () => {
             <Navigation />
             <div>
                 <Container fluid style={{padding:0,height:"100%"}} className={styles.AiDetaileSearchContainer}>
-                    <Row className={styles.AiDetaileSearchRow} style={{ paddingLeft:0, paddingRight:0}}>
+                    <div className={styles.AiDetaileSearchRow} style={{ paddingLeft:0, paddingRight:0}}>
                         <Col className={styles.col} style={{paddingLeft: 0, paddingRight: 0 }} md={{ span: 10, offset: 1 }}>
-                            <Col md={{ span:  8, offset: 2 }} >
+                            <Col md={{ span:  8, offset: 2 }} style={{paddingBottom: 50, paddingTop: 20}}>
                                 <Card className={styles.contentContainer} >
                                     <Card.Body>
                                         <Card.Title className={styles.upperHalfContain}>
@@ -445,7 +503,8 @@ const RecipeShareDetail = () => {
                                                 <Card.Body>
                                                     <Card.Title className={styles.ingredientTitle}>재료</Card.Title>
                                                     <div className={styles.ingredientList}>
-                                                        {formatIngredients(ingredient).replace(/\"/gi, "")}
+                                                        {/* {formatIngredients(ingredient).replace(/\"/gi, "")} */}
+                                                        {makeIngredientColumns()}
                                                     </div>
                                                 </Card.Body>
                                             </Card>
@@ -472,20 +531,24 @@ const RecipeShareDetail = () => {
                                 </Card>
                                 <Card className={styles.contentContainer} >
                                     <Card.Body>
-                                    <div className={styles.detailContainer}>
-                                            <Card className={styles.recipeContainCard}>
-                                                <Card.Body>
-                                                    <img src={`${process.env.PUBLIC_URL}/image/${image}`} alt='' />
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
-                                        <div className={styles.detailContainer}>
-                                            <Card className={styles.recipeContainCard}>
-                                                <Card.Body>
-                                                    {content}
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
+                                        {image?
+                                            <div className={styles.detailContainer}>
+                                                <Card className={styles.recipeContainCard}>
+                                                    <Card.Body>
+                                                        <img src={`http://localhost:8080/uploads/${image}`} alt='' />
+                                                    </Card.Body>
+                                                </Card>    
+                                            </div>
+                                        : null}
+                                        {content!="null"?
+                                            <div className={styles.detailContainer}>
+                                                <Card className={styles.recipeContainCard}>
+                                                    <Card.Body>
+                                                        {content}
+                                                    </Card.Body>
+                                                </Card>
+                                            </div>
+                                        : null}
                                         <div className={styles.detailContainer}>
                                             <Card className={styles.recipeContainCard}>
                                                 {commentList()}
@@ -494,8 +557,8 @@ const RecipeShareDetail = () => {
                                         <div className={styles.detailContainer}>
                                             <Card className={styles.recipeContainCard}>
                                                 <Card.Body>
-                                                    <Form.Control type="text" onChange={commentSet} placeholder='타인의 권리를 침해하거나 명예를 훼손하는 댓글은 운영원칙 및 관련 법률에 제재를 받을 수 있습니다.' />
-                                                    <Button onClick={commentAdd}>등록</Button>
+                                                    <Form.Control type="text" onChange={commentSet} value={newComment} placeholder='타인의 권리를 침해하거나 명예를 훼손하는 댓글은 운영원칙 및 관련 법률에 제재를 받을 수 있습니다.' />
+                                                    <Button className={styles.registration} onClick={commentAdd}>등록</Button>
                                                 </Card.Body>
                                             </Card>
                                         </div>
@@ -503,7 +566,7 @@ const RecipeShareDetail = () => {
                                 </Card>  
                             </Col>
                         </Col>
-                    </Row>
+                    </div>
                 </Container>
             </div>
         </>

@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AllergyModal from "../../components/MyPage/AllergyModal";
 
-
+import kakaoLogo from "../../assets/Logo/kakaologo.webp";
 
 const MyPagec = () => {
     const [infoData,setInfoData] = useState(null);
@@ -38,7 +38,7 @@ const MyPagec = () => {
     const dispatch = useDispatch();
     let newAccessToken;
 
-    const [filterModalShow, setFilterModalShow] = useState(false);
+    // const [filterModalShow, setFilterModalShow] = useState(false);
 
 
     useEffect(() => {
@@ -156,7 +156,7 @@ const MyPagec = () => {
                 <Container fluid  className={myPageStyle.MyPageContainer} >
                     <div className={myPageStyle.ContainerRow} >
                         <Col className={myPageStyle.LayoutWrapper}>
-                            <Sidebar setFilterModalShow={setFilterModalShow} />
+                            <Sidebar />
                             <Col md={8} className={myPageStyle.MyPageCardContainCol}>
                                 <Card className={`text-center ${myPageStyle.MyPageCard}`} >
                                     <Card.Body className={myPageStyle.MyPageCardBody}>
@@ -165,6 +165,8 @@ const MyPagec = () => {
                                             <div className={myPageStyle.info}>
                                                 <p className={myPageStyle.name}>{infoData ? infoData.nickname : 'Loading...'}</p>
                                                 <p>{infoData ? infoData.id : 'Loading...'}</p>
+
+                                                {infoData ? (infoData.kakao ? <img src={kakaoLogo} alt='' className={myPageStyle.kakao} />: null) : 'Loading...'}
                                             </div>
                                         </div>
 
@@ -186,23 +188,21 @@ const MyPagec = () => {
                                             onHide={() => {
                                                 setModalShow(false);
                                                 fetchDate();
-                                            }
-                                            }
+                                            }}
+                                            nickname={infoData?infoData.nickname:null}
+                                            phoneNumber={infoData?infoData.phoneNumber:null}
+                                            kakao={infoData?infoData.kakao:null}
                                         />
                                     </Card.Body>
+                                </Card>
+                                <Card className={myPageStyle.AllergyCard} >
+                                    <AllergyModal/>
                                 </Card>
                             </Col>
                         </Col>
                     </div>
                 </Container>
             </div>
-            <AllergyModal
-                show={filterModalShow}
-                onHide={() => {
-                    setFilterModalShow(false);
-                }
-                }
-            />
         </>
     );
 }

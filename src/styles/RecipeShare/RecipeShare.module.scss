@@ -28,6 +28,14 @@
           align-items: center;
           margin-bottom: 1rem;
 
+          .select {
+            border: 1px solid $p-color;
+            padding: 0.5rem;
+            height: 42px; // .form and .searchButton height
+            min-width: 130px;
+            text-align: center;
+          }
+
           .form {
             flex: 1;
             padding: 0.5rem;
@@ -128,16 +136,9 @@
               border-radius: 4px;
               cursor: pointer;
 
-              &:hover {
-                background-color: lighten($p-color, 40%);
-                color: darken($p-color, 20%);
-              }
-
-              &.active {
-                background-color: $p-color;
-                color: #fff;
-                font-weight: bold;
-                cursor: default;
+              &:hover, &.active{
+                background-color: lighten($p-color, 40%) !important; 
+                color: darken($p-color, 20%) !important;
               }
 
               &:disabled {

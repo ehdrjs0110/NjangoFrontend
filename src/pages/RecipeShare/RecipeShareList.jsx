@@ -23,17 +23,19 @@ import {
     engToKor,
 } from 'korean-regexp';
 import InputGroup from "react-bootstrap/InputGroup";
+import {MenuItem, Select} from "@mui/material";
 
 
 const RecipeShareList = () => {
     const [isList, setList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [pageSize, setPageSize] = useState(25);
+    const [pageSize, setPageSize] = useState(7);
     const [keyword, setKeyword] = useState("");
     const [searchInput, setSearchInput] = useState(""); // 검색어 상태
     const [isChange, setChange] = useState(false);
     const [modalShow, setModalShow] = useState(false);
+    const [sort, setSort] = useState("createAt");
     const navigate = useNavigate();
 
     const [cookies, setCookie] = useCookies(['refreshToken']);
@@ -42,20 +44,23 @@ const RecipeShareList = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchData(currentPage, pageSize, keyword);
-    }, [currentPage, pageSize, keyword, isChange]);
+        fetchData(currentPage, pageSize, keyword, sort);
+    }, [currentPage, pageSize, keyword, isChange, sort]);
 
-    const fetchData = async (page, size, keyword) => {
+    const fetchData = async (page, size, keyword, sort) => {
+        console.log('Fetching data with sort:', sort); // 추가된 로그
         try {
             await tokenHandler();
             const res = await axiosInstance.get(`recipeShare`, {
                 params: {
                     page: page,
                     size: size,
-                    keyword: keyword
+                    keyword: keyword,
+                    sort: sort
                 }
             });
             const storedRecipe = res.data.content;
+            console.log('Updated isList:', storedRecipe); // 추가된 로그
             setList(storedRecipe);
             setTotalPages(res.data.totalPages);
         } catch (err) {
@@ -179,7 +184,7 @@ const RecipeShareList = () => {
                 <Button
                     key={i}
                     onClick={() => handlePageChange(i)}
-                    className={i === currentPage ? 'active' : ''}
+                    className={i === currentPage ? styles.active : ''}
                 >
                     {i}
                 </Button>
@@ -225,6 +230,26 @@ const RecipeShareList = () => {
 
                             {/* 검색 필드 */}
                             <InputGroup className={styles.searchGroup}>
+                                <Select
+                                    className={styles.select}
+                                    name='sort'
+                                    value={sort}
+                                    onChange={(e) => setSort(e.target.value)}
+                                    displayEmpty
+                                    renderValue={(selected) => {
+                                        if (selected === "") {
+                                            return <em>정렬 기준 선택</em>;
+                                        }
+                                        return selected === "create_at" ? "작성일 순" : "추천 순";
+                                    }}
+                                >
+                                    <MenuItem value="" disabled>
+                                        <em>정렬 기준 선택</em>
+                                    </MenuItem>
+                                    <MenuItem value="create_at">작성일 순</MenuItem>
+                                    <MenuItem value="like_count">추천 순</MenuItem>
+                                </Select>
+
                                 <Form.Control
                                     placeholder="검색어를 입력하세요"
                                     aria-describedby="basic-addon2"
@@ -253,10 +278,10 @@ const RecipeShareList = () => {
                                     <thead>
                                     <tr>
                                         {/*<th>번호</th>*/}
-                                        <th>제목</th>
-                                        <th>작성자</th>
-                                        <th>작성일</th>
-                                        <th>추천</th>
+                                        <th style={{width:'auto'}}>제목</th>
+                                        <th style={{width:'15%'}}>작성자</th>
+                                        <th style={{width:'15%'}}>작성일</th>
+                                        <th style={{width:'10%'}}>추천</th>
                                     </tr>
                                     </thead>
                                     <tbody>

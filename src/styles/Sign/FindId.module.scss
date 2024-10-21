@@ -1,3 +1,4 @@
+@import "../index.scss";
 
 .container{
     display: flex;
@@ -18,16 +19,14 @@
 
             .btn {
                 margin: 10px;
+                background-color: $p-color;
+                border: none;
             }
         }
     }
 }
 
 // 모달창
-.modal_btn {
-    cursor: pointer;
-    margin-left: auto;
-}
   
 .modal_container {
     width: 100%;
@@ -59,6 +58,13 @@
 
     .show_email {
 
+    }
+
+    .modal_btn {
+        cursor: pointer;
+        margin-left: auto;
+        background-color: $p-color;
+        border: none;
     }
 }
 

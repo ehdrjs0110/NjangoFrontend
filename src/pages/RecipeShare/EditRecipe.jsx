@@ -26,7 +26,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import {axiosInstance, axiosInstanceFormData} from "../../middleware/customAxios";
 
-import styles from '../../styles/History/HistoryDetail.module.scss';
+import styles from "../../styles/RecipeShare/EditRecipe.module.scss";
 
 const EditRecipe = () => {
     const navigate = useNavigate();
@@ -312,7 +312,7 @@ const EditRecipe = () => {
             <div>
                 <Container fluid style={{padding:0,height:"100%"}} className={styles.AiDetaileSearchContainer}>
                     <Row className={styles.AiDetaileSearchRow} style={{ paddingLeft:0, paddingRight:0}}>
-                        <Col className={styles.col} style={{paddingLeft: 0, paddingRight: 0 }} md={{ span: 10, offset: 1 }}>
+                        <Col className={styles.col} style={{paddingLeft: 0, paddingRight: 0, marginTop:10, marginBottom:20 }} md={{ span: 10, offset: 1 }}>
                             <Col md={{ span:  8, offset: 2 }} >
                                 <Card className={styles.contentContainer} >
                                     <Card.Body>
@@ -353,7 +353,7 @@ const EditRecipe = () => {
                                                     <Row  style={{margin:0}} xs={2} md={2} lg={2}>
                                                         <Row style={{margin:0}} xs={3} md={3} lg={3}>
                                                             <Col>
-                                                            <Form.Select aria-label="Default select example" onChange={handleLevelChange}>
+                                                            <Form.Select aria-label="Default select example" value={level} onChange={handleLevelChange}>
                                                                 <option value="1">1</option>
                                                                 <option value="2">2</option>
                                                                 <option value="3">3</option>

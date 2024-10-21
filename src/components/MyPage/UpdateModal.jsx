@@ -10,6 +10,7 @@ import {useNavigate} from "react-router-dom";
 const UpdateModal = (props) => {
     const [nickname,setNickname] = useState(null);
     const [phoneNumber,setPhoneNumber] = useState(null);
+    const [password, setPassword] = useState(null);
     const [tokenCheck,setTokenCheck] = useState(false);
     const [request,setRequest] = useState(false);
 
@@ -123,7 +124,7 @@ const UpdateModal = (props) => {
         }
 
         try {
-            const requestBody = { nickname,  phoneNumber};
+            const requestBody = { nickname,  phoneNumber, password};
             const response = await axios.patch("http://localhost:8080/user/" + reduxEmail,
                 requestBody,
                 {
@@ -148,6 +149,12 @@ const UpdateModal = (props) => {
         const nickname =event.target.value;
         console.log(nickname);
         setNickname(nickname);
+    }
+
+    const passwordHandler = (event) => {
+        const password =event.target.value;
+        console.log(password);
+        setPassword(password);
     }
 
     // const phoneNumberHandler = (event) => {
@@ -213,16 +220,27 @@ const UpdateModal = (props) => {
                 <Form.Control
                     id="nickname"
                     onChange={nicknameHandler}
+                    value={props.nickname}
                     maxLength={14}
                 />
                 <Form.Label htmlFor="inputPassword5">전화번호</Form.Label>
                 <Form.Control
                     id="phonenumber"
-                    value={phoneNumber}
+                    value={props.phoneNumber}
                     onChange={phoneNumberHandler}
                     maxLength={13}
                 />
                 {!isValid && <p style={{ color: 'red' }}>유효하지 않은 전화번호 형식입니다.</p>}
+                {props.kakao ? null : (
+                <>
+                    <Form.Label htmlFor="inputPassword5">비밀번호</Form.Label>
+                    <Form.Control
+                    id="password"
+                    onChange={passwordHandler}
+                    maxLength={15}
+                    />
+                </>
+                )}
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={handClick}>저장</Button>

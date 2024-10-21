@@ -8,6 +8,8 @@
   border: 1px solid var(--bs-border-color-translucent);
   border-radius: 8px;
   margin-right: 20px;
+  min-height: 100%;
+  flex-shrink: 0;
   
   ul {
     list-style: none;
@@ -17,10 +19,15 @@
       padding: 10px 0;
       border-bottom: 1px solid #e5e5e5;
       font-size: 16px;
+      font-weight: bold;
       color: #333;
       cursor: pointer;
       
       &:hover {
+        color: $p-color;
+      }
+
+      &.active {
         color: $p-color;
       }
     }

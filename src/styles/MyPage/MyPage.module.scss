@@ -4,22 +4,23 @@
   display: flex;
   justify-content: center;
   min-height: 100vh;
-  background-color: #f7f8fa; // 좀 더 부드러운 배경 색상
+  background-color: $bg-color; // 좀 더 부드러운 배경 색상
 }
 
 .LayoutWrapper {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  max-width: 800px;
+  max-width: 1100px;
   width: 100%;
-  margin: 3% auto;
+  margin: 2% auto;
 }
 
 .MyPageCardContainCol {
   padding: 0;
   max-width: 600px;
   width: 100%;
+  margin-left: 10px;
 }
 
 .MyPageCard {
@@ -68,6 +69,14 @@
         margin-bottom: 5px;
         text-align: left;
       }
+
+      .kakao{
+        position: absolute;
+        right: 5%;
+        border: none;
+        width: 40px;
+        height: 40px;
+      }
     }
   }
 
@@ -114,6 +123,22 @@
 .MyPageContainer {
   padding: 0;
   .ContainerRow {
-    height: 100vh;
+    min-height: 100vh;
   }
 }
+
+.AllergyCard {
+  background-color: $white-color !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // 카드에 섀도우 추가
+  padding: 20px;
+  margin-top: 5%;
+}
+
+// .AllergyCardBody {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+//   padding: 30px;
+// }
+

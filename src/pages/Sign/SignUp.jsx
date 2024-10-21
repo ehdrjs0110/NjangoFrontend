@@ -15,6 +15,9 @@ const SignUp = () => {
   //입력받은 이메일 
   const [isEmail, setEmail] = useState();
 
+  //입력받은 전화번호
+  const [phoneNumber, setPhoneNumber] = useState('');
+
   //입력받은 인증 코드
   const [isCode, setCode] = useState();
 
@@ -36,14 +39,14 @@ const SignUp = () => {
       const email = form.elements.email.value;
       const password = form.elements.password.value;
       const nickname = form.elements.nickname.value;
-      const phoneNumber = form.elements.phone.value;
+      const phone = phoneNumber;
 
 
       const formData = new FormData();
       formData.append("email", email);
       formData.append("password", password);
       formData.append("nickname", nickname);
-      formData.append("phoneNumber", phoneNumber);
+      formData.append("phoneNumber", phone);
 
 
       // formData.forEach((value, key) => {
@@ -169,6 +172,23 @@ const SignUp = () => {
 
   }
 
+  const handlePhoneChange = (event) => {
+    const { value } = event.target;
+    setPhoneNumber(formatPhoneNumber(value)); // 입력값을 포맷팅하여 저장
+  };
+
+  const formatPhoneNumber = (value) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, ''); // 숫자가 아닌 문자는 모두 제거
+    const phoneNumberLength = phoneNumber.length;
+  
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 8) {
+      return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
+    }
+    return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 7)}-${phoneNumber.slice(7, 11)}`;
+  };
+
   return (
     <Container fluid className={styles.container}>
       <div className={styles.signup}>
@@ -195,7 +215,7 @@ const SignUp = () => {
             <input type="text" id='nickname' className={styles.inputbox} placeholder='닉네임'/>
           </div>
           <div className='inputbox'>  
-            <input type="text" id='phone' className={styles.inputbox} placeholder='전화번호'/>
+            <input type="text" id='phone' className={styles.inputbox} placeholder='전화번호' value={phoneNumber} onChange={handlePhoneChange}/>
           </div>
           <div className='btnbox'>
             <input type="submit" className={styles.submitbtn} value="회원가입" />

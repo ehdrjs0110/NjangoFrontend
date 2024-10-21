@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import {kakaoLogout} from "../../services/logout";
 
 import styles from '../../styles/Components/Nav/Navigation.module.scss';
-import logo from '../../assets/Logo/logo.png';
+import logo from '../../assets/Logo/navLogo.png';
 
 import cart from '../../assets/Nav/cart.png'
 
@@ -160,8 +160,7 @@ function Navigation({invenMode}) {
               <Nav.Link onClick={goToGallery}>갤러리</Nav.Link>
             </Nav>
             <Nav className={styles.navRight}>
-              {invenMode >= 0 && <Button className={styles.modeBtn} onClick={invenMode === 0 ? excelmode : invenmode} variant={"danger"}>{invenMode === 0 ? "전문가 모드" : "일반 모드"}</Button>}
-              <NavDropdown className={styles.navdropdown} style={(invenMode >= 0) ? {left: "0"} : {left: "8rem"}}>
+              <NavDropdown className={styles.navdropdown}>
                 <NavDropdown.Item onClick={goToMy}>내 정보</NavDropdown.Item>
                 {/*<NavDropdown.Item href="#action4">구매내역</NavDropdown.Item>*/}
                 <NavDropdown.Divider />
