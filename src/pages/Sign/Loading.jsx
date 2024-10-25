@@ -19,14 +19,7 @@ const Loading = () => {
     const dispatch = useDispatch();
     // accessToken && refreshToken 변수 선언
     let accessToken;
-    let refreshToken;
-
-    const CLIENT_ID = '7a2afab08fdef9ddd3b09ac451ca30b9';
-    const REDIRECT_URI = 'http://localhost:3000/Loading';
-    const kakaoSignUp = () => {
-      const kakaoUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
-      window.location.href = kakaoUrl;
-    };
+    let refreshToken;    
   
     const code = new URL(window.location.href).searchParams.get("code");
   

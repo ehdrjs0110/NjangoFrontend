@@ -92,7 +92,7 @@ const SignIn = () => {
 
   //카카오톡 로그인
   const CLIENT_ID = '7a2afab08fdef9ddd3b09ac451ca30b9';
-  const REDIRECT_URI = 'http://localhost:3000/Loading';
+  const REDIRECT_URI = 'http://115.142.105.147:3000/Loading';
   const kakaoSignUp = () => {
     const kakaoUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
     window.location.href = kakaoUrl;
