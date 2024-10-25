@@ -201,7 +201,7 @@ const AiSimpleSearch = () => {
         console.log(ingredientNames);
 
         const requestBody = {"userContent" : ` ${selectedIngredientList}를 이용한 레시피를 ${recipeCount}개를 알려주는데 재료는 자세하게 알려주고 만드는 과정에 ` +
-                `대해서는 130글자 내로 간략하게 알려줘 ${ingredientNames}가 있어 형태는 title,ingredients,process 으로 알려줘` +
+                `대해서는 130글자 내로 간략하게 알려줘 ${ingredientNames}가 있어 형태는 title,ingredients,process 으로 알려줘 그리고 재료는 리스트 형태는 싫고 객체 형태로 재료, 양의 쌍으로 알려줘` +
                 `그리고 json 객체로 {0:[요리 1], ...} 형태로 ${recipeCount}갯수로 참고로 키는 무조건 숫자여야해 보내줘`};
         let searchResponse;
         try {
