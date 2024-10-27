@@ -95,7 +95,7 @@ const HistoryDetail = () => {
         };
     
         await axios
-        .post("http://localhost:8080/kakaoMessage/kakaoCode", body)
+        .post("/njango/kakaoMessage/kakaoCode", body)
         .then((res) => {
           if(res.data!=null){
             console.log(res.data);

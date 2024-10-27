@@ -34,7 +34,7 @@ const PrivateRoute = ({component: Component}) => {
             console.log("counting up");
             try {
                 // POST 요청을 보낼 데이터 (여기서는 별도의 데이터를 전달하지 않음)
-                const response = await axios.post('http://localhost:8080/management/visit/today',{},
+                const response = await axios.post('/njango/management/visit/today',{},
                     {
                         headers: {
                             "Authorization": `Bearer ${accessToken}` // auth 설정

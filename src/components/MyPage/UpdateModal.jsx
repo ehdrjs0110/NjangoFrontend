@@ -125,7 +125,7 @@ const UpdateModal = (props) => {
 
         try {
             const requestBody = { nickname,  phoneNumber, password};
-            const response = await axios.patch("http://localhost:8080/user/" + reduxEmail,
+            const response = await axios.patch("/njango/user/" + reduxEmail,
                 requestBody,
                 {
                     headers: {

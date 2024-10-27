@@ -5,21 +5,21 @@ import {containToken} from "../Store/tokenSlice";
 
 
 const axiosInstance = axios.create({
-    baseURL:`http://localhost:8080/`,
+    baseURL:`/njango/`,
     headers: {
         'Content-Type': 'application/json'
     },
 });
 
 const axiosInstance2 = axios.create({
-    baseURL:`http://localhost:8080/`,
+    baseURL:`/njango/`,
     headers: {
         'Content-Type': 'application/json'
     },
 });
 
 const axiosInstanceFormData = axios.create({
-    baseURL:`http://localhost:8080/`,
+    baseURL:`/njango/`,
     headers: {
         'Content-Type': "multipart/form-data",
     },
