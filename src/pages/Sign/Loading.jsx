@@ -43,7 +43,7 @@ const Loading = () => {
         };
     
         await axios
-        .post("http://localhost:8080/login/kakaoCode", body)
+        .post("/njango/login/kakaoCode", body)
         .then((res) => {
           if(res.data!=null){
             //alert("카카오 계정으로 회원가입 성공!");

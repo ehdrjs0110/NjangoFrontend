@@ -54,7 +54,7 @@ const Sign = () => {
     };
 
     await axios
-    .post("http://localhost:8080/login/kakaoCode", body)
+    .post("/njanog/login/kakaoCode", body)
   }
 
   return (

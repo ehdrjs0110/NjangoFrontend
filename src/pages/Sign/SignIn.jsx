@@ -44,7 +44,7 @@ const SignIn = () => {
 
     // 로그인 요청
     axios
-        .post("http://localhost:8080/api/v1/auth/authenticate", formData, {
+        .post("/njango/api/v1/auth/authenticate", formData, {
           headers: {
             "Content-type": "multipart/form-data",
           },
@@ -112,7 +112,7 @@ const SignIn = () => {
     };
 
     await axios
-    .post("http://localhost:8080/login/kakaoCode", body)
+    .post("/njango/login/kakaoCode", body)
   }
 
   const findid = () => {

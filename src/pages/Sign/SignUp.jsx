@@ -55,7 +55,7 @@ const SignUp = () => {
 
       //axios 파일 전송
       axios
-        .post("http://localhost:8080/api/v1/auth/register", formData, {
+        .post("/njango/api/v1/auth/register", formData, {
           headers: {
             "Content-type": "multipart/form-data",
           },
@@ -87,7 +87,7 @@ const SignUp = () => {
     };
 
     try{
-      const res = await axios.post("http://localhost:8080/api/v1/auth/checkAccount", data);
+      const res = await axios.post("/njango/api/v1/auth/checkAccount", data);
         if(res.data){
           alert("계정이 존재");
           return false;
@@ -116,7 +116,7 @@ const SignUp = () => {
     
       try{
         const res = await axios
-        .post("http://localhost:8080/mail/send", data)
+        .post("/njango/mail/send", data)
 
         alert("메일 보내기 성공");
         console.log('메일 전송 성공:', res.data); // 성공 시 응답 출력
@@ -153,7 +153,7 @@ const SignUp = () => {
   
     //axios 파일 전송
     axios
-      .post("http://localhost:8080/mail/verify/code", data)
+      .post("/njango/mail/verify/code", data)
       .then((res) => {
           if(res.data === true){
             alert("코드 확인!");

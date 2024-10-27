@@ -31,7 +31,7 @@ const FindId = () => {
     e.preventDefault();
 
     try{
-      const res = await axios.get(`http://localhost:8080/user/find/findId/${phoneNumber}`);
+      const res = await axios.get(`/njango/user/find/findId/${phoneNumber}`);
       if(res){
         setHidden(true);
 
