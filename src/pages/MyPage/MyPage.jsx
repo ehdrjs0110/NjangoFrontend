@@ -86,7 +86,7 @@ const MyPagec = () => {
                 console.log("요청에서 accesstoken" + accessToken);
                 console.log("요청에서 accesstoken" + newAccessToken);
                 response = await axios.get(
-                    "http://localhost:8080/user/"+ reduxEmail,
+                    "/njango/user/"+ reduxEmail,
                     {
                         headers: {
                             "Content-Type": "application/json",
@@ -100,7 +100,7 @@ const MyPagec = () => {
             }
 
             response = await axios.get(
-                "http://localhost:8080/user/"+ reduxEmail,
+                "/njango/user/"+ reduxEmail,
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -119,7 +119,7 @@ const MyPagec = () => {
             try {
 
                 response = await axios.get(
-                    "http://localhost:8080/user/"+ reduxEmail,
+                    "/njango/user/"+ reduxEmail,
                     {
                         headers: {
                             "Content-Type": "application/json",

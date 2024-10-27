@@ -61,7 +61,7 @@ const FindPw = () => {
   
     //axios 파일 전송
     axios
-      .post("http://localhost:8080/mail/send", data)
+      .post("/njango/mail/send", data)
       .then((res) => {
         setSend(false);
         console.log('메일 전송 성공:', res.data); // 성공 시 응답 출력
@@ -91,7 +91,7 @@ const FindPw = () => {
   
     //axios 파일 전송
     axios
-      .post("http://localhost:8080/mail/verify/code", data)
+      .post("/njango/mail/verify/code", data)
       .then((res) => {
           if(res.data === true){
             alert("코드 확인!");
@@ -128,7 +128,7 @@ const FindPw = () => {
       const userId = isEmail;
       try {
         const requestBody = { password };
-        const response = await axios.patch(`http://localhost:8080/user/find/findPw/${userId}`,requestBody)
+        const response = await axios.patch(`/njango/user/find/findPw/${userId}`,requestBody)
         if(response){
           alert("비밀번호가 변경 되었습니다.");
           navigate('/SignIn');

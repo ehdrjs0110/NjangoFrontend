@@ -34,7 +34,7 @@ const ManagementLogin = () => {
         try{
             let accessToken;
             let refreshToken;
-            const response = await axios.post("http://localhost:8080/api/v1/auth/authenticate/admin",loginEntity,{
+            const response = await axios.post("/njango/api/v1/auth/authenticate/admin",loginEntity,{
                 headers: {
                     "Content-type": "multipart/form-data",
                 },
