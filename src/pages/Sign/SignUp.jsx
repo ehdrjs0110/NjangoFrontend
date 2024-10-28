@@ -105,10 +105,7 @@ const SignUp = () => {
     const checkAccount = await checkEmail();
 
     if(checkAccount){
-      setHidden(true);
-      setRead(true);
-
-
+      
       console.log(isEmail);
       const data = {
         email : isEmail
@@ -116,11 +113,13 @@ const SignUp = () => {
     
       try{
         const res = await axios
-        .post("/njango/mail/send", data)
+        .post("/njango/mail/send", data);
 
         alert("메일 보내기 성공");
         console.log('메일 전송 성공:', res.data); // 성공 시 응답 출력
         setAuth(true);
+        setHidden(true);
+        setRead(true);
 
       }catch(err){
         console.log("err message : " + err);
