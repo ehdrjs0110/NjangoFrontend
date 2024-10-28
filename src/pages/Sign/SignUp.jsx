@@ -89,10 +89,9 @@ const SignUp = () => {
     try{
       const res = await axios.post("/njango/api/v1/auth/checkAccount", data);
         if(res.data){
-          alert("계정이 존재");
+          alert("계정이 존재합니다.");
           return false;
         }else{
-          alert("계정이 없음");
           return true;
         }      
     }catch(err){

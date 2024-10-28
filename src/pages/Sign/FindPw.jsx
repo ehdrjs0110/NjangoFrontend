@@ -60,7 +60,6 @@ const FindPw = () => {
         if(res.data){
           return true;
         }else{
-          alert("계정이 존재하지 않습니다.");
           return false;
         }      
     }catch(err){
@@ -102,8 +101,9 @@ const FindPw = () => {
         }
         setRead(false);
       });
+    }else{
+      alert("해당하는 계정이 존재하지 않습니다.");
     }
-    alert("해당하는 계정이 존재하지 않습니다.");
   };
 
   const codeCheck = () => {
