@@ -50,9 +50,31 @@ const FindPw = () => {
     setCode(e.target.value);
   };
 
+  const checkEmail = async () => {
+    const data = {
+      email : isEmail
+    };
+
+    try{
+      const res = await axios.post("/njango/api/v1/auth/checkAccount", data);
+        if(res.data){
+          return true;
+        }else{
+          alert("계정이 존재하지 않습니다.");
+          return false;
+        }      
+    }catch(err){
+      alert("이메일 확인 실패");
+      return false;
+    }
+  };
+
   //이메일 디비 확인 및 전송
-  const emailCheck = () => {
-    setSend(true);
+  const emailCheck = async() => {
+    const checkAccount = await checkEmail();
+
+    if(checkAccount){
+      setSend(true);
 
     console.log(isEmail);
     const data = {
@@ -80,6 +102,8 @@ const FindPw = () => {
         }
         setRead(false);
       });
+    }
+    alert("해당하는 계정이 존재하지 않습니다.");
   };
 
   const codeCheck = () => {
