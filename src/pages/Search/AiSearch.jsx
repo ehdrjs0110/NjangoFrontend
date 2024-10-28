@@ -25,6 +25,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import {axiosInstance} from "../../middleware/customAxios";
 import {arrayNestedArray, makeFlatArray} from "../../services/arrayChecker";
+import * as http from "http";
 
 const AiSearch = () => {
     // 냉장고 재료 반영 선택 여부
@@ -304,9 +305,19 @@ const AiSearch = () => {
         try {
             console.log('Request Bundle:', requestBundle);
             await tokenHandler();
-            searchResponse = await axiosInstance.post("api/v1/chat-gpt/word",requestBundle,{timeout: 600000 });
+            searchResponse = await axiosInstance.post("api/v1/chat-gpt/word",requestBundle,
+                {timeout: 600000 });
         } catch (e) {
-            console.error(e);
+            if (e.response) {
+                console.error("Status:", e.response.status);
+                console.error("Data:", e.response.data);
+                console.error("Headers:", e.response.headers);
+            } else if (e.request) {
+                console.error("No response received:", e.request);
+            } else {
+                console.error("Error setting up request:", e.message);
+            }
+            console.error("Stack:", e.stack);
         }
         let response = searchResponse.data;
         console.log(response);
