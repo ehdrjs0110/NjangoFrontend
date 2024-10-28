@@ -304,7 +304,7 @@ const AiSearch = () => {
         try {
             console.log('Request Bundle:', requestBundle);
             await tokenHandler();
-            searchResponse = await axiosInstance.post("api/v1/chat-gpt/word",requestBundle);
+            searchResponse = await axiosInstance.post("api/v1/chat-gpt/word",requestBundle,{timeout: 600000 });
         } catch (e) {
             console.error(e);
         }
