@@ -199,7 +199,7 @@ const GalleryDetail = ({ show, onHide, galleryId, onDeleteComplete, onLikeToggle
             <Modal.Body>
                 <Form.Group controlId="formFile" className="mb-3">
                     <div className={styles.imgSection}>
-                        <img src={`http://localhost:8080/uploads/${isPhoto}`} alt={isGalleryId} />
+                        <img src={`/njango/uploads/${isPhoto}`} alt={isGalleryId} />
                 </div>
             </Form.Group>
             </Modal.Body>
