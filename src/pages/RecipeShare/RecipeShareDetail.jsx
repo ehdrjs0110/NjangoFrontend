@@ -535,7 +535,7 @@ const RecipeShareDetail = () => {
                                             <div className={styles.detailContainer}>
                                                 <Card className={styles.recipeContainCard}>
                                                     <Card.Body>
-                                                        <img src={`http://localhost:8080/uploads/${image}`} alt='' />
+                                                        <img src={`/njango/uploads/${image}`} alt='' />
                                                     </Card.Body>
                                                 </Card>    
                                             </div>

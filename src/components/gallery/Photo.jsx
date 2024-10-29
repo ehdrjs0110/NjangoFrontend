@@ -246,7 +246,7 @@ const Photo = ({ handleModalShow, isChangeUpload }) => {
                                 }}
                             />
                         </div>
-                        <img src={`http://localhost:8080/uploads/${img.photo}`} alt={img.galleryId} onClick={() => {
+                        <img src={`/njango/uploads/${img.photo}`} alt={img.galleryId} onClick={() => {
                             setOpenDetail(img.galleryId);
                             click()
                         }}/>
