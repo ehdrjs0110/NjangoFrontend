@@ -13,7 +13,7 @@ const getNewToken = async (refreshToken) => {
     try {
         console.log("토큰 다시받아오는 중");
         response = await axios.post(
-            "http://localhost:8080/api/v1/auth/refreshToken",{},
+            "/njango/api/v1/auth/refreshToken",{},
             {
                 headers: {
                     "Authorization": `Bearer ${refreshToken}`
@@ -65,7 +65,7 @@ const getNewTokenAdmin = async (refreshToken) => {;
     let response;
     try {
         response = await axios.post(
-            "http://localhost:8080/api/v1/auth/refreshToken/checkAdmin",{},
+            "/njango/api/v1/auth/refreshToken/checkAdmin",{},
             {
                 headers: {
                     "Authorization": `Bearer ${refreshToken}`
