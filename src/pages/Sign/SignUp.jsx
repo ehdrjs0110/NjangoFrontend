@@ -28,7 +28,7 @@ const SignUp = () => {
   const [isRead, setRead] = useState(false);
 
   //이메일 인증 여부
-  const [isAuth, setAuth] = useState(true);
+  const [isAuth, setAuth] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -193,7 +193,7 @@ const SignUp = () => {
         <img src={logoImg} alt='' className={styles.logoimg} />
         <form onSubmit={handleSubmit} >
           <div className='inputbox'>  
-            <input type="email" id='email' className={styles.inputbox} onChange={handleEmail} readOnly={isRead} placeholder='이메일'/>
+            <input type="email" id='email' className={styles.inputbox} onChange={handleEmail} readOnly={isRead} placeholder='이메일' required/>
           </div>
           <div className='email'>
           <Button variant="primary" className={styles.emailbtn} onClick={sendEmail}>인증번호 전송</Button>
@@ -207,13 +207,13 @@ const SignUp = () => {
           </div>
           </div>
           <div className='inputbox'>  
-            <input type="password" id='password' className={styles.inputbox} placeholder='비밀번호'/>
+            <input type="password" id='password' className={styles.inputbox} placeholder='비밀번호' required/>
           </div>
           <div className='inputbox'>  
-            <input type="text" id='nickname' className={styles.inputbox} placeholder='닉네임'/>
+            <input type="text" id='nickname' className={styles.inputbox} placeholder='닉네임' required/>
           </div>
           <div className='inputbox'>  
-            <input type="text" id='phone' className={styles.inputbox} placeholder='전화번호' value={phoneNumber} onChange={handlePhoneChange}/>
+            <input type="text" id='phone' className={styles.inputbox} placeholder='전화번호' value={phoneNumber} onChange={handlePhoneChange} required/>
           </div>
           <div className='btnbox'>
             <input type="submit" className={styles.submitbtn} value="회원가입" />

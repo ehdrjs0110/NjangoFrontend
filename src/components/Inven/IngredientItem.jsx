@@ -17,14 +17,15 @@ const IngredientItem = ({ item, index, isIngred, selectIngred, updateUnit, delet
     ) : null;
 
     const checkExpiredDate = (dateofuse) => {
-        if(dateofuse=== null) return false;
+        if (dateofuse === null) return false;
         // 문자열인 경우 Date 객체로 변환
         const dateOfUseObj = new Date(dateofuse);
         const today = new Date();
         const fiveDaysLater = new Date(today);
         fiveDaysLater.setDate(today.getDate() + 5);
-        return dateOfUseObj >= today && dateOfUseObj <= fiveDaysLater;
-    }
+        // 오늘보다 이전이거나 5일 이내일 때 true 반환
+        return dateOfUseObj <= fiveDaysLater;
+    }    
 
     const tooltip = (
         <Tooltip id="tooltip">
